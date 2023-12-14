@@ -7,6 +7,9 @@ use PHPStan\Node\VirtualNode;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 
+/**
+ * @implements Rule<Node>
+ */
 final class TodoByRule implements Rule
 {
     private const PATTERN = '/^TODO:?\s*([0-9]{4}-[0-9]{2}-[0-9]{2})(.*)$/';

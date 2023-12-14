@@ -2,7 +2,7 @@
 
 namespace ExampleTest;
 
-function doFoo() {
+function doFoo():void {
 
 }
 
@@ -19,14 +19,14 @@ class X {}
 //TODO: 2023-12-14 Expired commentX
 
 // TODO: 2023-12-14
-function doFooBar() {
+function doFooBar():void {
 
 }
 
 class Z {
     // TODO: 2023-12-14 method comment
-    public function XY() {
+    public function XY():void {
         // TODO: 2023-12-14 in method comment
-
+        $x = 1;
     }
 }

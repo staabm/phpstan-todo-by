@@ -6,6 +6,9 @@ use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use staabm\PHPStanTodoBy\TodoByRule;
 
+/**
+ * @extends RuleTestCase<TodoByRule>
+ */
 final class TodoByRuleTest extends RuleTestCase
 {
     protected function getRule(): Rule
