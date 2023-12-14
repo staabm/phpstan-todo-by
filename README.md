@@ -17,7 +17,7 @@ function doFoo() {
 
 ## Supported todo formats
 
-Every comment which matches the [supported pattern](https://github.com/staabm/phpstan-todo-by/blob/main/src/TodoByRule.php#L14) will be checked.
+Every comment which matches the [supported pattern](https://github.com/staabm/phpstan-todo-by/blob/main/src/TodoByRule.php#L15) will be checked.
 The supported dateformat is `YYYY-MM-DD`.
 See [all supported examples](https://github.com/staabm/phpstan-todo-by/blob/main/tests/data/example.php) in the Testsuite.
 
