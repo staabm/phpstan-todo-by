@@ -26,4 +26,4 @@ jobs:
             tools: parallel-lint
 
       -   name: Lint PHP
-          run: composer exec --no-interaction -- parallel-lint bin/ lib/ tests/
+          run: composer exec --no-interaction -- parallel-lint src/ tests/
