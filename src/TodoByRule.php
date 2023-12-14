@@ -3,14 +3,14 @@
 namespace staabm\PHPStanTodoBy;
 
 use PhpParser\Node;
-use PhpParser\Node\Stmt\Nop;
 use PHPStan\Node\VirtualNode;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
-use PHPStan\Node\ClassPropertiesNode;
 
 final class TodoByRule implements Rule
 {
+    private const PATTERN = '/^TODO:?\s*([0-9]{4}-[0-9]{2}-[0-9]{2})(.*)$/';
+
     public function getNodeType(): string
     {
         return Node::class;
@@ -30,12 +30,12 @@ final class TodoByRule implements Rule
 
         $errors = [];
         foreach($comments as $comment) {
-            $text = ltrim($comment->getText(), "\t /*#");
+            $text = ltrim($comment->getText(), "\t /");
             if (!str_starts_with($text, 'TODO')) {
                 continue;
             }
 
-            if (preg_match('/^TODO:?\s*([0-9]{4}-[0-9]{2}-[0-9]{2})(.*)$/', $text, $matches) !== 1) {
+            if (preg_match(self::PATTERN, $text, $matches) !== 1) {
                 continue;
             }
 
