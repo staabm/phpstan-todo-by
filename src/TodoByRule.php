@@ -7,6 +7,9 @@ use PHPStan\Node\VirtualNode;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 
+/**
+ * @implements Rule<Node>
+ */
 final class TodoByRule implements Rule
 {
     private const PATTERN = '/^TODO:?\s*([0-9]{4}-[0-9]{2}-[0-9]{2})(.*)$/';
@@ -18,7 +21,10 @@ final class TodoByRule implements Rule
 
     public function processNode(\PhpParser\Node $node, \PHPStan\Analyser\Scope $scope): array
     {
-        if ($node instanceof VirtualNode) {
+        if (
+            $node instanceof VirtualNode
+            || $node instanceof Node\Expr
+        ) {
             // prevent duplicate errors
             return [];
         }

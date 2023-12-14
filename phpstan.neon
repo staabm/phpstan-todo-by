@@ -1,6 +1,12 @@
+includes:
+    - extension.neon
+
 parameters:
     level: 8
 
     paths:
         - src
         - tests
+
+    excludePaths:
+        - tests/data/*
