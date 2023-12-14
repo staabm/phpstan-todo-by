@@ -21,7 +21,10 @@ final class TodoByRule implements Rule
 
     public function processNode(\PhpParser\Node $node, \PHPStan\Analyser\Scope $scope): array
     {
-        if ($node instanceof VirtualNode) {
+        if (
+            $node instanceof VirtualNode
+            || $node instanceof Node\Expr
+        ) {
             // prevent duplicate errors
             return [];
         }

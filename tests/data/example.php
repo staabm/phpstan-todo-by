@@ -26,7 +26,8 @@ function doFooBar():void {
 class Z {
     // TODO: 2023-12-14 method comment
     public function XY():void {
-        // TODO: 2023-12-14 in method comment
+        // TODO: 2023-12-14 in method comment1
         $x = 1;
+        // TODO: 2023-12-14 in method comment2
     }
 }

@@ -52,8 +52,12 @@ final class TodoByRuleTest extends RuleTestCase
                 27,
             ],
             [
-                "'in method comment' expired on 2023-12-14.",
+                "'in method comment1' expired on 2023-12-14.",
                 29,
+            ],
+            [
+                "'in method comment2' expired on 2023-12-14.",
+                31,
             ],
         ]);
     }
