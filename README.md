@@ -19,3 +19,26 @@ function doFoo() {
 
 Every comment which matches the [supported pattern](https://github.com/staabm/phpstan-todo-by/blob/main/src/TodoByRule.php#L14) will be checked.
 See [all supported examples](https://github.com/staabm/phpstan-todo-by/blob/main/tests/data/example.php) in the Testsuite.
+
+
+## Installation
+
+To use this extension, require it in [Composer](https://getcomposer.org/):
+
+```
+composer require --dev staabm/phpstan-todo-by
+```
+
+If you also install [phpstan/extension-installer](https://github.com/phpstan/extension-installer) then you're all set!
+
+<details>
+  <summary>Manual installation</summary>
+
+If you don't want to use `phpstan/extension-installer`, include extension.neon in your project's PHPStan config:
+
+```
+includes:
+    - vendor/staabm/phpstan-todo-by/extension.neon
+```
+
+</details>
