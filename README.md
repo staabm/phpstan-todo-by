@@ -8,7 +8,7 @@ Inspired by @parker_codes's [parker-codes/todo-by](https://github.com/parker-cod
 ```php
 <?php
 
-// TODO: 2023-12-14 This comment turns into a PHPStan error after 14th December 2023
+// TODO: 2023-12-14 This comment turns into a PHPStan error on 14th december 2023
 function doFoo() {
 
 }
