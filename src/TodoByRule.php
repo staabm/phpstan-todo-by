@@ -12,7 +12,7 @@ use PHPStan\Rules\RuleErrorBuilder;
  */
 final class TodoByRule implements Rule
 {
-    private const PATTERN = '/^TODO:?\s*([0-9]{4}-[0-9]{2}-[0-9]{2})(.*)$/';
+    private const PATTERN = '/^TODO:?\s*([0-9]{4}-[0-9]{2}-[0-9]{2}):?(.*)$/';
 
     public function getNodeType(): string
     {
@@ -54,7 +54,7 @@ final class TodoByRule implements Rule
             if ($todoText === '') {
                 $errorMessage = 'comment expired on '. $date .'.';
             } else {
-                $errorMessage = "'$todoText' expired on ". $date .'.';
+                $errorMessage = "comment '$todoText' expired on ". $date .'.';
             }
 
             $errors[] = RuleErrorBuilder::message($errorMessage)->line($comment->getStartLine())->build();

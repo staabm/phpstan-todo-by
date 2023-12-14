@@ -28,6 +28,6 @@ class Z {
     public function XY():void {
         // TODO: 2023-12-14 in method comment1
         $x = 1;
-        // TODO: 2023-12-14 in method comment2
+        // TODO 2023-12-14: in method comment2
     }
 }
