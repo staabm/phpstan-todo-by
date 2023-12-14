@@ -1,0 +1,4 @@
+services:
+    -
+        class: staabm\PHPStanTodoBy\TodoByRule
+        tags: [phpstan.rules.rule]
