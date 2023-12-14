@@ -8,3 +8,5 @@ parameters:
         - src
         - tests
 
+	excludePaths:
+		- ../tests/*/data/*
