@@ -14,6 +14,13 @@ final class TodoByRule implements Rule
 {
     private const PATTERN = '/^TODO:?\s*([0-9]{4}-[0-9]{2}-[0-9]{2}):?(.*)$/';
 
+    private int $now;
+
+    public function __construct()
+    {
+        $this->now = time();
+    }
+
     public function getNodeType(): string
     {
         return Node::class;
@@ -47,7 +54,7 @@ final class TodoByRule implements Rule
 
             $date = $matches[1];
             $todoText = trim($matches[2]);
-            if (strtotime($date) > time()) {
+            if (strtotime($date) > $this->now) {
                 continue;
             }
 
