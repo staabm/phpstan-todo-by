@@ -1,5 +1,8 @@
 {
     "name": "staabm/phpstan-todo-by",
+    "type": "phpstan-extension",
+    "license": "MIT",
+    "keywords": ["dev", "phpstan", "phpstan-extension", "static analysis"],
 
     "require": {
         "php": "^7.4 || ^8.0"
@@ -25,6 +28,7 @@
         "test": "vendor/bin/phpunit tests/"
     },
     "config": {
+        "sort-packages": true,
         "allow-plugins": {
             "phpstan/extension-installer": true
         }
