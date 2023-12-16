@@ -33,7 +33,7 @@ You can change this behaviour with a configuration option within your `phpstan.n
 ```neon
 parameters:
     todo_by:
-        nonIgnorable: false
+        nonIgnorable: false # default is true
 ```
 
 ## Installation
