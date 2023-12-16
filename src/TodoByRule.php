@@ -15,10 +15,12 @@ final class TodoByRule implements Rule
     private const PATTERN = '/^TODO:?\s*([0-9]{4}-[0-9]{2}-[0-9]{2}):?(.*)$/';
 
     private int $now;
+    private bool $nonIgnorable;
 
-    public function __construct()
+    public function __construct(bool $nonIgnorable)
     {
         $this->now = time();
+        $this->nonIgnorable = $nonIgnorable;
     }
 
     public function getNodeType(): string
@@ -64,7 +66,11 @@ final class TodoByRule implements Rule
                 $errorMessage = "comment '$todoText' expired on ". $date .'.';
             }
 
-            $errors[] = RuleErrorBuilder::message($errorMessage)->line($comment->getStartLine())->build();
+            $errBuilder = RuleErrorBuilder::message($errorMessage)->line($comment->getStartLine());
+            if ($this->nonIgnorable) {
+                $errBuilder->nonIgnorable();
+            }
+            $errors[] = $errBuilder->build();
         }
 
         return $errors;

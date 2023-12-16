@@ -25,6 +25,17 @@ When a text is given after the date, this text will be picked up for the PHPStan
 The supported dateformat is `YYYY-MM-DD`. See [all supported examples](https://github.com/staabm/phpstan-todo-by/blob/main/tests/data/example.php) in the Testsuite.
 
 
+## Configuration
+
+Errors emitted by the extension are non-ignorable by default, so they cannot be accidentally be put into the baseline.
+You can change this behaviour with a configuration option within your `phpstan.neon`:
+
+```neon
+parameters:
+    todo_by:
+        nonIgnorable: false
+```
+
 ## Installation
 
 To use this extension, require it in [Composer](https://getcomposer.org/):

@@ -13,7 +13,7 @@ final class TodoByRuleTest extends RuleTestCase
 {
     protected function getRule(): Rule
     {
-        return new TodoByRule();
+        return new TodoByRule(true);
     }
 
     public function testRule(): void
