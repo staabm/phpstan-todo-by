@@ -20,44 +20,52 @@ final class TodoByRuleTest extends RuleTestCase
     {
         $this->analyse([__DIR__ . '/data/example.php'], [
             [
-                "comment 'Expired comment1' expired on 2023-12-14.",
+                'Expired on 2023-12-14: Expired comment1',
                 9,
             ],
             [
-                "comment 'Expired comment2' expired on 2023-12-14.",
+                'Expired on 2023-12-14: Expired comment2',
                 10,
             ],
             [
-                "comment 'Expired comment3' expired on 2023-12-14.",
+                'Expired on 2023-12-14: Expired comment3',
                 11,
             ],
             [
-                "comment 'Expired comment4' expired on 2023-12-14.",
+                'Expired on 2023-12-14: Expired comment4',
                 12,
             ],
             [
-                "comment 'Expired comment5' expired on 2023-12-14.",
+                'Expired on 2023-12-14: Expired comment5',
                 13,
             ],
             [
-                "comment 'Expired commentX' expired on 2023-12-14.",
+                'Expired on 2023-12-14: Expired commentX',
                 19,
             ],
             [
-                "comment expired on 2023-12-14.",
+                'Expired on 2023-12-14',
                 21,
             ],
             [
-                "comment 'method comment' expired on 2023-12-14.",
-                27,
-            ],
-            [
-                "comment 'in method comment1' expired on 2023-12-14.",
+                'Expired on 2023-12-14: class comment',
                 29,
             ],
             [
-                "comment 'in method comment2' expired on 2023-12-14.",
-                31,
+                'Expired on 2023-12-13: class comment',
+                30,
+            ],
+            [
+                "Expired on 2023-12-14: method comment",
+                34,
+            ],
+            [
+                'Expired on 2023-12-14: in method comment1',
+                36,
+            ],
+            [
+                'Expired on 2023-12-14: in method comment2',
+                38,
             ],
         ]);
     }

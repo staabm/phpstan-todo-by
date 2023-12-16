@@ -23,6 +23,13 @@ function doFooBar():void {
 
 }
 
+/**
+ * other text
+ *
+ * @todo 2023-12-14 class comment
+ * @TODO 2023-12-13 - class comment
+ *   more comment data
+ */
 class Z {
     // TODO: 2023-12-14 method comment
     public function XY():void {
