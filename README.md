@@ -27,7 +27,7 @@ The supported dateformat is `YYYY-MM-DD`. See [all supported examples](https://g
 
 ## Configuration
 
-Errors emitted by the extension are non-ignorable by default, so they cannot be accidentally be put into the baseline.
+Errors emitted by the extension are non-ignorable by default, so they cannot accidentally be put into the baseline.
 You can change this behaviour with a configuration option within your `phpstan.neon`:
 
 ```neon
