@@ -1,4 +1,16 @@
+parametersSchema:
+    todo_by: structure([
+        nonIgnorable: bool()
+    ])
+
+# default parameters
+parameters:
+    todo_by:
+        nonIgnorable: true
+
 services:
     -
         class: staabm\PHPStanTodoBy\TodoByRule
         tags: [phpstan.rules.rule]
+        arguments:
+            - %todo_by.nonIgnorable%
