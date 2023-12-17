@@ -17,13 +17,35 @@ function doFoo() {
 
 ## Supported todo formats
 
-Every comment which matches the [supported pattern](https://github.com/staabm/phpstan-todo-by/blob/main/src/TodoByRule.php#L23-L31) will be checked.
-
 A todo comment can also consist of just a date without any text, like `// @todo 2023-12-14`.
 When a text is given after the date, this text will be picked up for the PHPStan error message.
 
-The supported dateformat is `YYYY-MM-DD`. See [all supported examples](https://github.com/staabm/phpstan-todo-by/blob/main/tests/data/example.php) in the Testsuite.
+- the `todo`, `TODO`, `tOdO` keyword is case-insensitive
+- the `todo` keyword can be suffixed or prefixed by a `@` character
+- a username might be included after the `todo@`
+- the comment might be mixed with `:` or `-` characters
+- dateformat is `YYYY-MM-DD`
+- multi line `/* */` and `/** */` comments are supported
 
+examples supported as of version 0.1.5:
+
+```php
+// todo 2023-12-14
+// @todo: 2023-12-14 fix it
+// @todo 2023-12-14: fix it
+// todo - 2023-12-14 fix it
+// todo 2023-12-14 - fix it
+
+// TODO@lars 2023-12-14 - fix it
+// TODO@lars: 2023-12-14 - fix it
+
+/*
+ * other text
+ *
+ * @todo 2023-12-14 classic multi line comment
+ *   more comment data
+ */
+```
 
 ## Configuration
 
