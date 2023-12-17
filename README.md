@@ -49,6 +49,8 @@ examples supported as of version 0.1.5:
 
 ## Configuration
 
+### Non-ignorable errors
+
 Errors emitted by the extension are non-ignorable by default, so they cannot accidentally be put into the baseline.
 You can change this behaviour with a configuration option within your `phpstan.neon`:
 
@@ -57,6 +59,29 @@ parameters:
     todo_by:
         nonIgnorable: false # default is true
 ```
+
+### Reference time
+
+By default comments are checked against todays date.
+
+You might be interested, which comments will expire within the next 7 days or similar, which can be configured with the `referenceTime` option.
+You need to configure a date parsable by `strtotime`.
+
+```neon
+parameters:
+    todo_by:
+        referenceTime: "now+7days"
+```
+
+It can be especially handy to use a env variable for it, so you can pass the reference date e.g. via the CLI:
+
+```neon
+parameters:
+    todo_by:
+        referenceTime: %env.TODOBY_REF_TIME%
+```
+
+`TODOBY_REF_TIME="now+7days" vendor/bin/phpstan analyze`
 
 ## Installation
 
