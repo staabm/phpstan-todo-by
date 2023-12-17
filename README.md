@@ -64,7 +64,7 @@ parameters:
 
 By default comments are checked against todays date.
 
-You might be interested, which comments will expire within the next 7 days or similar, which can be configured with the `referenceTime` option.
+You might be interested, which comments will expire e.g. within the next 7 days, which can be configured with the `referenceTime` option.
 You need to configure a date parsable by `strtotime`.
 
 ```neon
