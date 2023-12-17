@@ -67,6 +67,30 @@ final class TodoByRuleTest extends RuleTestCase
                 'Expired on 2023-12-14: in method comment2',
                 38,
             ],
+            [
+                'Expired on 2023-12-14: Convert to standard Drupal $content code.',
+                43,
+            ],
+            [
+                'Expired on 2023-12-14: Decide to fix all the broken instances of class as a string',
+                46,
+            ],
+            [
+                'Expired on 2023-12-14: fix it',
+                48,
+            ],
+            [
+                'Expired on 2023-12-14: fix it',
+                49,
+            ],
+            [
+                'Expired on 2023-12-14: fix it',
+                50,
+            ],
+            [
+                'Expired on 2023-12-14: fix it',
+                51,
+            ],
         ]);
     }
 }

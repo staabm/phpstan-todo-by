@@ -22,7 +22,7 @@ final class TodoByRule implements Rule
 {
     private const PATTERN = <<<'REGEXP'
 /
-@?TODO # possible leading @
+@?TODO # possible @ prefix
 \s*[:-]?\s* # optional colon or hyphen
 (?P<date>\d{4}-\d{2}-\d{2}) # date consisting of YYYY-MM-DD format
 \s*[:-]?\s* # optional colon or hyphen
