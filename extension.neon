@@ -1,12 +1,14 @@
 parametersSchema:
     todo_by: structure([
         nonIgnorable: bool()
+        referenceTime: string()
     ])
 
 # default parameters
 parameters:
     todo_by:
         nonIgnorable: true
+        referenceTime: "now"
 
 services:
     -

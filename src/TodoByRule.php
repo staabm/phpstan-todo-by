@@ -34,9 +34,9 @@ REGEXP;
     private int $now;
     private bool $nonIgnorable;
 
-    public function __construct(bool $nonIgnorable)
+    public function __construct(bool $nonIgnorable, string $referenceTime)
     {
-        $this->now = time();
+        $this->now = strtotime($referenceTime);
         $this->nonIgnorable = $nonIgnorable;
     }
 

@@ -11,13 +11,16 @@ use staabm\PHPStanTodoBy\TodoByRule;
  */
 final class TodoByRuleTest extends RuleTestCase
 {
+    private string $referenceTime;
     protected function getRule(): Rule
     {
-        return new TodoByRule(true);
+        return new TodoByRule(true, $this->referenceTime);
     }
 
     public function testRule(): void
     {
+        $this->referenceTime = "now";
+
         $this->analyse([__DIR__ . '/data/example.php'], [
             [
                 'Expired on 2023-12-14: Expired comment1',
@@ -102,6 +105,25 @@ final class TodoByRuleTest extends RuleTestCase
             [
                 'Expired on 2023-12-14: classic multi line comment',
                 59,
+            ],
+        ]);
+    }
+
+    public function testReferenceTime(): void
+    {
+        $this->referenceTime = "1st january 2023";
+
+        $this->analyse([__DIR__ . '/data/referenceTime.php'], []);
+    }
+
+    public function testReferenceTime2(): void
+    {
+        $this->referenceTime = "18th january 2023";
+
+        $this->analyse([__DIR__ . '/data/referenceTime.php'], [
+            [
+                'Expired on 2023-01-14: fix it',
+                5,
             ],
         ]);
     }
