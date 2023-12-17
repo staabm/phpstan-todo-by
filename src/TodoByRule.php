@@ -87,13 +87,13 @@ REGEXP;
                     continue;
                 }
 
-                // Have always present date at the start of the message.
-                $errorMessage = "Expired on {$date}";
 
+                // Have always present date at the start of the message.
                 // If there is further text, append it.
                 if ($todoText !== '') {
-
-                    $errorMessage .= ": {$todoText}";
+                    $errorMessage = "Expired on {$date}: {$todoText}";
+                } else {
+                    $errorMessage = "Comment expired on {$date}";
                 }
 
                 $wholeMatchStartOffset = $match[0][1];

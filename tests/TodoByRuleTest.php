@@ -44,7 +44,7 @@ final class TodoByRuleTest extends RuleTestCase
                 19,
             ],
             [
-                'Expired on 2023-12-14',
+                'Comment expired on 2023-12-14',
                 21,
             ],
             [
