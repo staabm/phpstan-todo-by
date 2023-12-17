@@ -91,6 +91,14 @@ final class TodoByRuleTest extends RuleTestCase
                 'Expired on 2023-12-14: fix it',
                 51,
             ],
+            [
+                'Expired on 2023-12-14: fix it',
+                53,
+            ],
+            [
+                'Expired on 2023-12-14: fix it',
+                54,
+            ],
         ]);
     }
 }
