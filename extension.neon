@@ -1,12 +1,14 @@
 parametersSchema:
     todo_by: structure([
         nonIgnorable: bool()
+        referenceTime: string()
     ])
 
 # default parameters
 parameters:
     todo_by:
         nonIgnorable: true
+        referenceTime: "now"
 
 services:
     -
@@ -14,3 +16,4 @@ services:
         tags: [phpstan.rules.rule]
         arguments:
             - %todo_by.nonIgnorable%
+            - %todo_by.referenceTime%

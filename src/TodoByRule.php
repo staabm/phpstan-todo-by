@@ -7,6 +7,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Node\VirtualNode;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\ShouldNotHappenException;
 use function preg_match_all;
 use function strtotime;
 use function substr_count;
@@ -34,9 +35,15 @@ REGEXP;
     private int $now;
     private bool $nonIgnorable;
 
-    public function __construct(bool $nonIgnorable)
+    public function __construct(bool $nonIgnorable, string $referenceTime)
     {
-        $this->now = time();
+        $time =  strtotime($referenceTime);
+
+        if ($time === false) {
+            throw new \RuntimeException('Unable to parse reference time "' . $referenceTime . '"');
+        }
+
+        $this->now = $time;
         $this->nonIgnorable = $nonIgnorable;
     }
 
