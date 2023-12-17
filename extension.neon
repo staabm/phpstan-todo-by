@@ -16,3 +16,4 @@ services:
         tags: [phpstan.rules.rule]
         arguments:
             - %todo_by.nonIgnorable%
+            - %todo_by.referenceTime%
