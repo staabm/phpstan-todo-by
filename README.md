@@ -19,7 +19,7 @@ function doFoo() {
 
 Every comment which matches the [supported pattern](https://github.com/staabm/phpstan-todo-by/blob/main/src/TodoByRule.php#L15) will be checked.
 
-A todo comment can also consist of just a date without any text, like `// TODO 2023-12-14`.
+A todo comment can also consist of just a date without any text, like `// @todo 2023-12-14`.
 When a text is given after the date, this text will be picked up for the PHPStan error message.
 
 The supported dateformat is `YYYY-MM-DD`. See [all supported examples](https://github.com/staabm/phpstan-todo-by/blob/main/tests/data/example.php) in the Testsuite.
