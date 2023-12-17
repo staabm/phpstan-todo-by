@@ -96,15 +96,15 @@ REGEXP;
                     $errorMessage .= ": {$todoText}";
                 }
 
-                $whole_match_start_offset = $match[0][1];
+                $wholeMatchStartOffset = $match[0][1];
 
                 // Count the number of newlines between the start of the whole comment, and the start of the match.
-                $new_lines = substr_count($text, "\n", 0, $whole_match_start_offset);
+                $newLines = substr_count($text, "\n", 0, $wholeMatchStartOffset);
 
                 // Set the message line to match the line the comment actually starts on.
-                $message_line = $comment->getStartLine() + $new_lines;
+                $messageLine = $comment->getStartLine() + $newLines;
 
-                $errBuilder = RuleErrorBuilder::message($errorMessage)->line($message_line);
+                $errBuilder = RuleErrorBuilder::message($errorMessage)->line($messageLine);
                 if ($this->nonIgnorable) {
                     $errBuilder->nonIgnorable();
                 }
