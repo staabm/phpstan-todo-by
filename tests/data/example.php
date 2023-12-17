@@ -52,3 +52,10 @@ class Z {
 
 // TODO@lars 2023-12-14 - fix it
 // TODO@lars: 2023-12-14 - fix it
+
+/*
+ * other text
+ *
+ * @todo 2023-12-14 classic multi line comment
+ *   more comment data
+ */

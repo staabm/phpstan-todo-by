@@ -99,6 +99,10 @@ final class TodoByRuleTest extends RuleTestCase
                 'Expired on 2023-12-14: fix it',
                 54,
             ],
+            [
+                'Expired on 2023-12-14: classic multi line comment',
+                59,
+            ],
         ]);
     }
 }
