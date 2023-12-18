@@ -100,6 +100,9 @@ final class TodoByVersionRuleTest extends RuleTestCase
         $this->analyse([__DIR__ . '/data/version.php'], $errors);
     }
 
+    /**
+     * @return iterable<array{string, list<array{0: string, 1: int, 2?: string|null}>}>
+     */
     static public function provideSemanticVersions(): iterable {
         yield [
             'nextMajor', // we assume this resolves to 1.0
