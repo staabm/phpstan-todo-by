@@ -49,19 +49,6 @@ REGEXP;
         $this->nonIgnorable = $nonIgnorable;
     }
 
-    private function getVersionComparator(string $version): ?string {
-        $comparator = null;
-        for($i = 0; $i < strlen($version); $i++) {
-            if (!in_array($version[$i], self::COMPARATORS)) {
-                break;
-            }
-            $comparator .= $version[$i];
-        }
-
-        return $comparator;
-
-    }
-
     public function getNodeType(): string
     {
         return Node::class;
@@ -141,5 +128,18 @@ REGEXP;
         }
 
         return $errors;
+    }
+
+    private function getVersionComparator(string $version): ?string {
+        $comparator = null;
+        for($i = 0; $i < strlen($version); $i++) {
+            if (!in_array($version[$i], self::COMPARATORS)) {
+                break;
+            }
+            $comparator .= $version[$i];
+        }
+
+        return $comparator;
+
     }
 }
