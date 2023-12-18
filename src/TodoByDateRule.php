@@ -99,9 +99,9 @@ REGEXP;
                 // Have always present date at the start of the message.
                 // If there is further text, append it.
                 if ($todoText !== '') {
-                    $errorMessage = "Expired on {$date}: {$todoText}";
+                    $errorMessage = "Expired on {$date}: ". rtrim($todoText, '.') .".";
                 } else {
-                    $errorMessage = "Comment expired on {$date}";
+                    $errorMessage = "Comment expired on {$date}.";
                 }
 
                 $wholeMatchStartOffset = $match[0][1];

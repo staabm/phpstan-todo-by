@@ -23,51 +23,51 @@ final class TodoByDateRuleTest extends RuleTestCase
 
         $this->analyse([__DIR__ . '/data/example.php'], [
             [
-                'Expired on 2023-12-14: Expired comment1',
+                'Expired on 2023-12-14: Expired comment1.',
                 9,
             ],
             [
-                'Expired on 2023-12-14: Expired comment2',
+                'Expired on 2023-12-14: Expired comment2.',
                 10,
             ],
             [
-                'Expired on 2023-12-14: Expired comment3',
+                'Expired on 2023-12-14: Expired comment3.',
                 11,
             ],
             [
-                'Expired on 2023-12-14: Expired comment4',
+                'Expired on 2023-12-14: Expired comment4.',
                 12,
             ],
             [
-                'Expired on 2023-12-14: Expired comment5',
+                'Expired on 2023-12-14: Expired comment5.',
                 13,
             ],
             [
-                'Expired on 2023-12-14: Expired commentX',
+                'Expired on 2023-12-14: Expired commentX.',
                 19,
             ],
             [
-                'Comment expired on 2023-12-14',
+                'Comment expired on 2023-12-14.',
                 21,
             ],
             [
-                'Expired on 2023-12-14: class comment',
+                'Expired on 2023-12-14: class comment.',
                 29,
             ],
             [
-                'Expired on 2023-12-13: class comment',
+                'Expired on 2023-12-13: class comment.',
                 30,
             ],
             [
-                "Expired on 2023-12-14: method comment",
+                "Expired on 2023-12-14: method comment.",
                 34,
             ],
             [
-                'Expired on 2023-12-14: in method comment1',
+                'Expired on 2023-12-14: in method comment1.',
                 36,
             ],
             [
-                'Expired on 2023-12-14: in method comment2',
+                'Expired on 2023-12-14: in method comment2.',
                 38,
             ],
             [
@@ -75,35 +75,35 @@ final class TodoByDateRuleTest extends RuleTestCase
                 43,
             ],
             [
-                'Expired on 2023-12-14: Decide to fix all the broken instances of class as a string',
+                'Expired on 2023-12-14: Decide to fix all the broken instances of class as a string.',
                 46,
             ],
             [
-                'Expired on 2023-12-14: fix it',
+                'Expired on 2023-12-14: fix it.',
                 48,
             ],
             [
-                'Expired on 2023-12-14: fix it',
+                'Expired on 2023-12-14: fix it.',
                 49,
             ],
             [
-                'Expired on 2023-12-14: fix it',
+                'Expired on 2023-12-14: fix it.',
                 50,
             ],
             [
-                'Expired on 2023-12-14: fix it',
+                'Expired on 2023-12-14: fix it.',
                 51,
             ],
             [
-                'Expired on 2023-12-14: fix it',
+                'Expired on 2023-12-14: fix it.',
                 53,
             ],
             [
-                'Expired on 2023-12-14: fix it',
+                'Expired on 2023-12-14: fix it.',
                 54,
             ],
             [
-                'Expired on 2023-12-14: classic multi line comment',
+                'Expired on 2023-12-14: classic multi line comment.',
                 59,
             ],
         ]);
@@ -122,7 +122,7 @@ final class TodoByDateRuleTest extends RuleTestCase
 
         $this->analyse([__DIR__ . '/data/referenceTime.php'], [
             [
-                'Expired on 2023-01-14: fix it',
+                'Expired on 2023-01-14: fix it.',
                 5,
             ],
         ]);
