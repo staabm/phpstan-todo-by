@@ -12,7 +12,7 @@ parameters:
 
 services:
     -
-        class: staabm\PHPStanTodoBy\TodoByRule
+        class: staabm\PHPStanTodoBy\TodoByDateRule
         tags: [phpstan.rules.rule]
         arguments:
             - %todo_by.nonIgnorable%

@@ -19,7 +19,7 @@ use const PREG_SET_ORDER;
 /**
  * @implements Rule<Node>
  */
-final class TodoByRule implements Rule
+final class TodoByDateRule implements Rule
 {
     private const PATTERN = <<<'REGEXP'
 /
