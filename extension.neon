@@ -2,13 +2,19 @@ parametersSchema:
     todo_by: structure([
         nonIgnorable: bool()
         referenceTime: string()
+        referenceVersion: string()
     ])
 
 # default parameters
 parameters:
     todo_by:
         nonIgnorable: true
+
+        # any strtotime() compatible string
         referenceTime: "now"
+
+        # "nextMajor", "nextMinor", "nextPatch" or a version string like "1.2.3"
+        referenceVersion: "nextMajor"
 
 services:
     -
@@ -17,3 +23,17 @@ services:
         arguments:
             - %todo_by.nonIgnorable%
             - %todo_by.referenceTime%
+
+    -
+        class: staabm\PHPStanTodoBy\TodoByVersionRule
+        tags: [phpstan.rules.rule]
+        arguments:
+            - %todo_by.nonIgnorable%
+
+    -
+        class: staabm\PHPStanTodoBy\GitTagFetcher
+
+    -
+        class: staabm\PHPStanTodoBy\ReferenceVersionFinder
+        arguments:
+            - %todo_by.referenceVersion%

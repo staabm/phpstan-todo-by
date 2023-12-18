@@ -36,16 +36,17 @@ final class TodoByVersionRule implements Rule
 /ix
 REGEXP;
 
-    private string $referenceVersion;
+    private ?string $referenceVersion = null;
     private bool $nonIgnorable;
 
     private VersionParser $versionParser;
 
-    public function __construct(bool $nonIgnorable, string $referenceVersion)
+    private ReferenceVersionFinder $referenceVersionFinder;
+
+    public function __construct(bool $nonIgnorable, ReferenceVersionFinder $refVersionFinder)
     {
         $this->versionParser = new VersionParser();
-
-        $this->referenceVersion = $this->versionParser->normalize($referenceVersion);
+        $this->referenceVersionFinder = $refVersionFinder;
         $this->nonIgnorable = $nonIgnorable;
     }
 
@@ -82,6 +83,8 @@ REGEXP;
                 continue;
             }
 
+            $referenceVersion = $this->getReferenceVersion();
+
             /** @var array<int, array<array{0: string, 1: int}>> $matches */
             foreach ($matches as $match) {
 
@@ -94,9 +97,9 @@ REGEXP;
 
                 $expired = false;
                 if ($versionComparator === '<') {
-                    $expired = Comparator::greaterThanOrEqualTo($this->referenceVersion, $normalized);
+                    $expired = Comparator::greaterThanOrEqualTo($referenceVersion, $normalized);
                 } elseif ($versionComparator === '>') {
-                    $expired = Comparator::greaterThan($this->referenceVersion, $normalized);
+                    $expired = Comparator::greaterThan($referenceVersion, $normalized);
                 }
 
                 if (!$expired) {
@@ -106,9 +109,9 @@ REGEXP;
                 // Have always present date at the start of the message.
                 // If there is further text, append it.
                 if ($todoText !== '') {
-                    $errorMessage = "Version requirement {$version} not satisfied: {$todoText}";
+                    $errorMessage = "Version requirement {$version} not satisfied: ". rtrim($todoText, '.') .".";
                 } else {
-                    $errorMessage = "Version requirement {$version} not satisfied";
+                    $errorMessage = "Version requirement {$version} not satisfied.";
                 }
 
                 $wholeMatchStartOffset = $match[0][1];
@@ -128,6 +131,14 @@ REGEXP;
         }
 
         return $errors;
+    }
+
+    private function getReferenceVersion(): string {
+        if ($this->referenceVersion === null) {
+            // lazy get the version, as it might incur subprocess creation
+            $this->referenceVersion = $this->versionParser->normalize($this->referenceVersionFinder->find());
+        }
+        return $this->referenceVersion;
     }
 
     private function getVersionComparator(string $version): ?string {

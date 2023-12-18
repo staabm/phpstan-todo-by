@@ -6,7 +6,8 @@
 
     "require": {
         "php": "^7.4 || ^8.0",
-        "composer/semver": "^3.4"
+        "composer/semver": "^3.4",
+        "nikolaposa/version": "^4.1"
     },
 
     "require-dev": {
