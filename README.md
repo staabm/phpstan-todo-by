@@ -1,7 +1,7 @@
 # phpstan-todo-by: comments with expiration date
 
 PHPStan extension to check for TODO comments with expiration date.
-Inspired by @parker_codes's [parker-codes/todo-by](https://github.com/parker-codes/todo_by).
+Inspired by [parker-codes/todo-by](https://github.com/parker-codes/todo_by).
 
 ## Example:
 
