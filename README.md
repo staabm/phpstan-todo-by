@@ -109,6 +109,18 @@ parameters:
 
 As shown in the "Reference time"-paragraph above, you might even use a env variable instead.
 
+Make sure tags are available within your git clone, e.g. by running `git fetch --tags origin`.
+
+In a GitHub Action this can be done like this:
+
+```yaml
+    -   name: Checkout
+        uses: actions/checkout@v4
+
+    -   name: Get tags
+        run: git fetch --tags origin
+```
+
 ## Installation
 
 To use this extension, require it in [Composer](https://getcomposer.org/):
