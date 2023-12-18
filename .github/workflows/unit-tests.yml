@@ -27,6 +27,9 @@ jobs:
             -   name: Checkout
                 uses: actions/checkout@v4
 
+            -   name: Get tags
+                run: git fetch --tags origin
+
             -   name: Setup PHP
                 uses: shivammathur/setup-php@v2
                 with:

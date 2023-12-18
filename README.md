@@ -1,6 +1,6 @@
-# phpstan-todo-by: comments with expiration date
+# phpstan-todo-by: comments with expiration date/version
 
-PHPStan extension to check for TODO comments with expiration date.
+PHPStan extension to check for TODO comments with expiration date/version.
 Inspired by [parker-codes/todo-by](https://github.com/parker-codes/todo_by).
 
 ## Example:
@@ -10,6 +10,11 @@ Inspired by [parker-codes/todo-by](https://github.com/parker-codes/todo_by).
 
 // TODO: 2023-12-14 This comment turns into a PHPStan error as of 14th december 2023
 function doFoo() {
+
+}
+
+// TODO: <1.0.0 This has to be in the first major release
+function doBar() {
 
 }
 
@@ -45,6 +50,9 @@ examples supported as of version 0.1.5:
  * @todo 2023-12-14 classic multi line comment
  *   more comment data
  */
+
+// TODO: <1.0.0 This has to be in the first major release
+// TODO >123.4: Must fix this or bump the version
 ```
 
 ## Configuration
@@ -62,7 +70,7 @@ parameters:
 
 ### Reference time
 
-By default comments are checked against todays date.
+By default date-todo-comments are checked against todays date.
 
 You might be interested, which comments will expire e.g. within the next 7 days, which can be configured with the `referenceTime` option.
 You need to configure a date parsable by `strtotime`.
@@ -70,6 +78,7 @@ You need to configure a date parsable by `strtotime`.
 ```neon
 parameters:
     todo_by:
+        # any strtotime() compatible string
         referenceTime: "now+7days"
 ```
 
@@ -82,6 +91,35 @@ parameters:
 ```
 
 `TODOBY_REF_TIME="now+7days" vendor/bin/phpstan analyze`
+
+### Reference version
+
+By default version-todo-comments are checked against `"nextMajor"` version.
+This is determined by fetching the latest local available git tag and incrementing the major version number.
+
+This behaviour can be configured with the `referenceVersion` option.
+Possible values are `"nextMajor"`, `"nextMinor"`, `"nextPatch"` - which will be computed based on the latest local git tag - or any other version string like `"1.2.3"`.
+
+```neon
+parameters:
+    todo_by:
+        # "nextMajor", "nextMinor", "nextPatch" or a version string like "1.2.3"
+        referenceVersion: "nextMinor"
+```
+
+As shown in the "Reference time"-paragraph above, you might even use a env variable instead.
+
+Make sure tags are available within your git clone, e.g. by running `git fetch --tags origin`.
+
+In a GitHub Action this can be done like this:
+
+```yaml
+    -   name: Checkout
+        uses: actions/checkout@v4
+
+    -   name: Get tags
+        run: git fetch --tags origin
+```
 
 ## Installation
 
