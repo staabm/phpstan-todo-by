@@ -31,8 +31,9 @@ When a text is given after the date, this text will be picked up for the PHPStan
 - the comment might be mixed with `:` or `-` characters
 - dateformat is `YYYY-MM-DD`
 - multi line `/* */` and `/** */` comments are supported
+- support for semantic version expiration constraints
 
-examples supported as of version 0.1.5:
+see examples of different comment variants which are supported:
 
 ```php
 // todo 2023-12-14
