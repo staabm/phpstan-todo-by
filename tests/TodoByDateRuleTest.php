@@ -4,17 +4,17 @@ namespace staabm\PHPStanTodoBy\Tests;
 
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
-use staabm\PHPStanTodoBy\TodoByRule;
+use staabm\PHPStanTodoBy\TodoByDateRule;
 
 /**
- * @extends RuleTestCase<TodoByRule>
+ * @extends RuleTestCase<TodoByDateRule>
  */
-final class TodoByRuleTest extends RuleTestCase
+final class TodoByDateRuleTest extends RuleTestCase
 {
     private string $referenceTime;
     protected function getRule(): Rule
     {
-        return new TodoByRule(true, $this->referenceTime);
+        return new TodoByDateRule(true, $this->referenceTime);
     }
 
     public function testRule(): void
