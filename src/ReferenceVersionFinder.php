@@ -22,9 +22,14 @@ final class ReferenceVersionFinder
     {
         if (in_array($this->referenceVersion, ['nextMajor', 'nextMinor', 'nextPatch'], true)) {
             $latestTagVersion = $this->fetcher->fetchLatestTagVersion($workingDirectory);
+
             $normalized = $this->versionNormalizer->normalize($latestTagVersion);
             // composer/semver versions have 4 parts, but Version\Version only accepts 3.
             $normalized = preg_replace('/\.0$/', '', $normalized);
+            if ($normalized === null) {
+                throw new \RuntimeException('Could not normalize version: ' . $latestTagVersion);
+            }
+
             $version = Version::fromString($normalized);
 
             if ($this->referenceVersion === 'nextMajor') {
