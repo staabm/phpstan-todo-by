@@ -5,6 +5,9 @@ on:
         paths:
             - '**.php'
 
+env:
+    writable: ${{ github.event_name != 'push' && github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]' && 1 || 0 }}
+
 jobs:
     php-cs-fixer:
         runs-on: ubuntu-latest
@@ -12,9 +15,15 @@ jobs:
         if: github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.draft == false
 
         steps:
-            - uses: actions/checkout@v4
-              with:
-                  ref: ${{ github.head_ref }}
+            -   name: Checkout
+                uses: actions/checkout@v4
+                if: env.writable == 1
+                with:
+                    ref: ${{ github.head_ref }}
+                    token: ${{ secrets.BOT_TOKEN }}
+            -   name: Checkout fork
+                uses: actions/checkout@v4
+                if: env.writable == 0
 
             - name: Setup PHP
               uses: shivammathur/setup-php@v2
