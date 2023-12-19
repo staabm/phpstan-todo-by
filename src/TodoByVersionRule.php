@@ -52,7 +52,7 @@ REGEXP;
     public function __construct(
         bool $nonIgnorable,
         bool $singleGitRepo,
-        ReferenceVersionFinder $refVersionFinder,
+        ReferenceVersionFinder $refVersionFinder
     )
     {
         $this->versionParser = new VersionParser();
