@@ -97,9 +97,9 @@ REGEXP;
                 }
 
                 if ($todoText !== '') {
-                    $errorMessage = "Resolved in {$ticketKey}: ". rtrim($todoText, '.') .".";
+                    $errorMessage = "Should have been resolved in {$ticketKey}: ". rtrim($todoText, '.') .".";
                 } else {
-                    $errorMessage = "Comment resolved in {$ticketKey}.";
+                    $errorMessage = "Comment should have been resolved in {$ticketKey}.";
                 }
 
                 $wholeMatchStartOffset = $match[0][1];
