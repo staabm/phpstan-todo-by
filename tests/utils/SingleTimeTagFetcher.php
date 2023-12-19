@@ -6,7 +6,7 @@ use staabm\PHPStanTodoBy\TagFetcher;
 
 final class SingleTimeTagFetcher implements TagFetcher
 {
-    static private int $counter = 0;
+    private static int $counter = 0;
 
     public function fetchLatestTagVersion(?string $workingDirectory): string
     {
