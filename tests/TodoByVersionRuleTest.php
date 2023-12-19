@@ -34,7 +34,7 @@ final class TodoByVersionRuleTest extends RuleTestCase
     /**
      * @return iterable<array{string, list<array{0: string, 1: int, 2?: string|null}>}>
      */
-    static public function provideErrors(): iterable
+    public static function provideErrors(): iterable
     {
         yield [
             "0.1",
@@ -103,7 +103,8 @@ final class TodoByVersionRuleTest extends RuleTestCase
     /**
      * @return iterable<array{string, list<array{0: string, 1: int, 2?: string|null}>}>
      */
-    static public function provideSemanticVersions(): iterable {
+    public static function provideSemanticVersions(): iterable
+    {
         yield [
             'nextMajor', // we assume this resolves to 1.0
             [

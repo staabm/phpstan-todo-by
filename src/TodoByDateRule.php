@@ -77,7 +77,7 @@ REGEXP;
              * PREG_SET_ORDER: Make each value of $matches be structured the same as if from preg_match().
              */
             if (
-                preg_match_all(self::PATTERN, $text, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER) === FALSE
+                preg_match_all(self::PATTERN, $text, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER) === false
                 || count($matches) === 0
             ) {
                 continue;
