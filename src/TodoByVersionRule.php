@@ -53,8 +53,7 @@ REGEXP;
         bool $nonIgnorable,
         bool $singleGitRepo,
         ReferenceVersionFinder $refVersionFinder
-    )
-    {
+    ) {
         $this->versionParser = new VersionParser();
         $this->referenceVersionFinder = $refVersionFinder;
         $this->nonIgnorable = $nonIgnorable;
