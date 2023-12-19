@@ -187,15 +187,15 @@ ticketResolvedStatuses:
 
 # if your ticket key is FOO-12345, then this value should be "FOO".
 # only comments with keys containing this prefix will be analyzed.
-ticketKeyPrefix: null
+ticketKeyPrefix: FOO
 
 # e.g. https://your-company.atlassian.net
-jiraServer: null
+jiraServer: https://acme.atlassian.net
 
 # path to a file containing a string with username and either a password or api key.
 # username and a password/key must be separated with ":", e.g. john.doe@example.com:p@ssword
 # this file must not be commited into the repository!
-jiraCredentialsFilePath: null
+jiraCredentialsFilePath: .secrets/jira-credentials.txt
 ```
 
 
