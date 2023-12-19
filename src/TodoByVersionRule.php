@@ -80,7 +80,7 @@ REGEXP;
              * PREG_SET_ORDER: Make each value of $matches be structured the same as if from preg_match().
              */
             if (
-                preg_match_all(self::PATTERN, $text, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER) === FALSE
+                preg_match_all(self::PATTERN, $text, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER) === false
                 || count($matches) === 0
             ) {
                 continue;
@@ -136,7 +136,8 @@ REGEXP;
         return $errors;
     }
 
-    private function getReferenceVersion(): string {
+    private function getReferenceVersion(): string
+    {
         if ($this->referenceVersion === null) {
             // lazy get the version, as it might incur subprocess creation
             $this->referenceVersion = $this->versionParser->normalize($this->referenceVersionFinder->find());
@@ -144,7 +145,8 @@ REGEXP;
         return $this->referenceVersion;
     }
 
-    private function getVersionComparator(string $version): ?string {
+    private function getVersionComparator(string $version): ?string
+    {
         $comparator = null;
         for($i = 0; $i < strlen($version); $i++) {
             if (!in_array($version[$i], self::COMPARATORS)) {

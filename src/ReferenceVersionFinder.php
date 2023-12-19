@@ -4,15 +4,18 @@ namespace staabm\PHPStanTodoBy;
 
 use Version\Version;
 
-final class ReferenceVersionFinder {
+final class ReferenceVersionFinder
+{
     private TagFetcher $fetcher;
     private string $referenceVersion;
 
-    public function __construct(string $referenceVersion, TagFetcher $fetcher) {
+    public function __construct(string $referenceVersion, TagFetcher $fetcher)
+    {
         $this->referenceVersion = $referenceVersion;
         $this->fetcher = $fetcher;
     }
-    public function find(): string {
+    public function find(): string
+    {
         if (in_array($this->referenceVersion, ['nextMajor', 'nextMinor', 'nextPatch'], true)) {
             $latestTagVersion = $this->fetcher->fetchLatestTagVersion();
 
