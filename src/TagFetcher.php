@@ -4,5 +4,5 @@ namespace staabm\PHPStanTodoBy;
 
 interface TagFetcher
 {
-    public function fetchLatestTagVersion(): string;
+    public function fetchLatestTagVersion(?string $workingDirectory): string;
 }

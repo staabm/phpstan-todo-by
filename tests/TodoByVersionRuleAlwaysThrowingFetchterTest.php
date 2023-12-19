@@ -15,7 +15,11 @@ final class TodoByVersionRuleAlwaysThrowingFetchterTest extends RuleTestCase
     private string $referenceVersion;
     protected function getRule(): Rule
     {
-        return new TodoByVersionRule(true, new ReferenceVersionFinder($this->referenceVersion, new AlwaysThrowingTagFetcher()));
+        return new TodoByVersionRule(
+            true,
+            true,
+            new ReferenceVersionFinder($this->referenceVersion, new AlwaysThrowingTagFetcher())
+        );
     }
 
     public function testRule(): void
