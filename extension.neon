@@ -37,12 +37,12 @@ services:
             - %todo_by.singleGitRepo%
 
     -
-        class: staabm\PHPStanTodoBy\GitTagFetcher
+        class: staabm\PHPStanTodoBy\utils\GitTagFetcher
 
     -
-        class: staabm\PHPStanTodoBy\ReferenceVersionFinder
+        class: staabm\PHPStanTodoBy\utils\ReferenceVersionFinder
         arguments:
             - %todo_by.referenceVersion%
 
     -
-        class: staabm\PHPStanTodoBy\VersionNormalizer
+        class: staabm\PHPStanTodoBy\utils\VersionNormalizer
