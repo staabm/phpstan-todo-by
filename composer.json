@@ -11,6 +11,7 @@
     },
 
     "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.41",
         "phpstan/phpstan": "^1.10",
         "phpunit/phpunit": "^9 || ^10.5"
     },
