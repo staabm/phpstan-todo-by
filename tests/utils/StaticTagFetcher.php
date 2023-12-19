@@ -8,7 +8,8 @@ final class StaticTagFetcher implements TagFetcher
 {
     private string $tag;
 
-    public function __construct(string $tag) {
+    public function __construct(string $tag)
+    {
         $this->tag = $tag;
     }
     public function fetchLatestTagVersion(): string
