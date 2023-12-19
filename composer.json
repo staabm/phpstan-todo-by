@@ -12,8 +12,10 @@
     ],
     "require": {
         "php": "^7.4 || ^8.0",
+        "ext-json": "*",
         "composer-runtime-api": "^2",
         "composer/semver": "^3.4",
+        "guzzlehttp/guzzle": "^7.8",
         "nikolaposa/version": "^4.1"
     },
     "require-dev": {

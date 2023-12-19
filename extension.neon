@@ -4,6 +4,10 @@ parametersSchema:
         referenceTime: string()
         referenceVersion: string()
         singleGitRepo: bool()
+        jiraHost: string()
+        jiraUser: string()
+        jiraPasswordOrApiKey: string()
+        jiraDoneStatuses: listOf(string())
     ])
 
 # default parameters
@@ -21,12 +25,20 @@ parameters:
         # If set to false, the git tags are fetched for each directory individually (slower)
         singleGitRepo: true
 
+        jiraHost: https://jira.atlassian.com
+
 services:
     -
         class: staabm\PHPStanTodoBy\TodoByDateRule
         tags: [phpstan.rules.rule]
         arguments:
             - %todo_by.referenceTime%
+    -
+        class: staabm\PHPStanTodoBy\TodoByTicketRule
+        tags: [phpstan.rules.rule]
+        arguments:
+            - %todo_by.nonIgnorable%
+            - %todo_by.jiraDoneStatuses%
 
     -
         class: staabm\PHPStanTodoBy\TodoByVersionRule
@@ -52,3 +64,10 @@ services:
         class: staabm\PHPStanTodoBy\utils\ExpiredCommentErrorBuilder
         arguments:
             - %todo_by.nonIgnorable%
+
+    -
+        class: staabm\PHPStanTodoBy\utils\JiraTicketStatusFetcher
+        arguments:
+            - %todo_by.jiraHost%
+            - %todo_by.jiraUser%
+            - %todo_by.jiraPasswordOrApiKey%
