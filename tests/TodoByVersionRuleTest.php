@@ -93,7 +93,8 @@ final class TodoByVersionRuleTest extends RuleTestCase
      * @param list<array{0: string, 1: int, 2?: string|null}> $errors
      * @dataProvider provideSemanticVersions
      */
-    public function testSemanticVersions(string $referenceVersion, array $errors): void     {
+    public function testSemanticVersions(string $referenceVersion, array $errors): void
+    {
         $this->referenceVersion = $referenceVersion;
 
         $this->analyse([__DIR__ . '/data/version.php'], $errors);
