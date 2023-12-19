@@ -76,7 +76,10 @@ REGEXP;
              * PREG_OFFSET_CAPTURE: Track where each "todo" comment starts within the whole comment text.
              * PREG_SET_ORDER: Make each value of $matches be structured the same as if from preg_match().
              */
-            if (preg_match_all(self::PATTERN, $text, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER) !== 1) {
+            if (
+                preg_match_all(self::PATTERN, $text, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER) === FALSE
+                || count($matches) === 0
+            ) {
                 continue;
             }
 
