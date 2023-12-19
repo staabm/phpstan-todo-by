@@ -19,7 +19,7 @@ final class TodoByTicketRuleTest extends RuleTestCase
             'APP-444' => 'To Do',
         ]);
 
-        return new TodoByTicketRule(true, ['Done'], $fetcher);
+        return new TodoByTicketRule(true, ['Done'], 'APP', $fetcher);
     }
 
     public function testRule(): void

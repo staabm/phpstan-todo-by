@@ -33,13 +33,15 @@ REGEXP;
     private bool $nonIgnorable;
     /** @var list<non-empty-string> */
     private array $doneStatuses;
+    private string $keyPrefix;
     private TicketStatusFetcher $fetcher;
 
     /** @param list<non-empty-string> $doneStatuses */
-    public function __construct(bool $nonIgnorable, array $doneStatuses, TicketStatusFetcher $fetcher)
+    public function __construct(bool $nonIgnorable, array $doneStatuses, string $keyPrefix, TicketStatusFetcher $fetcher)
     {
         $this->nonIgnorable = $nonIgnorable;
         $this->doneStatuses = $doneStatuses;
+        $this->keyPrefix = $keyPrefix;
         $this->fetcher = $fetcher;
     }
 
@@ -81,9 +83,12 @@ REGEXP;
 
             /** @var array<int, array<array{0: string, 1: int}>> $matches */
             foreach ($matches as $match) {
-
                 $ticketKey = $match['ticket'][0];
                 $todoText = trim($match['comment'][0]);
+
+                if (strpos($ticketKey, $this->keyPrefix) === false) {
+                    continue;
+                }
 
                 $ticketStatus = $this->fetcher->fetchTicketStatus($ticketKey);
 
@@ -91,8 +96,6 @@ REGEXP;
                     continue;
                 }
 
-                // Have always present date at the start of the message.
-                // If there is further text, append it.
                 if ($todoText !== '') {
                     $errorMessage = "Resolved in {$ticketKey}: ". rtrim($todoText, '.') .".";
                 } else {

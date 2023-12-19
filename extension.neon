@@ -4,10 +4,12 @@ parametersSchema:
         referenceTime: string()
         referenceVersion: string()
         singleGitRepo: bool()
-        jiraHost: string()
-        jiraUser: string()
-        jiraPasswordOrApiKey: string()
-        jiraDoneStatuses: listOf(string())
+        byTicketEnabled: bool()
+        ticketDoneStatuses: listOf(string())
+        ticketKeyPrefix: schema(string(), nullable())
+        jiraServer: schema(string(), nullable())
+        jiraUsername: schema(string(), nullable())
+        jiraPasswordOrApiKeyFilePath: schema(string(), nullable())
     ])
 
 # default parameters
@@ -25,11 +27,28 @@ parameters:
         # If set to false, the git tags are fetched for each directory individually (slower)
         singleGitRepo: true
 
-        jiraHost: https://jira.atlassian.com
-        jiraUser: ChangeMe
-        jiraPasswordOrApiKey: ChangeMe
-        jiraDoneStatuses:
-            - Done
+        # whether to analyze comments by issue tracker ticket key
+        byTicketEnabled: false
+
+        # a case-sensitive list of status names.
+        # only tickets having any of these statuses are considered resolved.
+        ticketDoneStatuses: []
+
+        # if your ticket key is FOO-12345, then this value should be "FOO".
+        # only comments with keys containing this prefix will be analyzed.
+        ticketKeyPrefix: null
+
+        jiraServer: null
+
+        jiraUsername: null
+
+        # path to a file containing a string with either a password or api key.
+        # this file must not be commited to the repository!
+        jiraPasswordOrApiKeyFilePath: null
+
+conditionalTags:
+    staabm\PHPStanTodoBy\TodoByTicketRule:
+        phpstan.rules.rule: %todo_by.byTicketEnabled%
 
 services:
     -
@@ -39,10 +58,10 @@ services:
             - %todo_by.referenceTime%
     -
         class: staabm\PHPStanTodoBy\TodoByTicketRule
-        tags: [phpstan.rules.rule]
         arguments:
             - %todo_by.nonIgnorable%
-            - %todo_by.jiraDoneStatuses%
+            - %todo_by.ticketDoneStatuses%
+            - %todo_by.ticketKeyPrefix%
 
     -
         class: staabm\PHPStanTodoBy\TodoByVersionRule
@@ -72,6 +91,6 @@ services:
     -
         class: staabm\PHPStanTodoBy\utils\JiraTicketStatusFetcher
         arguments:
-            - %todo_by.jiraHost%
-            - %todo_by.jiraUser%
-            - %todo_by.jiraPasswordOrApiKey%
+            - %todo_by.jiraServer%
+            - %todo_by.jiraUsername%
+            - %todo_by.jiraPasswordOrApiKeyFilePath%
