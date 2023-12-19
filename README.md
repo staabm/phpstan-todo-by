@@ -192,11 +192,10 @@ ticketKeyPrefix: null
 # e.g. https://your-company.atlassian.net
 jiraServer: null
 
-jiraUsername: null
-
-# path to a file containing a string with either a password or api key.
-# this file must not be commited to the repository!
-jiraPasswordOrApiKeyFilePath: null
+# path to a file containing a string with username and either a password or api key.
+# username and a password/key must be separated with ":", e.g. john.doe@example.com:p@ssword
+# this file must not be commited into the repository!
+jiraCredentialsFilePath: null
 ```
 
 

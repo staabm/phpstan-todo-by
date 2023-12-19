@@ -13,11 +13,11 @@ final class JiraTicketStatusFetcher implements TicketStatusFetcher
     private Client $client;
     private string $credentials;
 
-    public function __construct(string $host, string $username, string $passwordOrApiKeyFilePath)
+    public function __construct(string $host, string $credentialsFilePath)
     {
-        $passwordOrApiKey = self::getPasswordOrApiKey($passwordOrApiKeyFilePath);
+        $credentials = self::getCredentials($credentialsFilePath);
 
-        $this->credentials = base64_encode("$username:$passwordOrApiKey");
+        $this->credentials = base64_encode($credentials);
         $this->client = new Client([
             'base_uri' => $host,
         ]);
@@ -78,15 +78,15 @@ final class JiraTicketStatusFetcher implements TicketStatusFetcher
         return $data;
     }
 
-    private static function getPasswordOrApiKey(string $passwordOrApiKeyFilePath): string
+    private static function getCredentials(string $credentialsFilePath): string
     {
-        $passwordOrApiKey = file_get_contents($passwordOrApiKeyFilePath);
+        $credentials = file_get_contents($credentialsFilePath);
 
-        if ($passwordOrApiKey === false) {
-            throw new \RuntimeException("Cannot read $passwordOrApiKeyFilePath file");
+        if ($credentials === false) {
+            throw new \RuntimeException("Cannot read $credentialsFilePath file");
         }
 
-        return trim($passwordOrApiKey);
+        return trim($credentials);
     }
 
     /** @return never */
