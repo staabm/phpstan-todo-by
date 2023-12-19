@@ -10,7 +10,7 @@ use staabm\PHPStanTodoBy\TodoByVersionRule;
 /**
  * @extends RuleTestCase<TodoByVersionRule>
  */
-final class TodoByVersionRuleThrowingFetchterTest extends RuleTestCase
+final class TodoByVersionRuleAlwaysThrowingFetchterTest extends RuleTestCase
 {
     private string $referenceVersion;
     protected function getRule(): Rule
