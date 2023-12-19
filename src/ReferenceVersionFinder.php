@@ -2,6 +2,7 @@
 
 namespace staabm\PHPStanTodoBy;
 
+use Version\Exception\InvalidVersionString;
 use Version\Version;
 
 final class ReferenceVersionFinder
@@ -19,7 +20,16 @@ final class ReferenceVersionFinder
         if (in_array($this->referenceVersion, ['nextMajor', 'nextMinor', 'nextPatch'], true)) {
             $latestTagVersion = $this->fetcher->fetchLatestTagVersion();
 
-            $version = Version::fromString($latestTagVersion);
+            try {
+                $version = Version::fromString($latestTagVersion);
+            } catch (InvalidVersionString $originException) {
+                try {
+                    $version = Version::fromString($latestTagVersion.'.0');
+                } catch (InvalidVersionString $innerException) {
+                    throw $originException;
+                }
+            }
+            
             if ($this->referenceVersion === 'nextMajor') {
                 return $version->incrementMajor()->toString();
             }
