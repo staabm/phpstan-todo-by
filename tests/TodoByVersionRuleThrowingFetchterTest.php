@@ -20,7 +20,7 @@ final class TodoByVersionRuleThrowingFetchterTest extends RuleTestCase
 
     public function testRule(): void
     {
-        $this->referenceVersion = "0.1";
+        $this->referenceVersion = "nextMajor";
 
         $this->analyse([__DIR__ . '/data/regularComments.php'], []);
     }
