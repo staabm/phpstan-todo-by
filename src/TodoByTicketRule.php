@@ -32,15 +32,15 @@ REGEXP;
 
     private bool $nonIgnorable;
     /** @var list<non-empty-string> */
-    private array $doneStatuses;
+    private array $resolvedStatuses;
     private string $keyPrefix;
     private TicketStatusFetcher $fetcher;
 
-    /** @param list<non-empty-string> $doneStatuses */
-    public function __construct(bool $nonIgnorable, array $doneStatuses, string $keyPrefix, TicketStatusFetcher $fetcher)
+    /** @param list<non-empty-string> $resolvedStatuses */
+    public function __construct(bool $nonIgnorable, array $resolvedStatuses, string $keyPrefix, TicketStatusFetcher $fetcher)
     {
         $this->nonIgnorable = $nonIgnorable;
-        $this->doneStatuses = $doneStatuses;
+        $this->resolvedStatuses = $resolvedStatuses;
         $this->keyPrefix = $keyPrefix;
         $this->fetcher = $fetcher;
     }
@@ -92,7 +92,7 @@ REGEXP;
 
                 $ticketStatus = $this->fetcher->fetchTicketStatus($ticketKey);
 
-                if ($ticketStatus === null || !in_array($ticketStatus, $this->doneStatuses, true)) {
+                if ($ticketStatus === null || !in_array($ticketStatus, $this->resolvedStatuses, true)) {
                     continue;
                 }
 

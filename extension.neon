@@ -5,7 +5,7 @@ parametersSchema:
         referenceVersion: string()
         singleGitRepo: bool()
         byTicketEnabled: bool()
-        ticketDoneStatuses: listOf(string())
+        ticketResolvedStatuses: listOf(string())
         ticketKeyPrefix: schema(string(), nullable())
         jiraServer: schema(string(), nullable())
         jiraUsername: schema(string(), nullable())
@@ -32,7 +32,7 @@ parameters:
 
         # a case-sensitive list of status names.
         # only tickets having any of these statuses are considered resolved.
-        ticketDoneStatuses: []
+        ticketResolvedStatuses: []
 
         # if your ticket key is FOO-12345, then this value should be "FOO".
         # only comments with keys containing this prefix will be analyzed.
@@ -60,7 +60,7 @@ services:
         class: staabm\PHPStanTodoBy\TodoByTicketRule
         arguments:
             - %todo_by.nonIgnorable%
-            - %todo_by.ticketDoneStatuses%
+            - %todo_by.ticketResolvedStatuses%
             - %todo_by.ticketKeyPrefix%
 
     -
