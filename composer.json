@@ -28,7 +28,8 @@
     },
     "scripts": {
         "phpstan": "vendor/bin/phpstan --ansi",
-        "test": "vendor/bin/phpunit tests/"
+        "test": "vendor/bin/phpunit tests/",
+        "cs": "vendor/bin/php-cs-fixer fix --ansi"
     },
     "config": {
         "sort-packages": true,

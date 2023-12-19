@@ -3,6 +3,7 @@ parametersSchema:
         nonIgnorable: bool()
         referenceTime: string()
         referenceVersion: string()
+        singleGitRepo: bool()
     ])
 
 # default parameters
@@ -15,6 +16,10 @@ parameters:
 
         # "nextMajor", "nextMinor", "nextPatch" or a version string like "1.2.3"
         referenceVersion: "nextMajor"
+
+        # whether all files beeing analyzed are contained in the same git repository.
+        # If set to false, the git tags are fetched for each directory individually (slower)
+        singleGitRepo: true
 
 services:
     -
@@ -29,6 +34,7 @@ services:
         tags: [phpstan.rules.rule]
         arguments:
             - %todo_by.nonIgnorable%
+            - %todo_by.singleGitRepo%
 
     -
         class: staabm\PHPStanTodoBy\GitTagFetcher

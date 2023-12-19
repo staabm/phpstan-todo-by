@@ -6,8 +6,8 @@ use staabm\PHPStanTodoBy\TagFetcher;
 
 final class AlwaysThrowingTagFetcher implements TagFetcher
 {
-    public function fetchLatestTagVersion(): string
+    public function fetchLatestTagVersion(?string $workingDirectory): string
     {
-        throw new \RuntimeException('Could not determine latest git tag');
+        throw new \RuntimeException('This should never happen');
     }
 }

@@ -16,7 +16,7 @@ final class ReferenceVersionFinderTest extends TestCase
     public function testReferenceFinder(string $refernceVersion, string $staticTag, string $expected): void
     {
         $finder = new ReferenceVersionFinder($refernceVersion, new StaticTagFetcher($staticTag));
-        $this->assertSame($expected, $finder->find());
+        $this->assertSame($expected, $finder->find(null));
     }
 
     /**

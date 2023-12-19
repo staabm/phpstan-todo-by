@@ -3,6 +3,7 @@
 PHPStan extension to check for TODO comments with expiration date/version.
 Inspired by [parker-codes/todo-by](https://github.com/parker-codes/todo_by).
 
+
 ## Example:
 
 ```php
@@ -19,6 +20,7 @@ function doBar() {
 }
 
 ```
+
 
 ## Supported todo formats
 
@@ -56,7 +58,9 @@ see examples of different comment variants which are supported:
 // TODO >123.4: Must fix this or bump the version
 ```
 
+
 ## Configuration
+
 
 ### Non-ignorable errors
 
@@ -68,6 +72,7 @@ parameters:
     todo_by:
         nonIgnorable: false # default is true
 ```
+
 
 ### Reference time
 
@@ -92,6 +97,7 @@ parameters:
 ```
 
 `TODOBY_REF_TIME="now+7days" vendor/bin/phpstan analyze`
+
 
 ### Reference version
 
@@ -121,6 +127,17 @@ In a GitHub Action this can be done like this:
     -   name: Get tags
         run: git fetch --tags origin
 ```
+
+
+### Multiple GIT repository support
+
+By default the latest git tag to calculate the reference version is fetched once for all files beeing analyzed.
+
+This behaviour can be configured with the `singleGitRepo` option.
+
+In case you are using git submodules, or the analyzed codebase consists of multiple git repositories,
+set the `singleGitRepo` option to `false` which resolves the reference version for each directory beeing analyzed.
+
 
 ## Installation
 

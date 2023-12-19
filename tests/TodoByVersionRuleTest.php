@@ -17,7 +17,11 @@ final class TodoByVersionRuleTest extends RuleTestCase
     private string $referenceVersion;
     protected function getRule(): Rule
     {
-        return new TodoByVersionRule(true, new ReferenceVersionFinder($this->referenceVersion, new GitTagFetcher()));
+        return new TodoByVersionRule(
+            true,
+            true,
+            new ReferenceVersionFinder($this->referenceVersion, new GitTagFetcher())
+        );
     }
 
     /**

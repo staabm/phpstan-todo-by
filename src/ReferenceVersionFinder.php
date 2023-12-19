@@ -15,10 +15,10 @@ final class ReferenceVersionFinder
         $this->referenceVersion = $referenceVersion;
         $this->fetcher = $fetcher;
     }
-    public function find(): string
+    public function find(?string $workingDirectory): string
     {
         if (in_array($this->referenceVersion, ['nextMajor', 'nextMinor', 'nextPatch'], true)) {
-            $latestTagVersion = $this->fetcher->fetchLatestTagVersion();
+            $latestTagVersion = $this->fetcher->fetchLatestTagVersion($workingDirectory);
 
             try {
                 $version = Version::fromString($latestTagVersion);
