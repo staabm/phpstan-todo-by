@@ -2,11 +2,8 @@
 
 namespace staabm\PHPStanTodoBy\Tests;
 
-use PHPStan\Rules\Rule;
-use PHPStan\Testing\RuleTestCase;
 use PHPUnit\Framework\TestCase;
-use staabm\PHPStanTodoBy\ReferenceVersionFinder;
-use staabm\PHPStanTodoBy\TodoByDateRule;
+use staabm\PHPStanTodoBy\utils\ReferenceVersionFinder;
 
 final class ReferenceVersionFinderTest extends TestCase
 {

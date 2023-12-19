@@ -1,8 +1,7 @@
 <?php
 
-namespace staabm\PHPStanTodoBy;
+namespace staabm\PHPStanTodoBy\utils;
 
-use Version\Exception\InvalidVersionString;
 use Version\Version;
 
 final class ReferenceVersionFinder

@@ -4,11 +4,10 @@ namespace staabm\PHPStanTodoBy\Tests;
 
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
-use staabm\PHPStanTodoBy\GitTagFetcher;
-use staabm\PHPStanTodoBy\ReferenceVersionFinder;
-use staabm\PHPStanTodoBy\TodoByDateRule;
 use staabm\PHPStanTodoBy\TodoByVersionRule;
-use staabm\PHPStanTodoBy\VersionNormalizer;
+use staabm\PHPStanTodoBy\utils\GitTagFetcher;
+use staabm\PHPStanTodoBy\utils\ReferenceVersionFinder;
+use staabm\PHPStanTodoBy\utils\VersionNormalizer;
 
 /**
  * @extends RuleTestCase<TodoByVersionRule>
