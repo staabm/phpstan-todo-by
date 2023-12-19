@@ -42,48 +42,58 @@ final class TodoByVersionRuleTest extends RuleTestCase
             ]
         ];
 
+        $tip = "Calculated reference version is '1.0.0.0'.\n\n   See also:\n https://github.com/staabm/phpstan-todo-by#reference-version";
         yield [
             "1.0",
             [
                 [
                     'Version requirement <1.0.0 not satisfied: This has to be in the first major release.',
                     5,
+                    $tip
                 ],
                 [
                 'Version requirement <1.0.0 not satisfied.',
                     10,
+                    $tip
                 ]
             ]
         ];
 
+        $tip = "Calculated reference version is '123.4.0.0'.\n\n   See also:\n https://github.com/staabm/phpstan-todo-by#reference-version";
         yield [
             "123.4",
             [
                 [
                     'Version requirement <1.0.0 not satisfied: This has to be in the first major release.',
                     5,
+                    $tip
                 ],
                 [
                     'Version requirement <1.0.0 not satisfied.',
                     10,
+                    $tip
                 ]
             ]
         ];
 
+        $tip = "Calculated reference version is '123.5.0.0'.\n\n   See also:\n https://github.com/staabm/phpstan-todo-by#reference-version";
         yield [
             "123.5",
             [
                 [
                     'Version requirement <1.0.0 not satisfied: This has to be in the first major release.',
                     5,
+                    $tip
                 ],
                 [
                     'Version requirement >123.4 not satisfied: Must fix this or bump the version.',
                     7,
+                    $tip
                 ],
                 [
                     'Version requirement <1.0.0 not satisfied.',
                     10,
+                    $tip
                 ]
             ]
         ];
@@ -105,16 +115,20 @@ final class TodoByVersionRuleTest extends RuleTestCase
      */
     public static function provideSemanticVersions(): iterable
     {
+        $tip = "Calculated reference version is '1.0.0.0'.\n\n   See also:\n https://github.com/staabm/phpstan-todo-by#reference-version";
+
         yield [
             'nextMajor', // we assume this resolves to 1.0
             [
                 [
                     'Version requirement <1.0.0 not satisfied: This has to be in the first major release.',
                     5,
+                    $tip
                 ],
                 [
                     'Version requirement <1.0.0 not satisfied.',
                     10,
+                    $tip
                 ]
             ]
         ];
