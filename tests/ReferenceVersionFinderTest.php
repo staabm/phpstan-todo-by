@@ -19,6 +19,9 @@ final class ReferenceVersionFinderTest extends TestCase
         $this->assertSame($expected, $finder->find());
     }
 
+    /**
+     * @return iterable<array{string, string, string}>
+     */
     public static function provideData(): iterable
     {
         yield [
