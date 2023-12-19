@@ -12,7 +12,7 @@ final class VersionNormalizer
     {
         $this->versionParser = new VersionParser();
     }
-    
+
     public function normalize(string $version): string
     {
         return $this->versionParser->normalize($version);
