@@ -19,7 +19,7 @@ final class ReferenceVersionFinderTest extends TestCase
         $this->assertSame($expected, $finder->find());
     }
 
-    static public function provideData(): iterable
+    public static function provideData(): iterable
     {
         yield [
             '1.2.3',
