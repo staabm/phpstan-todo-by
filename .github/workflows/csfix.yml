@@ -1,4 +1,6 @@
 name: Auto Format PHP
+# workflow requires read/write access in actions
+# see https://dev.to/github/the-githubtoken-in-github-actions-how-it-works-change-permissions-customizations-3cgp#the-permissions-ui
 
 on:
     pull_request:
