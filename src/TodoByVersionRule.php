@@ -129,6 +129,7 @@ REGEXP;
                 if ($this->nonIgnorable) {
                     $errBuilder->nonIgnorable();
                 }
+                $errBuilder->tip('Calculated reference version is '. $referenceVersion .".\n\n   See also:\n https://github.com/staabm/phpstan-todo-by#reference-version");
                 $errors[] = $errBuilder->build();
             }
         }
