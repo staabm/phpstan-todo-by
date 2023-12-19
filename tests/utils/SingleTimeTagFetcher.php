@@ -2,7 +2,7 @@
 
 namespace staabm\PHPStanTodoBy\Tests;
 
-use staabm\PHPStanTodoBy\TagFetcher;
+use staabm\PHPStanTodoBy\utils\TagFetcher;
 
 final class SingleTimeTagFetcher implements TagFetcher
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace staabm\PHPStanTodoBy;
+namespace staabm\PHPStanTodoBy\utils;
 
 interface TagFetcher
 {
