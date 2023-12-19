@@ -62,17 +62,17 @@ final class ReferenceVersionFinderTest extends TestCase
 
         yield [
             'nextMajor',
-            '1.0',
+            '1',
             '2.0.0',
         ];
         yield [
             'nextMinor',
-            '1.0',
+            '1',
             '1.1.0',
         ];
         yield [
             'nextPatch',
-            '1.0',
+            '1',
             '1.0.1',
         ];
     }

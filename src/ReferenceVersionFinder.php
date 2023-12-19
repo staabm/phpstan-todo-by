@@ -26,7 +26,11 @@ final class ReferenceVersionFinder
                 try {
                     $version = Version::fromString($latestTagVersion.'.0');
                 } catch (InvalidVersionString $innerException) {
-                    throw $originException;
+                    try {
+                        $version = Version::fromString($latestTagVersion.'.0.0');
+                    } catch (InvalidVersionString $innerInnerException) {
+                        throw $originException;
+                    }
                 }
             }
 
