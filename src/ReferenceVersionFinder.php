@@ -5,10 +5,10 @@ namespace staabm\PHPStanTodoBy;
 use Version\Version;
 
 final class ReferenceVersionFinder {
-    private GitTagFetcher $fetcher;
+    private TagFetcher $fetcher;
     private string $referenceVersion;
 
-    public function __construct(string $referenceVersion, GitTagFetcher $fetcher) {
+    public function __construct(string $referenceVersion, TagFetcher $fetcher) {
         $this->referenceVersion = $referenceVersion;
         $this->fetcher = $fetcher;
     }

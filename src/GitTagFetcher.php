@@ -2,7 +2,7 @@
 
 namespace staabm\PHPStanTodoBy;
 
-final class GitTagFetcher {
+final class GitTagFetcher implements TagFetcher {
     // fetch version of the latest created git tag
     public function fetchLatestTagVersion(): string
     {
