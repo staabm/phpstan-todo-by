@@ -12,7 +12,7 @@ final class StaticTagFetcher implements TagFetcher
     {
         $this->tag = $tag;
     }
-    public function fetchLatestTagVersion(): string
+    public function fetchLatestTagVersion(?string $workingDirectory): string
     {
         return $this->tag;
     }
