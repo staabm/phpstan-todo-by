@@ -18,6 +18,9 @@ final class GitTagFetcher implements TagFetcher
         exec($cmd, $output, $returnCode);
 
         if ($returnCode !== 0 || count($output) !== 1) {
+            if ($workingDirectory !== null) {
+                throw new \RuntimeException('Could not determine latest git tag in working directory: "' . $workingDirectory .'"');
+            }
             throw new \RuntimeException('Could not determine latest git tag');
         }
         return $output[0];
