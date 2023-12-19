@@ -16,16 +16,18 @@ final class TodoByTicketRuleTest extends RuleTestCase
     {
         $fetcher = new StaticTicketStatusFetcher([
             'APP-123' => 'Done',
-            'APP-444' => 'To Do',
+            'APP-4444' => 'Resolved',
+            'APP-5000' => 'To Do',
         ]);
 
-        return new TodoByTicketRule(true, ['Done'], 'APP', $fetcher);
+        return new TodoByTicketRule(true, ['Done', 'Resolved'], 'APP', $fetcher);
     }
 
     public function testRule(): void
     {
         $this->analyse([__DIR__ . '/data/example.php'], [
-            ['Resolved in APP-123: fix it.', 63]
+            ['Should have been resolved in APP-123: fix it.', 63],
+            ['Comment should have been resolved in APP-4444.', 64],
         ]);
     }
 }
