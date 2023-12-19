@@ -122,6 +122,17 @@ In a GitHub Action this can be done like this:
         run: git fetch --tags origin
 ```
 
+
+### Multi GIT Repo support
+
+By default the latest git tag to calculate the reference version is fetched once for all files beeing analyzed.
+
+This behaviour can be configured with the `singleGitRepo` option.
+
+In case you are using git submodules, or the analyzed codebase consists of multiple git repositories,
+set the `singleGitRepo` option to `false` which resolves the reference version for each directory beeing analyzed (and is a bit slower).
+
+
 ## Installation
 
 To use this extension, require it in [Composer](https://getcomposer.org/):
