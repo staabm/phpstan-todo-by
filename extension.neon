@@ -38,6 +38,7 @@ parameters:
         # only comments with keys containing this prefix will be analyzed.
         ticketKeyPrefix: null
 
+        # e.g. https://your-company.atlassian.net
         jiraServer: null
 
         jiraUsername: null

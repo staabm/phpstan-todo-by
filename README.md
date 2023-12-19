@@ -28,6 +28,11 @@ function doFooBar() {
 
 // TODO: php:8 drop this polyfill when php 8.x is required
 
+// TODO: APP-2137 This has to be fixed
+function doBaz() {
+
+}
+
 ```
 
 
@@ -71,6 +76,10 @@ see examples of different comment variants which are supported:
 
 // TODO: phpunit/phpunit:<5 This has to be fixed before updating to phpunit 5.x
 // TODO@markus: phpunit/phpunit:5.3 This has to be fixed when updating phpunit to 5.3.x or higher
+
+// TODO: APP-123 fix it
+// TODO@lars: APP-444 fix it
+// todo@lars: APP-000 - fix it
 ```
 
 ## Configuration
@@ -157,6 +166,38 @@ This behaviour can be configured with the `singleGitRepo` option.
 In case you are using git submodules, or the analyzed codebase consists of multiple git repositories,
 set the `singleGitRepo` option to `false` which resolves the reference version for each directory beeing analyzed.
 
+
+### Issue tracker key support
+
+Optionally you can configure this extension to analyze your comments with issue tracker ticket keys.
+The extension fetches issue tracker API for issue status. If the remote issue is resolved, the comment will be reported.
+
+Currently only JIRA is supported.
+
+This feature is disabled by default. To enable it, you must set `byTicketEnabled: true` parameter.
+You also need to set these parameters:
+
+```yaml
+# a case-sensitive list of status names.
+# only tickets having any of these statuses are considered resolved.
+ticketResolvedStatuses:
+    - Done
+    - Resolved
+    - Declined
+
+# if your ticket key is FOO-12345, then this value should be "FOO".
+# only comments with keys containing this prefix will be analyzed.
+ticketKeyPrefix: null
+
+# e.g. https://your-company.atlassian.net
+jiraServer: null
+
+jiraUsername: null
+
+# path to a file containing a string with either a password or api key.
+# this file must not be commited to the repository!
+jiraPasswordOrApiKeyFilePath: null
+```
 
 
 ## Installation
