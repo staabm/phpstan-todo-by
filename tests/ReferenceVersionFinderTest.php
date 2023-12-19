@@ -22,6 +22,13 @@ final class ReferenceVersionFinderTest extends TestCase
     static public function provideData(): iterable
     {
         yield [
+            '1.2.3',
+            '1.0.3',
+            '1.2.3',
+        ];
+
+
+        yield [
             'nextMajor',
             '1.0.3',
             '2.0.0',

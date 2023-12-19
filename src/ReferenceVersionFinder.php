@@ -29,7 +29,7 @@ final class ReferenceVersionFinder
                     throw $originException;
                 }
             }
-            
+
             if ($this->referenceVersion === 'nextMajor') {
                 return $version->incrementMajor()->toString();
             }
