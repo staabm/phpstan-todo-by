@@ -3,7 +3,6 @@
 namespace staabm\PHPStanTodoBy;
 
 use Composer\Semver\Comparator;
-use Composer\Semver\VersionParser;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\VirtualNode;
@@ -38,7 +37,7 @@ REGEXP;
 
     private bool $nonIgnorable;
 
-    private VersionParser $versionParser;
+    private VersionNormalizer $versionNormalizer;
 
     private ReferenceVersionFinder $referenceVersionFinder;
 
@@ -52,12 +51,13 @@ REGEXP;
     public function __construct(
         bool $nonIgnorable,
         bool $singleGitRepo,
-        ReferenceVersionFinder $refVersionFinder
+        ReferenceVersionFinder $refVersionFinder,
+        VersionNormalizer $versionNormalizer
     ) {
-        $this->versionParser = new VersionParser();
         $this->referenceVersionFinder = $refVersionFinder;
         $this->nonIgnorable = $nonIgnorable;
         $this->singleGitRepo = $singleGitRepo;
+        $this->versionNormalizer = $versionNormalizer;
     }
 
     public function getNodeType(): string
@@ -106,7 +106,7 @@ REGEXP;
 
                 $versionComparator = $this->getVersionComparator($version);
                 $plainVersion = ltrim($version, implode("", self::COMPARATORS));
-                $normalized = $this->versionParser->normalize($plainVersion);
+                $normalized = $this->versionNormalizer->normalize($plainVersion);
 
                 $expired = false;
                 if ($versionComparator === '<') {
@@ -161,7 +161,7 @@ REGEXP;
 
         if (!array_key_exists($cacheKey, $this->referenceVersions)) {
             // lazy get the version, as it might incur subprocess creation
-            $this->referenceVersions[$cacheKey] = $this->versionParser->normalize(
+            $this->referenceVersions[$cacheKey] = $this->versionNormalizer->normalize(
                 $this->referenceVersionFinder->find($workingDirectory)
             );
         }

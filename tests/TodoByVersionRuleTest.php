@@ -8,6 +8,7 @@ use staabm\PHPStanTodoBy\GitTagFetcher;
 use staabm\PHPStanTodoBy\ReferenceVersionFinder;
 use staabm\PHPStanTodoBy\TodoByDateRule;
 use staabm\PHPStanTodoBy\TodoByVersionRule;
+use staabm\PHPStanTodoBy\VersionNormalizer;
 
 /**
  * @extends RuleTestCase<TodoByVersionRule>
@@ -20,7 +21,8 @@ final class TodoByVersionRuleTest extends RuleTestCase
         return new TodoByVersionRule(
             true,
             true,
-            new ReferenceVersionFinder($this->referenceVersion, new GitTagFetcher())
+            new ReferenceVersionFinder($this->referenceVersion, new GitTagFetcher()),
+            new VersionNormalizer()
         );
     }
 
