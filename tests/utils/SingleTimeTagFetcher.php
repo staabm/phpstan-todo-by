@@ -16,6 +16,6 @@ final class SingleTimeTagFetcher implements TagFetcher
             return '1.2.3';
         }
 
-        throw new \RuntimeException('Could not determine latest git tag');
+        throw new \RuntimeException('Tag fetched more than once');
     }
 }
