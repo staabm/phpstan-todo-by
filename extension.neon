@@ -43,3 +43,6 @@ services:
         class: staabm\PHPStanTodoBy\ReferenceVersionFinder
         arguments:
             - %todo_by.referenceVersion%
+
+    -
+        class: staabm\PHPStanTodoBy\VersionNormalizer
