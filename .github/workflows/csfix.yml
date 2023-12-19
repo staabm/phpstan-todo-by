@@ -20,7 +20,7 @@ jobs:
                 if: env.writable == 1
                 with:
                     ref: ${{ github.head_ref }}
-                    token: ${{ secrets.BOT_TOKEN }}
+                    token: ${{ secrets.GITHUB_TOKEN }}
             -   name: Checkout fork
                 uses: actions/checkout@v4
                 if: env.writable == 0
