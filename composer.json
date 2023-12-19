@@ -1,21 +1,23 @@
 {
     "name": "staabm/phpstan-todo-by",
-    "type": "phpstan-extension",
     "license": "MIT",
-    "keywords": ["dev", "phpstan", "phpstan-extension", "static analysis"],
-
+    "type": "phpstan-extension",
+    "keywords": [
+        "dev",
+        "phpstan",
+        "phpstan-extension",
+        "static analysis"
+    ],
     "require": {
         "php": "^7.4 || ^8.0",
         "composer/semver": "^3.4",
         "nikolaposa/version": "^4.1"
     },
-
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.41",
         "phpstan/phpstan": "^1.10",
         "phpunit/phpunit": "^9 || ^10.5"
     },
-
     "autoload": {
         "psr-4": {
             "staabm\\PHPStanTodoBy\\": "src/"
@@ -26,16 +28,11 @@
             "tests/"
         ]
     },
-    "scripts": {
-        "phpstan": "vendor/bin/phpstan --ansi",
-        "test": "vendor/bin/phpunit tests/",
-        "cs": "vendor/bin/php-cs-fixer fix --ansi"
-    },
     "config": {
-        "sort-packages": true,
         "allow-plugins": {
             "phpstan/extension-installer": true
-        }
+        },
+        "sort-packages": true
     },
     "extra": {
         "phpstan": {
@@ -43,5 +40,10 @@
                 "extension.neon"
             ]
         }
+    },
+    "scripts": {
+        "cs": "vendor/bin/php-cs-fixer fix --ansi",
+        "phpstan": "vendor/bin/phpstan --ansi",
+        "test": "vendor/bin/phpunit tests/"
     }
 }
