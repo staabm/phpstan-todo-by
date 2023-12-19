@@ -26,6 +26,10 @@ parameters:
         singleGitRepo: true
 
         jiraHost: https://jira.atlassian.com
+        jiraUser: ChangeMe
+        jiraPasswordOrApiKey: ChangeMe
+        jiraDoneStatuses:
+            - Done
 
 services:
     -
