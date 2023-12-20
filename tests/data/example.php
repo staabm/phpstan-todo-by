@@ -59,8 +59,3 @@ class Z {
  * @todo 2023-12-14 classic multi line comment
  *   more comment data
  */
-
-// TODO: APP-123 fix it
-// TODO@lars: APP-4444
-// TODO - APP-5000
-// todo@lars: APP-000 - fix it

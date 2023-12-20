@@ -30,9 +30,9 @@ final class TodoByTicketRuleTest extends RuleTestCase
 
     public function testRule(): void
     {
-        $this->analyse([__DIR__ . '/data/example.php'], [
-            ['Should have been resolved in APP-123: fix it.', 63],
-            ['Comment should have been resolved in APP-4444.', 64],
+        $this->analyse([__DIR__ . '/data/ticket.php'], [
+            ['Should have been resolved in APP-123: rename this to doBar().', 5],
+            ['Comment should have been resolved in APP-4444.', 11],
         ]);
     }
 }
