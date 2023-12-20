@@ -142,7 +142,7 @@ REGEXP;
                     }
 
                     try {
-                        if (!InstalledVersions::satisfies(new VersionParser(), $package, $version)) {
+                        if (!InstalledVersions::satisfies($versionParser, $package, $version)) {
                             continue;
                         }
                     } catch (\UnexpectedValueException $e) {
