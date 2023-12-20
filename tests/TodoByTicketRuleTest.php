@@ -5,7 +5,6 @@ namespace staabm\PHPStanTodoBy\Tests;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use staabm\PHPStanTodoBy\TodoByTicketRule;
-use staabm\PHPStanTodoBy\Tests\StaticTicketStatusFetcher;
 use staabm\PHPStanTodoBy\utils\ExpiredCommentErrorBuilder;
 
 /**
