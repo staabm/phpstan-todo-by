@@ -16,7 +16,6 @@ use PHPStan\Rules\RuleErrorBuilder;
 use staabm\PHPStanTodoBy\utils\CommentMatcher;
 use staabm\PHPStanTodoBy\utils\ExpiredCommentErrorBuilder;
 use staabm\PHPStanTodoBy\utils\ReferenceVersionFinder;
-use staabm\PHPStanTodoBy\utils\VersionNormalizer;
 use function preg_match_all;
 use function substr_count;
 use function trim;

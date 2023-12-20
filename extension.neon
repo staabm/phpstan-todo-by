@@ -49,9 +49,6 @@ services:
             - %todo_by.referenceVersion%
 
     -
-        class: staabm\PHPStanTodoBy\utils\VersionNormalizer
-
-    -
         class: staabm\PHPStanTodoBy\utils\ExpiredCommentErrorBuilder
         arguments:
             - %todo_by.nonIgnorable%
