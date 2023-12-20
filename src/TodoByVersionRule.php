@@ -8,6 +8,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Node\VirtualNode;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+use staabm\PHPStanTodoBy\utils\ExpiredCommentErrorBuilder;
 use staabm\PHPStanTodoBy\utils\ReferenceVersionFinder;
 use staabm\PHPStanTodoBy\utils\VersionNormalizer;
 use function preg_match_all;
@@ -34,8 +35,6 @@ final class TodoByVersionRule implements Rule
 /ix
 REGEXP;
 
-    private bool $nonIgnorable;
-
     private VersionNormalizer $versionNormalizer;
 
     private ReferenceVersionFinder $referenceVersionFinder;
@@ -47,14 +46,16 @@ REGEXP;
      */
     private array $referenceVersions = [];
 
+    private ExpiredCommentErrorBuilder $errorBuilder;
+
     public function __construct(
-        bool $nonIgnorable,
         bool $singleGitRepo,
         ReferenceVersionFinder $refVersionFinder,
-        VersionNormalizer $versionNormalizer
+        VersionNormalizer $versionNormalizer,
+        ExpiredCommentErrorBuilder $errorBuilder
     ) {
         $this->referenceVersionFinder = $refVersionFinder;
-        $this->nonIgnorable = $nonIgnorable;
+        $this->errorBuilder = $errorBuilder;
         $this->singleGitRepo = $singleGitRepo;
         $this->versionNormalizer = $versionNormalizer;
     }
@@ -126,20 +127,12 @@ REGEXP;
                     $errorMessage = "Version requirement {$version} not satisfied.";
                 }
 
-                $wholeMatchStartOffset = $match[0][1];
-
-                // Count the number of newlines between the start of the whole comment, and the start of the match.
-                $newLines = substr_count($text, "\n", 0, $wholeMatchStartOffset);
-
-                // Set the message line to match the line the comment actually starts on.
-                $messageLine = $comment->getStartLine() + $newLines;
-
-                $errBuilder = RuleErrorBuilder::message($errorMessage)->line($messageLine);
-                if ($this->nonIgnorable) {
-                    $errBuilder->nonIgnorable();
-                }
-                $errBuilder->tip("Calculated reference version is '". $referenceVersion ."'.\n\n   See also:\n https://github.com/staabm/phpstan-todo-by#reference-version");
-                $errors[] = $errBuilder->build();
+                $errors[] = $this->errorBuilder->buildError(
+                    $comment,
+                    $errorMessage,
+                    "Calculated reference version is '". $referenceVersion ."'.\n\n   See also:\n https://github.com/staabm/phpstan-todo-by#reference-version",
+                    $match[0][1]
+                );
             }
         }
 

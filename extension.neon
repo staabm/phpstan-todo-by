@@ -26,14 +26,12 @@ services:
         class: staabm\PHPStanTodoBy\TodoByDateRule
         tags: [phpstan.rules.rule]
         arguments:
-            - %todo_by.nonIgnorable%
             - %todo_by.referenceTime%
 
     -
         class: staabm\PHPStanTodoBy\TodoByVersionRule
         tags: [phpstan.rules.rule]
         arguments:
-            - %todo_by.nonIgnorable%
             - %todo_by.singleGitRepo%
 
     -
@@ -46,3 +44,8 @@ services:
 
     -
         class: staabm\PHPStanTodoBy\utils\VersionNormalizer
+
+    -
+        class: staabm\PHPStanTodoBy\utils\ExpiredCommentErrorBuilder
+        arguments:
+            - %todo_by.nonIgnorable%
