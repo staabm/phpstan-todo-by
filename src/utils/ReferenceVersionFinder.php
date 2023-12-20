@@ -12,14 +12,12 @@ final class ReferenceVersionFinder
     private TagFetcher $fetcher;
     private string $referenceVersion;
 
-    private VersionNormalizer $versionNormalizer;
-
     public function __construct(string $referenceVersion, TagFetcher $fetcher)
     {
         $this->referenceVersion = $referenceVersion;
         $this->fetcher = $fetcher;
-        $this->versionNormalizer = new VersionNormalizer();
     }
+
     public function find(?string $workingDirectory): string
     {
         if (in_array($this->referenceVersion, ['nextMajor', 'nextMinor', 'nextPatch'], true)) {
