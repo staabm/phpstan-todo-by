@@ -24,14 +24,15 @@ use const PREG_SET_ORDER;
 final class TodoByDateRule implements Rule
 {
     private const PATTERN = <<<'REGEXP'
-/
-@?TODO # possible @ prefix
-@?[a-zA-Z0-9_-]*\s* # optional username
-\s*[:-]?\s* # optional colon or hyphen
-(?P<date>\d{4}-\d{2}-\d{2}) # date consisting of YYYY-MM-DD format
-\s*[:-]?\s* # optional colon or hyphen
-(?P<comment>.*) # rest of line as comment text
-/ix
+{
+    @?TODO # possible @ prefix
+    @?[a-zA-Z0-9_-]*\s* # optional username
+    \s*[:-]?\s* # optional colon or hyphen
+    \s+ # keyword/date separator
+    (?P<date>\d{4}-\d{2}-\d{2}) # date consisting of YYYY-MM-DD format
+    \s*[:-]?\s* # optional colon or hyphen
+    (?P<comment>.*) # rest of line as comment text
+}ix
 REGEXP;
 
     private int $now;
