@@ -6,11 +6,13 @@ use PhpParser\Comment;
 use PHPStan\Node\VirtualNode;
 use PhpParser\Node;
 
-final class CommentMatcher {
+final class CommentMatcher
+{
     /**
      * @return iterable<Comment, array<mixed>>
      */
-    static public function matchComments(Node $node, string $pattern): iterable {
+    public static function matchComments(Node $node, string $pattern): iterable
+    {
         if (
             $node instanceof VirtualNode
             || $node instanceof Node\Expr
