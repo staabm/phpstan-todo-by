@@ -5,7 +5,6 @@ namespace staabm\PHPStanTodoBy\Tests;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use staabm\PHPStanTodoBy\TodoByPackageVersionRule;
-use staabm\PHPStanTodoBy\TodoByVersionRule;
 use staabm\PHPStanTodoBy\utils\ExpiredCommentErrorBuilder;
 
 /**
