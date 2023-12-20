@@ -64,7 +64,12 @@ REGEXP;
 
                 // see https://getcomposer.org/doc/07-runtime.md#installed-versions
                 if (!InstalledVersions::isInstalled($package)) {
-                    $errors[] = 'Package "' . $package . '" is not installed via composer.';
+                    $errors[] = $this->errorBuilder->buildError(
+                        $comment,
+                        'Package "' . $package . '" is not installed via composer.',
+                        null,
+                        $match[0][1]
+                    );
 
                     continue;
                 }

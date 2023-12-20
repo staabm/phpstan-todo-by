@@ -50,6 +50,10 @@ final class TodoByPackageVersionRuleTest extends RuleTestCase
                 [
                     'Package "not-installed/package" is not installed via composer.',
                     11
+                ],
+                [
+                    'phpunit/phpunit version requirement <9 not satisfied.',
+                    13
                 ]
             ]
         ];

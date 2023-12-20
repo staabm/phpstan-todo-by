@@ -9,3 +9,7 @@ namespace ExamplePackageVersion;
 
 
 // TODO: not-installed/package:<5 this should error because package is not in composer.json
+
+// TODO: phpunit/phpunit:<9
+// TODO: phpunit/phpunit:<10
+// TODO: phpunit/phpunit:<11
