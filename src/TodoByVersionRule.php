@@ -27,14 +27,16 @@ final class TodoByVersionRule implements Rule
     private const COMPARATORS = ['<', '>', '='];
 
     private const PATTERN = <<<'REGEXP'
-/
-@?TODO # possible @ prefix
-@?[a-zA-Z0-9_-]*\s* # optional username
-\s*[:-]?\s* # optional colon or hyphen
-(?P<version>[<>=]?[^\s:\-]+) # version
-\s*[:-]?\s* # optional colon or hyphen
-(?P<comment>.*) # rest of line as comment text
-/ix
+{
+    @?TODO # possible @ prefix
+    @?[a-zA-Z0-9_-]*\s* # optional username
+    \s*[:-]?\s* # optional colon or hyphen
+    \s+ # keyword/version separator
+    (?P<version>[<>=]?[^\s:\-]+) # version
+    \s*[:-]?\s* # optional colon or hyphen
+    \s+ # version/comment separator
+    (?P<comment>.*) # rest of line as comment text
+}ix
 REGEXP;
 
     private VersionNormalizer $versionNormalizer;
