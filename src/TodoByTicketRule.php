@@ -28,15 +28,19 @@ REGEXP;
 
     /** @var list<non-empty-string> */
     private array $resolvedStatuses;
-    private string $keyPrefix;
+    /** @var list<non-empty-string> */
+    private array $keyPrefixes;
     private TicketStatusFetcher $fetcher;
     private ExpiredCommentErrorBuilder $errorBuilder;
 
-    /** @param list<non-empty-string> $resolvedStatuses */
-    public function __construct(array $resolvedStatuses, string $keyPrefix, TicketStatusFetcher $fetcher, ExpiredCommentErrorBuilder $errorBuilder)
+    /**
+     * @param list<non-empty-string> $resolvedStatuses
+     * @param list<non-empty-string> $keyPrefixes
+     */
+    public function __construct(array $resolvedStatuses, array $keyPrefixes, TicketStatusFetcher $fetcher, ExpiredCommentErrorBuilder $errorBuilder)
     {
         $this->resolvedStatuses = $resolvedStatuses;
-        $this->keyPrefix = $keyPrefix;
+        $this->keyPrefixes = $keyPrefixes;
         $this->fetcher = $fetcher;
         $this->errorBuilder = $errorBuilder;
     }
@@ -57,7 +61,7 @@ REGEXP;
                 $ticketKey = $match['ticket'][0];
                 $todoText = trim($match['comment'][0]);
 
-                if (strpos($ticketKey, $this->keyPrefix) === false) {
+                if (!$this->hasPrefix($ticketKey)) {
                     continue;
                 }
 
@@ -83,5 +87,16 @@ REGEXP;
         }
 
         return $errors;
+    }
+
+    private function hasPrefix(string $ticketKey): bool
+    {
+        foreach ($this->keyPrefixes as $prefix) {
+            if (substr($ticketKey, 0, strlen($prefix)) === $prefix) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

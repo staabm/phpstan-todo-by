@@ -6,7 +6,7 @@ parametersSchema:
         singleGitRepo: bool()
         byTicketEnabled: bool()
         ticketResolvedStatuses: listOf(string())
-        ticketKeyPrefix: schema(string(), nullable())
+        ticketKeyPrefixes: listOf(string())
         jiraServer: schema(string(), nullable())
         jiraCredentialsFilePath: schema(string(), nullable())
     ])
@@ -33,9 +33,10 @@ parameters:
         # only tickets having any of these statuses are considered resolved.
         ticketResolvedStatuses: []
 
-        # if your ticket key is FOO-12345, then this value should be "FOO".
+        # if your ticket key is FOO-12345, then this value should be ["FOO"].
+        # multiple key prefixes are allowed, e.g. ["FOO", "APP"].
         # only comments with keys containing this prefix will be analyzed.
-        ticketKeyPrefix: null
+        ticketKeyPrefixes: []
 
         # e.g. https://your-company.atlassian.net
         jiraServer: null
@@ -59,7 +60,7 @@ services:
         class: staabm\PHPStanTodoBy\TodoByTicketRule
         arguments:
             - %todo_by.ticketResolvedStatuses%
-            - %todo_by.ticketKeyPrefix%
+            - %todo_by.ticketKeyPrefixes%
 
     -
         class: staabm\PHPStanTodoBy\TodoByVersionRule

@@ -185,9 +185,11 @@ ticketResolvedStatuses:
     - Resolved
     - Declined
 
-# if your ticket key is FOO-12345, then this value should be "FOO".
+# if your ticket key is FOO-12345, then this value should be ["FOO"].
+# multiple key prefixes are allowed, e.g. ["FOO", "APP"].
 # only comments with keys containing this prefix will be analyzed.
-ticketKeyPrefix: FOO
+ticketKeyPrefixes:
+    - FOO
 
 # e.g. https://your-company.atlassian.net
 jiraServer: https://acme.atlassian.net

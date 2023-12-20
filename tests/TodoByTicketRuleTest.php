@@ -16,13 +16,14 @@ final class TodoByTicketRuleTest extends RuleTestCase
     {
         $fetcher = new StaticTicketStatusFetcher([
             'APP-123' => 'Done',
+            'FOO-0001' => 'Done',
             'APP-4444' => 'Resolved',
             'APP-5000' => 'To Do',
         ]);
 
         return new TodoByTicketRule(
             ['Done', 'Resolved'],
-            'APP',
+            ['APP', 'FOO'],
             $fetcher,
             new ExpiredCommentErrorBuilder(true),
         );
@@ -33,6 +34,7 @@ final class TodoByTicketRuleTest extends RuleTestCase
         $this->analyse([__DIR__ . '/data/ticket.php'], [
             ['Should have been resolved in APP-123: rename this to doBar().', 5],
             ['Comment should have been resolved in APP-4444.', 11],
+            ['Comment should have been resolved in FOO-0001.', 12],
         ]);
     }
 }
