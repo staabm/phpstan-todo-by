@@ -2,21 +2,14 @@
 
 namespace staabm\PHPStanTodoBy;
 
-use Composer\Semver\Comparator;
 use Composer\Semver\VersionParser;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
-use PHPStan\Node\VirtualNode;
 use PHPStan\Rules\Rule;
-use PHPStan\Rules\RuleErrorBuilder;
 use staabm\PHPStanTodoBy\utils\CommentMatcher;
 use staabm\PHPStanTodoBy\utils\ExpiredCommentErrorBuilder;
 use staabm\PHPStanTodoBy\utils\ReferenceVersionFinder;
-use function preg_match_all;
-use function substr_count;
 use function trim;
-use const PREG_OFFSET_CAPTURE;
-use const PREG_SET_ORDER;
 
 /**
  * @implements Rule<Node>
