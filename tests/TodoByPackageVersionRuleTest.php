@@ -33,7 +33,7 @@ final class TodoByPackageVersionRuleTest extends RuleTestCase
     }
 
     /**
-     * @return iterable<list<array{0: string, 1: int, 2?: string|null}>>
+     * @return iterable<array{list<array{0: string, 1: int, 2?: string|null}>}>
      */
     public static function provideErrors(): iterable
     {
