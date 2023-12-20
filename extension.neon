@@ -37,6 +37,8 @@ services:
     -
         class: staabm\PHPStanTodoBy\TodoByPackageVersionRule
         tags: [phpstan.rules.rule]
+        arguments:
+            - %currentWorkingDirectory%
 
     -
         class: staabm\PHPStanTodoBy\utils\GitTagFetcher

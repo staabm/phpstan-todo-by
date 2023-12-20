@@ -15,3 +15,5 @@ namespace ExamplePackageVersion;
 // TODO: phpunit/phpunit:<11
 
 // TODO: phpunit/phpunit:<inValid.12
+
+// TODO php:<8.0 drop this code after min-version raise to 8.0

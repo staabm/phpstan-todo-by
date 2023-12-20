@@ -2,11 +2,13 @@
 
 namespace staabm\PHPStanTodoBy;
 
+use Composer\Autoload\ClassLoader;
 use Composer\InstalledVersions;
 use Composer\Semver\Comparator;
 use Composer\Semver\VersionParser;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
+use PHPStan\Internal\ComposerHelper;
 use PHPStan\Node\VirtualNode;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
@@ -31,7 +33,7 @@ final class TodoByPackageVersionRule implements Rule
     @?TODO # possible @ prefix
     @?[a-zA-Z0-9_-]*\s* # optional username
     \s*[:-]?\s* # optional colon or hyphen
-    (?:(?P<package>[a-z0-9]([_.-]?[a-z0-9]+)*/[a-z0-9](([_.]|-{1,2})?[a-z0-9]+)*):) # composer package name, followed by ":"
+    (?:(?P<package>(php|[a-z0-9]([_.-]?[a-z0-9]+)*/[a-z0-9](([_.]|-{1,2})?[a-z0-9]+)*)):) # "php" or a composer package name, followed by ":"
     (?P<version>[^\s:\-]+) # version constraint
     \s*[:-]?\s* # optional colon or hyphen
     (?P<comment>.*) # rest of line as comment text
@@ -40,9 +42,13 @@ REGEXP;
 
     private ExpiredCommentErrorBuilder $errorBuilder;
 
+    private string $workingDirectory;
+
     public function __construct(
+        string $workingDirectory,
         ExpiredCommentErrorBuilder $errorBuilder
     ) {
+        $this->workingDirectory = $workingDirectory;
         $this->errorBuilder = $errorBuilder;
     }
 
@@ -56,40 +62,74 @@ REGEXP;
         $it = CommentMatcher::matchComments($node, self::PATTERN);
 
         $errors = [];
+        $versionParser = new VersionParser();
         foreach($it as $comment => $matches) {
             /** @var array<int, array<array{0: string, 1: int}>> $matches */
             foreach ($matches as $match) {
 
                 $package = $match['package'][0];
-
-                // see https://getcomposer.org/doc/07-runtime.md#installed-versions
-                if (!InstalledVersions::isInstalled($package)) {
-                    $errors[] = $this->errorBuilder->buildError(
-                        $comment,
-                        'Package "' . $package . '" is not installed via Composer.',
-                        null,
-                        $match[0][1]
-                    );
-
-                    continue;
-                }
-
                 $version = $match['version'][0];
                 $todoText = trim($match['comment'][0]);
 
-                try {
-                    if (InstalledVersions::satisfies(new VersionParser(), $package, $version)) {
+                if ($package === 'php') {
+                    $config = ComposerHelper::getComposerConfig($this->workingDirectory);
+                    if ($config === null) {
+                        $errors[] = $this->errorBuilder->buildError(
+                            $comment,
+                            'Unable to find composer.json in '. $this->workingDirectory,
+                            null,
+                            $match[0][1]
+                        );
+
                         continue;
                     }
-                } catch (\UnexpectedValueException $e) {
-                    $errors[] = $this->errorBuilder->buildError(
-                        $comment,
-                        'Invalid version constraint "' . $version . '" for package "' . $package . '".',
-                        null,
-                        $match[0][1]
-                    );
 
-                    continue;
+                    if (!isset($config['require']['php'])) {
+                        $errors[] = $this->errorBuilder->buildError(
+                            $comment,
+                            'Missing php platform requirement from '. $this->workingDirectory .'/composer.json',
+                            null,
+                            $match[0][1]
+                        );
+
+                        continue;
+                    }
+
+                    $provided = $versionParser->parseConstraints(
+                        $config['require']['php']
+                    );
+                    $constraint = $versionParser->parseConstraints($version);
+
+                    if ($provided->matches($constraint)) {
+                        continue;
+                    }
+                } else {
+                    // see https://getcomposer.org/doc/07-runtime.md#installed-versions
+                    if (!InstalledVersions::isInstalled($package)) {
+                        $errors[] = $this->errorBuilder->buildError(
+                            $comment,
+                            'Package "' . $package . '" is not installed via Composer.',
+                            null,
+                            $match[0][1]
+                        );
+
+                        continue;
+                    }
+
+                    try {
+                        if (InstalledVersions::satisfies(new VersionParser(), $package, $version)) {
+                            continue;
+                        }
+                    } catch (\UnexpectedValueException $e) {
+                        $errors[] = $this->errorBuilder->buildError(
+                            $comment,
+                            'Invalid version constraint "' . $version . '" for package "' . $package . '".',
+                            null,
+                            $match[0][1]
+                        );
+
+                        continue;
+                    }
                 }
 
                 // Have always present date at the start of the message.
