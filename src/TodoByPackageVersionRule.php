@@ -6,6 +6,7 @@ use Composer\Autoload\ClassLoader;
 use Composer\InstalledVersions;
 use Composer\Semver\Comparator;
 use Composer\Semver\VersionParser;
+use PhpParser\Comment;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Internal\ComposerHelper;
@@ -64,7 +65,6 @@ REGEXP;
         $it = CommentMatcher::matchComments($node, self::PATTERN);
 
         $errors = [];
-        $versionParser = new VersionParser();
         foreach($it as $comment => $matches) {
             /** @var array<int, array<array{0: string, 1: int}>> $matches */
             foreach ($matches as $match) {
@@ -79,82 +79,17 @@ REGEXP;
                 }
 
                 if ($package === 'php') {
-                    // @phpstan-ignore-next-line missing bc promise
-                    $config = ComposerHelper::getComposerConfig($this->workingDirectory);
-                    if ($config === null) {
-                        $errors[] = $this->errorBuilder->buildError(
-                            $comment,
-                            'Unable to find composer.json in '. $this->workingDirectory,
-                            null,
-                            $match[0][1]
-                        );
-
-                        continue;
-                    }
-
-                    if (
-                        !isset($config['require'])
-                        || !is_array($config['require'])
-                        || !isset($config['require']['php'])
-                        || !is_string($config['require']['php'])
-                    ) {
-                        $errors[] = $this->errorBuilder->buildError(
-                            $comment,
-                            'Missing php platform requirement in '. $this->workingDirectory .'/composer.json',
-                            null,
-                            $match[0][1]
-                        );
-
-                        continue;
-                    }
-
-                    $provided = $versionParser->parseConstraints(
-                        $config['require']['php']
-                    );
-
-                    try {
-                        $constraint = $versionParser->parseConstraints($version);
-                    } catch (\UnexpectedValueException $e) {
-                        $errors[] = $this->errorBuilder->buildError(
-                            $comment,
-                            'Invalid version constraint "' . $version . '" for package "' . $package . '".',
-                            null,
-                            $match[0][1]
-                        );
-
-                        continue;
-                    }
-
-                    if (!$provided->matches($constraint)) {
-                        continue;
-                    }
+                    $satisfiesOrError = $this->satisfiesPhpPlatformPackage($package, $version, $comment, $match[0][1]);
                 } else {
-                    // see https://getcomposer.org/doc/07-runtime.md#installed-versions
-                    if (!InstalledVersions::isInstalled($package)) {
-                        $errors[] = $this->errorBuilder->buildError(
-                            $comment,
-                            'Package "' . $package . '" is not installed via Composer.',
-                            null,
-                            $match[0][1]
-                        );
+                    $satisfiesOrError = $this->satisfiesInstalledPackage($package, $version, $comment, $match[0][1]);
+                }
 
-                        continue;
-                    }
-
-                    try {
-                        if (!InstalledVersions::satisfies($versionParser, $package, $version)) {
-                            continue;
-                        }
-                    } catch (\UnexpectedValueException $e) {
-                        $errors[] = $this->errorBuilder->buildError(
-                            $comment,
-                            'Invalid version constraint "' . $version . '" for package "' . $package . '".',
-                            null,
-                            $match[0][1]
-                        );
-
-                        continue;
-                    }
+                if ($satisfiesOrError instanceof \PHPStan\Rules\RuleError) {
+                    $errors[] = $satisfiesOrError;
+                    continue;
+                }
+                if ($satisfiesOrError === false) {
+                    continue;
                 }
 
                 // Have always present date at the start of the message.
@@ -175,6 +110,85 @@ REGEXP;
         }
 
         return $errors;
+    }
+
+    /**
+     * @return bool|\PHPStan\Rules\RuleError
+     */
+    private function satisfiesPhpPlatformPackage(string $package, string $version, Comment $comment, int $wholeMatchStartOffset)
+    {
+        $versionParser = new VersionParser();
+
+        // @phpstan-ignore-next-line missing bc promise
+        $config = ComposerHelper::getComposerConfig($this->workingDirectory);
+        if ($config === null) {
+            return $this->errorBuilder->buildError(
+                $comment,
+                'Unable to find composer.json in '. $this->workingDirectory,
+                null,
+                $wholeMatchStartOffset
+            );
+        }
+
+        if (
+            !isset($config['require'])
+            || !is_array($config['require'])
+            || !isset($config['require']['php'])
+            || !is_string($config['require']['php'])
+        ) {
+            return $this->errorBuilder->buildError(
+                $comment,
+                'Missing php platform requirement in '. $this->workingDirectory .'/composer.json',
+                null,
+                $wholeMatchStartOffset
+            );
+        }
+
+        $provided = $versionParser->parseConstraints(
+            $config['require']['php']
+        );
+
+        try {
+            $constraint = $versionParser->parseConstraints($version);
+        } catch (\UnexpectedValueException $e) {
+            return $this->errorBuilder->buildError(
+                $comment,
+                'Invalid version constraint "' . $version . '" for package "' . $package . '".',
+                null,
+                $wholeMatchStartOffset
+            );
+        }
+
+        return $provided->matches($constraint);
+    }
+
+    /**
+     * @return bool|\PHPStan\Rules\RuleError
+     */
+    private function satisfiesInstalledPackage(string $package, string $version, Comment $comment, int $wholeMatchStartOffset)
+    {
+        $versionParser = new VersionParser();
+
+        // see https://getcomposer.org/doc/07-runtime.md#installed-versions
+        if (!InstalledVersions::isInstalled($package)) {
+            return $this->errorBuilder->buildError(
+                $comment,
+                'Package "' . $package . '" is not installed via Composer.',
+                null,
+                $wholeMatchStartOffset
+            );
+        }
+
+        try {
+            return InstalledVersions::satisfies($versionParser, $package, $version);
+        } catch (\UnexpectedValueException $e) {
+            return $this->errorBuilder->buildError(
+                $comment,
+                'Invalid version constraint "' . $version . '" for package "' . $package . '".',
+                null,
+                $wholeMatchStartOffset
+            );
+        }
     }
 
     private function getVersionComparator(string $version): ?string
