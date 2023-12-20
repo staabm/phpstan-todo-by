@@ -221,9 +221,9 @@ We recommend you use OAuth over basic authentication, especially if you use phps
 There are multiple ways to pass your credentials to this extension.
 You should choose one of them - if you define both parameters, only `credentials` parameter is considered and the file is ignored.
 
-##### Pass credentials in environmental variable
+##### Pass credentials in environment variable
 
-Configure `credentials` parameter to [read value from environmental variable](https://phpstan.org/config-reference#environment-variables):
+Configure `credentials` parameter to [read value from environment variable](https://phpstan.org/config-reference#environment-variables):
 ```yaml
 parameters:
     todo_by:
