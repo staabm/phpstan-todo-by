@@ -25,15 +25,13 @@ use const PREG_SET_ORDER;
  */
 final class TodoByPackageVersionRule implements Rule
 {
-    private const COMPARATORS = ['<', '>', '='];
-
     private const PATTERN = <<<'REGEXP'
 {
     @?TODO # possible @ prefix
     @?[a-zA-Z0-9_-]*\s* # optional username
     \s*[:-]?\s* # optional colon or hyphen
-    (?:(?P<package>[a-z0-9]([_.-]?[a-z0-9]+)*/[a-z0-9](([_.]|-{1,2})?[a-z0-9]+)*):)\s* # optional composer package name
-    (?P<version>[<>=]+[^\s:\-]+) # version
+    (?:(?P<package>[a-z0-9]([_.-]?[a-z0-9]+)*/[a-z0-9](([_.]|-{1,2})?[a-z0-9]+)*):) # optional composer package name
+    (?P<version>[^\s:\-]+) # version
     \s*[:-]?\s* # optional colon or hyphen
     (?P<comment>.*) # rest of line as comment text
 }ix
@@ -69,7 +67,7 @@ REGEXP;
 
                 // see https://getcomposer.org/doc/07-runtime.md#installed-versions
                 if (!InstalledVersions::isInstalled($package)) {
-                    $errors[] = 'Package ' . $package . ' is not installed.';
+                    $errors[] = 'Package "' . $package . '" is not installed via composer.';
 
                     continue;
                 }
@@ -101,17 +99,4 @@ REGEXP;
         return $errors;
     }
 
-    private function getVersionComparator(string $version): ?string
-    {
-        $comparator = null;
-        for($i = 0; $i < strlen($version); $i++) {
-            if (!in_array($version[$i], self::COMPARATORS)) {
-                break;
-            }
-            $comparator .= $version[$i];
-        }
-
-        return $comparator;
-
-    }
 }

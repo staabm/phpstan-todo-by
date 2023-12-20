@@ -43,6 +43,14 @@ final class TodoByPackageVersionRuleTest extends RuleTestCase
                 [
                     'phpunit/phpunit version requirement <5 not satisfied: This has to be fixed when updating to phpunit 5.x.',
                     7
+                ],
+                [
+                    'phpunit/phpunit version requirement 5.3.* not satisfied: This has to be fixed when updating to phpunit 5.3.*.',
+                    8
+                ],
+                [
+                    'Package "not-installed/package" is not installed via composer.',
+                    11
                 ]
             ]
         ];
