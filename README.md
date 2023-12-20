@@ -24,6 +24,8 @@ function doFooBar() {
 
 }
 
+// TODO: php>8 drop this polyfill as of php8
+
 ```
 
 ## Supported todo formats
