@@ -77,7 +77,18 @@ REGEXP;
                 $version = $match['version'][0];
                 $todoText = trim($match['comment'][0]);
 
-                if (InstalledVersions::satisfies(new VersionParser(), $package, $version)) {
+                try {
+                    if (InstalledVersions::satisfies(new VersionParser(), $package, $version)) {
+                        continue;
+                    }
+                } catch (\UnexpectedValueException $e) {
+                    $errors[] = $this->errorBuilder->buildError(
+                        $comment,
+                        'Invalid version constraint "' . $version . '" for package "' . $package . '".',
+                        null,
+                        $match[0][1]
+                    );
+
                     continue;
                 }
 

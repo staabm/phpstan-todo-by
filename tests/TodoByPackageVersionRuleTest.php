@@ -54,6 +54,10 @@ final class TodoByPackageVersionRuleTest extends RuleTestCase
                 [
                     'phpunit/phpunit version requirement <9 not satisfied.',
                     13
+                ],
+                [
+                    'Invalid version constraint "<inValid.12" for package "phpunit/phpunit".',
+                    17
                 ]
             ]
         ];

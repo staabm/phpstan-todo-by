@@ -13,3 +13,5 @@ namespace ExamplePackageVersion;
 // TODO: phpunit/phpunit:<9
 // TODO: phpunit/phpunit:<10
 // TODO: phpunit/phpunit:<11
+
+// TODO: phpunit/phpunit:<inValid.12
