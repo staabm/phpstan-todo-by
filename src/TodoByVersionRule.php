@@ -9,6 +9,12 @@ use PHPStan\Rules\Rule;
 use staabm\PHPStanTodoBy\utils\CommentMatcher;
 use staabm\PHPStanTodoBy\utils\ExpiredCommentErrorBuilder;
 use staabm\PHPStanTodoBy\utils\ReferenceVersionFinder;
+use UnexpectedValueException;
+
+use function array_key_exists;
+use function dirname;
+use function in_array;
+use function strlen;
 use function trim;
 
 /**
@@ -19,16 +25,16 @@ final class TodoByVersionRule implements Rule
     private const COMPARATORS = ['<', '>', '='];
 
     private const PATTERN = <<<'REGEXP'
-{
-    @?TODO # possible @ prefix
-    @?[a-zA-Z0-9_-]*\s* # optional username
-    \s*[:-]?\s* # optional colon or hyphen
-    \s+ # keyword/version separator
-    (?P<version>[<>=]?[^\s:\-]+) # version
-    \s*[:-]?\s* # optional colon or hyphen
-    (?P<comment>.*) # rest of line as comment text
-}ix
-REGEXP;
+        {
+            @?TODO # possible @ prefix
+            @?[a-zA-Z0-9_-]*\s* # optional username
+            \s*[:-]?\s* # optional colon or hyphen
+            \s+ # keyword/version separator
+            (?P<version>[<>=]?[^\s:\-]+) # version
+            \s*[:-]?\s* # optional colon or hyphen
+            (?P<comment>.*) # rest of line as comment text
+        }ix
+        REGEXP;
 
     private ReferenceVersionFinder $referenceVersionFinder;
 
@@ -62,7 +68,7 @@ REGEXP;
 
         $errors = [];
         $versionParser = new VersionParser();
-        foreach($it as $comment => $matches) {
+        foreach ($it as $comment => $matches) {
             $referenceVersion = $this->getReferenceVersion($scope);
             $provided = $versionParser->parseConstraints(
                 $referenceVersion
@@ -70,18 +76,17 @@ REGEXP;
 
             /** @var array<int, array<array{0: string, 1: int}>> $matches */
             foreach ($matches as $match) {
-
                 $version = $match['version'][0];
                 $todoText = trim($match['comment'][0]);
 
                 // assume a min version constraint, when the comment does not specify a comparator
-                if ($this->getVersionComparator($version) === null) {
+                if (null === $this->getVersionComparator($version)) {
                     $version = '>='. $version;
                 }
 
                 try {
                     $constraint = $versionParser->parseConstraints($version);
-                } catch (\UnexpectedValueException $e) {
+                } catch (UnexpectedValueException $e) {
                     $errors[] = $this->errorBuilder->buildError(
                         $comment,
                         'Invalid version constraint "' . $version . '".',
@@ -97,8 +102,8 @@ REGEXP;
                 }
 
                 // If there is further text, append it.
-                if ($todoText !== '') {
-                    $errorMessage = "Version requirement {$version} satisfied: ". rtrim($todoText, '.') .".";
+                if ('' !== $todoText) {
+                    $errorMessage = "Version requirement {$version} satisfied: ". rtrim($todoText, '.') .'.';
                 } else {
                     $errorMessage = "Version requirement {$version} satisfied.";
                 }
@@ -141,7 +146,7 @@ REGEXP;
     private function getVersionComparator(string $version): ?string
     {
         $comparator = null;
-        for($i = 0; $i < strlen($version); $i++) {
+        for ($i = 0; $i < strlen($version); ++$i) {
             if (!in_array($version[$i], self::COMPARATORS)) {
                 break;
             }

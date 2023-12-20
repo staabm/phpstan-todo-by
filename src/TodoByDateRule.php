@@ -5,8 +5,10 @@ namespace staabm\PHPStanTodoBy;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
+use RuntimeException;
 use staabm\PHPStanTodoBy\utils\CommentMatcher;
 use staabm\PHPStanTodoBy\utils\ExpiredCommentErrorBuilder;
+
 use function strtotime;
 use function trim;
 
@@ -16,16 +18,16 @@ use function trim;
 final class TodoByDateRule implements Rule
 {
     private const PATTERN = <<<'REGEXP'
-{
-    @?TODO # possible @ prefix
-    @?[a-zA-Z0-9_-]*\s* # optional username
-    \s*[:-]?\s* # optional colon or hyphen
-    \s+ # keyword/date separator
-    (?P<date>\d{4}-\d{2}-\d{2}) # date consisting of YYYY-MM-DD format
-    \s*[:-]?\s* # optional colon or hyphen
-    (?P<comment>.*) # rest of line as comment text
-}ix
-REGEXP;
+        {
+            @?TODO # possible @ prefix
+            @?[a-zA-Z0-9_-]*\s* # optional username
+            \s*[:-]?\s* # optional colon or hyphen
+            \s+ # keyword/date separator
+            (?P<date>\d{4}-\d{2}-\d{2}) # date consisting of YYYY-MM-DD format
+            \s*[:-]?\s* # optional colon or hyphen
+            (?P<comment>.*) # rest of line as comment text
+        }ix
+        REGEXP;
 
     private int $now;
     private ExpiredCommentErrorBuilder $errorBuilder;
@@ -34,10 +36,10 @@ REGEXP;
         string $referenceTime,
         ExpiredCommentErrorBuilder $errorBuilder
     ) {
-        $time =  strtotime($referenceTime);
+        $time = strtotime($referenceTime);
 
-        if ($time === false) {
-            throw new \RuntimeException('Unable to parse reference time "' . $referenceTime . '"');
+        if (false === $time) {
+            throw new RuntimeException('Unable to parse reference time "' . $referenceTime . '"');
         }
 
         $this->now = $time;
@@ -54,10 +56,9 @@ REGEXP;
         $it = CommentMatcher::matchComments($node, self::PATTERN);
 
         $errors = [];
-        foreach($it as $comment => $matches) {
+        foreach ($it as $comment => $matches) {
             /** @var array<int, array<array{0: string, 1: int}>> $matches */
             foreach ($matches as $match) {
-
                 $date = $match['date'][0];
                 $todoText = trim($match['comment'][0]);
 
@@ -70,11 +71,10 @@ REGEXP;
                     continue;
                 }
 
-
                 // Have always present date at the start of the message.
                 // If there is further text, append it.
-                if ($todoText !== '') {
-                    $errorMessage = "Expired on {$date}: ". rtrim($todoText, '.') .".";
+                if ('' !== $todoText) {
+                    $errorMessage = "Expired on {$date}: ". rtrim($todoText, '.') .'.';
                 } else {
                     $errorMessage = "Comment expired on {$date}.";
                 }

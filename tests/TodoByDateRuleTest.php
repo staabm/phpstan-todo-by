@@ -9,10 +9,12 @@ use staabm\PHPStanTodoBy\utils\ExpiredCommentErrorBuilder;
 
 /**
  * @extends RuleTestCase<TodoByDateRule>
+ * @internal
  */
 final class TodoByDateRuleTest extends RuleTestCase
 {
     private string $referenceTime;
+
     protected function getRule(): Rule
     {
         return new TodoByDateRule(
@@ -23,7 +25,7 @@ final class TodoByDateRuleTest extends RuleTestCase
 
     public function testRule(): void
     {
-        $this->referenceTime = "now";
+        $this->referenceTime = 'now';
 
         $this->analyse([__DIR__ . '/data/example.php'], [
             [
@@ -63,7 +65,7 @@ final class TodoByDateRuleTest extends RuleTestCase
                 30,
             ],
             [
-                "Expired on 2023-12-14: method comment.",
+                'Expired on 2023-12-14: method comment.',
                 34,
             ],
             [
@@ -115,14 +117,14 @@ final class TodoByDateRuleTest extends RuleTestCase
 
     public function testReferenceTime(): void
     {
-        $this->referenceTime = "1st january 2023";
+        $this->referenceTime = '1st january 2023';
 
         $this->analyse([__DIR__ . '/data/referenceTime.php'], []);
     }
 
     public function testReferenceTime2(): void
     {
-        $this->referenceTime = "18th january 2023";
+        $this->referenceTime = '18th january 2023';
 
         $this->analyse([__DIR__ . '/data/referenceTime.php'], [
             [

@@ -32,7 +32,7 @@ final class ExpiredCommentErrorBuilder
         if ($this->nonIgnorable) {
             $errBuilder->nonIgnorable();
         }
-        if ($tip !== null) {
+        if (null !== $tip) {
             $errBuilder->tip($tip);
         }
         return $errBuilder->build();

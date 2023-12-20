@@ -3,8 +3,11 @@
 namespace staabm\PHPStanTodoBy\utils;
 
 use PhpParser\Comment;
-use PHPStan\Node\VirtualNode;
 use PhpParser\Node;
+use PHPStan\Node\VirtualNode;
+use RuntimeException;
+
+use function count;
 
 final class CommentMatcher
 {
@@ -22,7 +25,6 @@ final class CommentMatcher
         }
 
         foreach ($node->getComments() as $comment) {
-
             $text = $comment->getText();
 
             /**
@@ -34,11 +36,11 @@ final class CommentMatcher
              * PREG_SET_ORDER: Make each value of $matches be structured the same as if from preg_match().
              */
             if (
-                preg_match_all($pattern, $text, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER) === false
-                || count($matches) === 0
+                false === preg_match_all($pattern, $text, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER)
+                || 0 === count($matches)
             ) {
-                if (preg_last_error() !== PREG_NO_ERROR) {
-                    throw new \RuntimeException('Error in PCRE: '. preg_last_error_msg());
+                if (PREG_NO_ERROR !== preg_last_error()) {
+                    throw new RuntimeException('Error in PCRE: '. preg_last_error_msg());
                 }
 
                 continue;
