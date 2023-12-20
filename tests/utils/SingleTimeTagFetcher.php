@@ -2,6 +2,7 @@
 
 namespace staabm\PHPStanTodoBy\Tests;
 
+use RuntimeException;
 use staabm\PHPStanTodoBy\utils\TagFetcher;
 
 final class SingleTimeTagFetcher implements TagFetcher
@@ -10,12 +11,12 @@ final class SingleTimeTagFetcher implements TagFetcher
 
     public function fetchLatestTagVersion(?string $workingDirectory): string
     {
-        if (self::$counter === 0) {
-            self::$counter++;
+        if (0 === self::$counter) {
+            ++self::$counter;
 
             return '1.2.3';
         }
 
-        throw new \RuntimeException('Tag fetched more than once');
+        throw new RuntimeException('Tag fetched more than once');
     }
 }

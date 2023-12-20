@@ -10,10 +10,12 @@ use staabm\PHPStanTodoBy\utils\ReferenceVersionFinder;
 
 /**
  * @extends RuleTestCase<TodoByVersionRule>
+ * @internal
  */
 final class TodoByVersionRuleAlwaysThrowingFetchterTest extends RuleTestCase
 {
     private string $referenceVersion;
+
     protected function getRule(): Rule
     {
         return new TodoByVersionRule(
@@ -25,9 +27,8 @@ final class TodoByVersionRuleAlwaysThrowingFetchterTest extends RuleTestCase
 
     public function testRule(): void
     {
-        $this->referenceVersion = "nextMajor";
+        $this->referenceVersion = 'nextMajor';
 
         $this->analyse([__DIR__ . '/data/regularComments.php'], []);
     }
-
 }

@@ -12,9 +12,6 @@ $finder = PhpCsFixer\Finder::create()
         'data'
     ]);
 
-return (new PhpCsFixer\Config())
+return (new Redaxo\PhpCsFixerConfig\Config())
     ->setFinder($finder)
-    ->setRules([
-        '@PSR2' => true,
-    ]
-);
+    ;

@@ -5,6 +5,9 @@ namespace staabm\PHPStanTodoBy\Tests;
 use PHPUnit\Framework\TestCase;
 use staabm\PHPStanTodoBy\utils\ReferenceVersionFinder;
 
+/**
+ * @internal
+ */
 final class ReferenceVersionFinderTest extends TestCase
 {
     /**
@@ -13,7 +16,7 @@ final class ReferenceVersionFinderTest extends TestCase
     public function testReferenceFinder(string $refernceVersion, string $staticTag, string $expected): void
     {
         $finder = new ReferenceVersionFinder($refernceVersion, new StaticTagFetcher($staticTag));
-        $this->assertSame($expected, $finder->find(null));
+        static::assertSame($expected, $finder->find(null));
     }
 
     /**
@@ -26,7 +29,6 @@ final class ReferenceVersionFinderTest extends TestCase
             '1.0.3',
             '1.2.3',
         ];
-
 
         yield [
             'nextMajor',
