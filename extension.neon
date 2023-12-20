@@ -10,7 +10,8 @@ parametersSchema:
             resolvedStatuses: listOf(string())
             jira: structure([
                 server: string()
-                credentialsFilePath: string()
+                credentials: schema(string(), nullable())
+                credentialsFilePath: schema(string(), nullable())
             ])
         ])
     ])
@@ -47,10 +48,15 @@ parameters:
                 # e.g. https://your-company.atlassian.net
                 server: https://jira.atlassian.com
 
-                # path to a file containing a string with username and either a password or api key.
-                # username and a password/key must be separated with ":", e.g. john.doe@example.com:p@ssword
+                # see README for possible formats.
+                # if this value is empty, credentials file will be used instead.
+                credentials: null
+
+                # path to a file containing Jira credentials.
+                # see README for possible formats.
+                # if credentials parameter is not empty, it will be used instead of this file.
                 # this file must not be commited into the repository!
-                credentialsFilePath: ""
+                credentialsFilePath: null
 
 conditionalTags:
     staabm\PHPStanTodoBy\TodoByTicketRule:
@@ -94,7 +100,8 @@ services:
             - %todo_by.nonIgnorable%
 
     -
-        class: staabm\PHPStanTodoBy\utils\JiraTicketStatusFetcher
+        class: staabm\PHPStanTodoBy\utils\jira\JiraTicketStatusFetcher
         arguments:
             - %todo_by.ticket.jira.server%
+            - %todo_by.ticket.jira.credentials%
             - %todo_by.ticket.jira.credentialsFilePath%

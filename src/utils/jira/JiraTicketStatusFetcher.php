@@ -1,23 +1,24 @@
 <?php
 
-namespace staabm\PHPStanTodoBy\utils;
+namespace staabm\PHPStanTodoBy\utils\jira;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use Psr\Http\Message\StreamInterface;
+use staabm\PHPStanTodoBy\utils\TicketStatusFetcher;
 
 final class JiraTicketStatusFetcher implements TicketStatusFetcher
 {
     private const API_VERSION = 2;
 
     private Client $client;
-    private string $credentials;
+    private string $authorizationHeader;
 
-    public function __construct(string $host, string $credentialsFilePath)
+    public function __construct(string $host, ?string $credentials, ?string $credentialsFilePath)
     {
-        $credentials = self::getCredentials($credentialsFilePath);
+        $credentials = JiraAuthorization::getCredentials($credentials, $credentialsFilePath);
 
-        $this->credentials = base64_encode($credentials);
+        $this->authorizationHeader = JiraAuthorization::createAuthorizationHeader($credentials);
         $this->client = new Client([
             'base_uri' => $host,
         ]);
@@ -33,7 +34,7 @@ final class JiraTicketStatusFetcher implements TicketStatusFetcher
                     'expand' => 'status',
                 ],
                 'headers' => [
-                    'Authorization' => "Basic {$this->credentials}",
+                    'Authorization' => $this->authorizationHeader,
                 ]
             ]);
         } catch (ClientException $exception) {
@@ -76,17 +77,6 @@ final class JiraTicketStatusFetcher implements TicketStatusFetcher
         }
 
         return $data;
-    }
-
-    private static function getCredentials(string $credentialsFilePath): string
-    {
-        $credentials = file_get_contents($credentialsFilePath);
-
-        if ($credentials === false) {
-            throw new \RuntimeException("Cannot read $credentialsFilePath file");
-        }
-
-        return trim($credentials);
     }
 
     /** @return never */

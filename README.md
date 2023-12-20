@@ -172,7 +172,7 @@ set the `singleGitRepo` option to `false` which resolves the reference version f
 Optionally you can configure this extension to analyze your comments with issue tracker ticket keys.
 The extension fetches issue tracker API for issue status. If the remote issue is resolved, the comment will be reported.
 
-Currently only JIRA is supported.
+Currently only Jira is supported.
 
 This feature is disabled by default. To enable it, you must set `ticket.enabled` parameter to `true`.
 You also need to set these parameters:
@@ -200,11 +200,60 @@ parameters:
                 # e.g. https://your-company.atlassian.net
                 server: https://acme.atlassian.net
 
-                # path to a file containing a string with username and either a password or api key.
-                # username and a password/key must be separated with ":", e.g. john.doe@example.com:p@ssword
+                # see below for possible formats.
+                # if this value is empty, credentials file will be used instead.
+                credentials: %env.JIRA_TOKEN%
+
+                # path to a file containing Jira credentials.
+                # see below for possible formats.
+                # if credentials parameter is not empty, it will be used instead of this file.
                 # this file must not be commited into the repository!
                 credentialsFilePath: .secrets/jira-credentials.txt
 ```
+
+#### Jira Credentials
+
+This extension uses Jira's REST API to fetch ticket's status. In order for it to work, you need to configure valid credentials.
+These authentication methods are supported:
+- [OAuth 2.0 Access Tokens](https://confluence.atlassian.com/adminjiraserver/jira-oauth-2-0-provider-api-1115659070.html)
+- [Personal Access Tokens](https://confluence.atlassian.com/enterprise/using-personal-access-tokens-1026032365.html)
+- [Basic Authentication](https://developer.atlassian.com/server/jira/platform/basic-authentication/)
+
+We recommend you use OAuth over basic authentication, especially if you use phpstan in CI.
+There are multiple ways to pass your credentials to this extension.
+You should choose one of them - if you define both parameters, only `credentials` parameter is considered and the file is ignored.
+
+##### Pass credentials in environmental variable
+
+Configure `credentials` parameter to [read value from environmental variable](https://phpstan.org/config-reference#environment-variables):
+```yaml
+parameters:
+    todo_by:
+        ticket:
+            jira:
+                credentials: %env.JIRA_TOKEN%
+```
+
+Depending on chosen authentication method its content should be:
+* Access Token for token based authentication, e.g. `JIRA_TOKEN=ATATT3xFfGF0Gv_pLFSsunmigz8wq5Y0wkogoTMgxDFHyR...`
+* `<username>:<passwordOrApiKey>` for basic authentication, e.g. `JIRA_TOKEN=john.doe@example.com:p@ssword`
+
+##### Pass credentials in text file
+
+Create text file in your project's directory (or anywhere else on your computer) and put its path into configuration:
+
+```yaml
+parameters:
+    todo_by:
+        ticket:
+            jira:
+                credentialsFilePath: path/to/file
+```
+
+**Remember not to commit this file to repository!**
+Depending on chosen authentication method its value should be:
+* Access Token for token based authentication, e.g. `JATATT3xFfGF0Gv_pLFSsunmigz8wq5Y0wkogoTMgxDFHyR...`
+* `<username>:<passwordOrApiKey>` for basic authentication, e.g. `john.doe@example.com:p@ssword`
 
 
 ## Installation
