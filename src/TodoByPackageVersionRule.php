@@ -125,7 +125,7 @@ REGEXP;
                         continue;
                     }
 
-                    if ($provided->matches($constraint)) {
+                    if (!$provided->matches($constraint)) {
                         continue;
                     }
                 } else {
