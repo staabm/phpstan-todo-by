@@ -108,7 +108,6 @@ REGEXP;
                     continue;
                 }
 
-                // Have always present date at the start of the message.
                 // If there is further text, append it.
                 if ($todoText !== '') {
                     $errorMessage = "Version requirement {$version} satisfied: ". rtrim($todoText, '.') .".";
