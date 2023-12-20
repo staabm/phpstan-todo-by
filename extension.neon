@@ -35,6 +35,10 @@ services:
             - %todo_by.singleGitRepo%
 
     -
+        class: staabm\PHPStanTodoBy\TodoByPackageVersionRule
+        tags: [phpstan.rules.rule]
+
+    -
         class: staabm\PHPStanTodoBy\utils\GitTagFetcher
 
     -

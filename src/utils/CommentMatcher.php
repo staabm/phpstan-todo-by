@@ -37,8 +37,13 @@ final class CommentMatcher
                 preg_match_all($pattern, $text, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER) === false
                 || count($matches) === 0
             ) {
+                if (preg_last_error() !== PREG_NO_ERROR) {
+                    throw new \RuntimeException('Error in PCRE: '. preg_last_error_msg());
+                }
+
                 continue;
             }
+
 
             yield $comment => $matches;
         }
