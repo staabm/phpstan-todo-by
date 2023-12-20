@@ -8,6 +8,7 @@ use PHPStan\Node\VirtualNode;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\ShouldNotHappenException;
+use staabm\PHPStanTodoBy\utils\ExpiredCommentErrorBuilder;
 use function preg_match_all;
 use function strtotime;
 use function substr_count;
@@ -33,9 +34,12 @@ final class TodoByDateRule implements Rule
 REGEXP;
 
     private int $now;
-    private bool $nonIgnorable;
+    private ExpiredCommentErrorBuilder $errorBuilder;
 
-    public function __construct(bool $nonIgnorable, string $referenceTime)
+    public function __construct(
+        string $referenceTime,
+        ExpiredCommentErrorBuilder $errorBuilder
+    )
     {
         $time =  strtotime($referenceTime);
 
@@ -44,7 +48,7 @@ REGEXP;
         }
 
         $this->now = $time;
-        $this->nonIgnorable = $nonIgnorable;
+        $this->errorBuilder = $errorBuilder;
     }
 
     public function getNodeType(): string
@@ -107,19 +111,12 @@ REGEXP;
                     $errorMessage = "Comment expired on {$date}.";
                 }
 
-                $wholeMatchStartOffset = $match[0][1];
-
-                // Count the number of newlines between the start of the whole comment, and the start of the match.
-                $newLines = substr_count($text, "\n", 0, $wholeMatchStartOffset);
-
-                // Set the message line to match the line the comment actually starts on.
-                $messageLine = $comment->getStartLine() + $newLines;
-
-                $errBuilder = RuleErrorBuilder::message($errorMessage)->line($messageLine);
-                if ($this->nonIgnorable) {
-                    $errBuilder->nonIgnorable();
-                }
-                $errors[] = $errBuilder->build();
+                $errors[] = $this->errorBuilder->buildError(
+                    $comment,
+                    $errorMessage,
+                    null,
+                    $match[0][1]
+                );
             }
         }
 

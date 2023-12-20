@@ -5,6 +5,7 @@ namespace staabm\PHPStanTodoBy\Tests;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use staabm\PHPStanTodoBy\TodoByDateRule;
+use staabm\PHPStanTodoBy\utils\ExpiredCommentErrorBuilder;
 
 /**
  * @extends RuleTestCase<TodoByDateRule>
@@ -14,7 +15,10 @@ final class TodoByDateRuleTest extends RuleTestCase
     private string $referenceTime;
     protected function getRule(): Rule
     {
-        return new TodoByDateRule(true, $this->referenceTime);
+        return new TodoByDateRule(
+            $this->referenceTime,
+            new ExpiredCommentErrorBuilder(true)
+        );
     }
 
     public function testRule(): void

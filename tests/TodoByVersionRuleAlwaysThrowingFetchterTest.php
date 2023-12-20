@@ -5,6 +5,7 @@ namespace staabm\PHPStanTodoBy\Tests;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use staabm\PHPStanTodoBy\TodoByVersionRule;
+use staabm\PHPStanTodoBy\utils\ExpiredCommentErrorBuilder;
 use staabm\PHPStanTodoBy\utils\ReferenceVersionFinder;
 use staabm\PHPStanTodoBy\utils\VersionNormalizer;
 
@@ -18,9 +19,9 @@ final class TodoByVersionRuleAlwaysThrowingFetchterTest extends RuleTestCase
     {
         return new TodoByVersionRule(
             true,
-            true,
             new ReferenceVersionFinder($this->referenceVersion, new AlwaysThrowingTagFetcher()),
-            new VersionNormalizer()
+            new VersionNormalizer(),
+            new ExpiredCommentErrorBuilder(true)
         );
     }
 
