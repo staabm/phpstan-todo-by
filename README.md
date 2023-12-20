@@ -112,7 +112,7 @@ parameters:
 
 By default version-todo-comments are checked against `"nextMajor"` version.
 
-_Note: this does not apply to package-version-todo-comments._
+_Note: The reference version is not applied to package-version-todo-comments._
 
 This is determined by fetching the latest local available git tag and incrementing the major version number.
 
