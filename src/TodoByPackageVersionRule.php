@@ -66,7 +66,7 @@ REGEXP;
                 if (!InstalledVersions::isInstalled($package)) {
                     $errors[] = $this->errorBuilder->buildError(
                         $comment,
-                        'Package "' . $package . '" is not installed via composer.',
+                        'Package "' . $package . '" is not installed via Composer.',
                         null,
                         $match[0][1]
                     );

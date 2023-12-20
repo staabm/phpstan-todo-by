@@ -48,7 +48,7 @@ final class TodoByPackageVersionRuleTest extends RuleTestCase
                     8
                 ],
                 [
-                    'Package "not-installed/package" is not installed via composer.',
+                    'Package "not-installed/package" is not installed via Composer.',
                     11
                 ],
                 [
