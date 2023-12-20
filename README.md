@@ -78,8 +78,6 @@ see examples of different comment variants which are supported:
 // TODO@markus: phpunit/phpunit:5.3 This has to be fixed when updating phpunit to 5.3.x or higher
 
 // TODO: APP-123 fix it
-// TODO@lars: APP-444 fix it
-// todo@lars: APP-000 - fix it
 ```
 
 ## Configuration
