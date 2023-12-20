@@ -2,22 +2,14 @@
 
 namespace staabm\PHPStanTodoBy;
 
-use Composer\Semver\Comparator;
 use Composer\Semver\VersionParser;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
-use PHPStan\Node\VirtualNode;
 use PHPStan\Rules\Rule;
-use PHPStan\Rules\RuleErrorBuilder;
 use staabm\PHPStanTodoBy\utils\CommentMatcher;
 use staabm\PHPStanTodoBy\utils\ExpiredCommentErrorBuilder;
 use staabm\PHPStanTodoBy\utils\ReferenceVersionFinder;
-use staabm\PHPStanTodoBy\utils\VersionNormalizer;
-use function preg_match_all;
-use function substr_count;
 use function trim;
-use const PREG_OFFSET_CAPTURE;
-use const PREG_SET_ORDER;
 
 /**
  * @implements Rule<Node>
@@ -38,8 +30,6 @@ final class TodoByVersionRule implements Rule
 }ix
 REGEXP;
 
-    private VersionNormalizer $versionNormalizer;
-
     private ReferenceVersionFinder $referenceVersionFinder;
 
     private bool $singleGitRepo;
@@ -54,13 +44,11 @@ REGEXP;
     public function __construct(
         bool $singleGitRepo,
         ReferenceVersionFinder $refVersionFinder,
-        VersionNormalizer $versionNormalizer,
         ExpiredCommentErrorBuilder $errorBuilder
     ) {
         $this->referenceVersionFinder = $refVersionFinder;
         $this->errorBuilder = $errorBuilder;
         $this->singleGitRepo = $singleGitRepo;
-        $this->versionNormalizer = $versionNormalizer;
     }
 
     public function getNodeType(): string
@@ -140,8 +128,9 @@ REGEXP;
         }
 
         if (!array_key_exists($cacheKey, $this->referenceVersions)) {
+            $versionParser = new VersionParser();
             // lazy get the version, as it might incur subprocess creation
-            $this->referenceVersions[$cacheKey] = $this->versionNormalizer->normalize(
+            $this->referenceVersions[$cacheKey] = $versionParser->normalize(
                 $this->referenceVersionFinder->find($workingDirectory)
             );
         }

@@ -5,11 +5,7 @@ namespace staabm\PHPStanTodoBy\Tests;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use staabm\PHPStanTodoBy\TodoByPackageVersionRule;
-use staabm\PHPStanTodoBy\TodoByVersionRule;
 use staabm\PHPStanTodoBy\utils\ExpiredCommentErrorBuilder;
-use staabm\PHPStanTodoBy\utils\GitTagFetcher;
-use staabm\PHPStanTodoBy\utils\ReferenceVersionFinder;
-use staabm\PHPStanTodoBy\utils\VersionNormalizer;
 
 /**
  * @extends RuleTestCase<TodoByPackageVersionRule>
