@@ -66,8 +66,8 @@ see examples of different comment variants which are supported:
 // TODO: <1.0.0 This has to be in the first major release
 // TODO >123.4: Must fix this or bump the version
 
-// TODO: phpunit/phpunit:<5 This has to be fixed when updating to phpunit 5.x
-// TODO@markus: phpunit/phpunit:5.3.* This has to be fixed when updating to phpunit 5.3.*
+// TODO: phpunit/phpunit:<5 This has to be fixed before updating to phpunit 5.x
+// TODO@markus: phpunit/phpunit:5.3 This has to be fixed when updating phpunit to 5.3.x or higher
 ```
 
 ## Configuration
