@@ -148,6 +148,5 @@ REGEXP;
         }
 
         return $comparator;
-
     }
 }
