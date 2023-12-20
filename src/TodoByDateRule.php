@@ -39,8 +39,7 @@ REGEXP;
     public function __construct(
         string $referenceTime,
         ExpiredCommentErrorBuilder $errorBuilder
-    )
-    {
+    ) {
         $time =  strtotime($referenceTime);
 
         if ($time === false) {

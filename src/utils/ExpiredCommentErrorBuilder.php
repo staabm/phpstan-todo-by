@@ -5,7 +5,8 @@ namespace staabm\PHPStanTodoBy\utils;
 use PhpParser\Comment;
 use PHPStan\Rules\RuleErrorBuilder;
 
-final class ExpiredCommentErrorBuilder {
+final class ExpiredCommentErrorBuilder
+{
     private bool $nonIgnorable;
 
     public function __construct(bool $nonIgnorable)
@@ -31,8 +32,7 @@ final class ExpiredCommentErrorBuilder {
         if ($this->nonIgnorable) {
             $errBuilder->nonIgnorable();
         }
-        if ($tip !== null)
-        {
+        if ($tip !== null) {
             $errBuilder->tip($tip);
         }
         return $errBuilder->build();
