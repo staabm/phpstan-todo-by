@@ -72,6 +72,7 @@ REGEXP;
                 $todoText = trim($match['comment'][0]);
 
                 if ($package === 'php') {
+                    // @phpstan-ignore-next-line missing bc promise
                     $config = ComposerHelper::getComposerConfig($this->workingDirectory);
                     if ($config === null) {
                         $errors[] = $this->errorBuilder->buildError(
@@ -84,10 +85,15 @@ REGEXP;
                         continue;
                     }
 
-                    if (!isset($config['require']['php'])) {
+                    if (
+                        !isset($config['require'])
+                        || !is_array($config['require'])
+                        || !isset($config['require']['php'])
+                        || !is_string($config['require']['php'])
+                    ) {
                         $errors[] = $this->errorBuilder->buildError(
                             $comment,
-                            'Missing php platform requirement from '. $this->workingDirectory .'/composer.json',
+                            'Missing php platform requirement in '. $this->workingDirectory .'/composer.json',
                             null,
                             $match[0][1]
                         );
