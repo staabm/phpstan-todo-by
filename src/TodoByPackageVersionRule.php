@@ -104,7 +104,19 @@ REGEXP;
                     $provided = $versionParser->parseConstraints(
                         $config['require']['php']
                     );
-                    $constraint = $versionParser->parseConstraints($version);
+
+                    try {
+                        $constraint = $versionParser->parseConstraints($version);
+                    } catch (\UnexpectedValueException $e) {
+                        $errors[] = $this->errorBuilder->buildError(
+                            $comment,
+                            'Invalid version constraint "' . $version . '" for package "' . $package . '".',
+                            null,
+                            $match[0][1]
+                        );
+
+                        continue;
+                    }
 
                     if ($provided->matches($constraint)) {
                         continue;
