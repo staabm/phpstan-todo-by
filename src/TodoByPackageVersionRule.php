@@ -10,6 +10,7 @@ use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Internal\ComposerHelper;
 use PHPStan\Rules\Rule;
+use PHPStan\Rules\RuleError;
 use staabm\PHPStanTodoBy\utils\CommentMatcher;
 use staabm\PHPStanTodoBy\utils\ExpiredCommentErrorBuilder;
 use UnexpectedValueException;
@@ -43,6 +44,11 @@ final class TodoByPackageVersionRule implements Rule
     private ExpiredCommentErrorBuilder $errorBuilder;
 
     private string $workingDirectory;
+
+    /**
+     * @var null|string|RuleError
+     */
+    private $platformPhpVersion;
 
     public function __construct(
         string $workingDirectory,
@@ -112,36 +118,13 @@ final class TodoByPackageVersionRule implements Rule
      */
     private function satisfiesPhpPlatformPackage(string $package, string $version, Comment $comment, int $wholeMatchStartOffset)
     {
+        $platformPhpVersion = $this->readPlatformPhpVersion($comment, $wholeMatchStartOffset);
+        if ($platformPhpVersion instanceof RuleError) {
+            return $platformPhpVersion;
+        }
+
         $versionParser = new VersionParser();
-
-        /** @phpstan-ignore-next-line missing bc promise */
-        $config = ComposerHelper::getComposerConfig($this->workingDirectory);
-        if (null === $config) {
-            return $this->errorBuilder->buildError(
-                $comment,
-                'Unable to find composer.json in '. $this->workingDirectory,
-                null,
-                $wholeMatchStartOffset
-            );
-        }
-
-        if (
-            !isset($config['require'])
-            || !is_array($config['require'])
-            || !isset($config['require']['php'])
-            || !is_string($config['require']['php'])
-        ) {
-            return $this->errorBuilder->buildError(
-                $comment,
-                'Missing php platform requirement in '. $this->workingDirectory .'/composer.json',
-                null,
-                $wholeMatchStartOffset
-            );
-        }
-
-        $provided = $versionParser->parseConstraints(
-            $config['require']['php']
-        );
+        $provided = $versionParser->parseConstraints($platformPhpVersion);
 
         try {
             $constraint = $versionParser->parseConstraints($version);
@@ -155,6 +138,43 @@ final class TodoByPackageVersionRule implements Rule
         }
 
         return $provided->matches($constraint);
+    }
+
+    /**
+     * @return RuleError|string
+     */
+    private function readPlatformPhpVersion(Comment $comment, int $wholeMatchStartOffset)
+    {
+        if (null !== $this->platformPhpVersion) {
+            return $this->platformPhpVersion;
+        }
+
+        /** @phpstan-ignore-next-line missing bc promise */
+        $config = ComposerHelper::getComposerConfig($this->workingDirectory);
+        if (null === $config) {
+            return $this->platformPhpVersion = $this->errorBuilder->buildError(
+                $comment,
+                'Unable to find composer.json in '. $this->workingDirectory,
+                null,
+                $wholeMatchStartOffset
+            );
+        }
+
+        if (
+            !isset($config['require'])
+            || !is_array($config['require'])
+            || !isset($config['require']['php'])
+            || !is_string($config['require']['php'])
+        ) {
+            return $this->platformPhpVersion = $this->errorBuilder->buildError(
+                $comment,
+                'Missing php platform requirement in '. $this->workingDirectory .'/composer.json',
+                null,
+                $wholeMatchStartOffset
+            );
+        }
+
+        return $this->platformPhpVersion = $config['require']['php'];
     }
 
     /**
