@@ -4,6 +4,8 @@ namespace staabm\PHPStanTodoBy\Tests;
 
 use staabm\PHPStanTodoBy\utils\TicketStatusFetcher;
 
+use function array_key_exists;
+
 final class StaticTicketStatusFetcher implements TicketStatusFetcher
 {
     /** @var array<string, string> */

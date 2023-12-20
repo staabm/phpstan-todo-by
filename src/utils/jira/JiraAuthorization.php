@@ -2,22 +2,24 @@
 
 namespace staabm\PHPStanTodoBy\utils\jira;
 
+use RuntimeException;
+
 final class JiraAuthorization
 {
     public static function getCredentials(?string $credentials, ?string $credentialsFilePath): string
     {
-        if ($credentials !== null) {
+        if (null !== $credentials) {
             return trim($credentials);
         }
 
-        if ($credentialsFilePath === null) {
-            throw new \RuntimeException("Either credentials or credentialsFilePath parameter must be configured");
+        if (null === $credentialsFilePath) {
+            throw new RuntimeException('Either credentials or credentialsFilePath parameter must be configured');
         }
 
         $credentials = file_get_contents($credentialsFilePath);
 
-        if ($credentials === false) {
-            throw new \RuntimeException("Cannot read $credentialsFilePath file");
+        if (false === $credentials) {
+            throw new RuntimeException("Cannot read $credentialsFilePath file");
         }
 
         return trim($credentials);
@@ -25,7 +27,7 @@ final class JiraAuthorization
 
     public static function createAuthorizationHeader(string $credentials): string
     {
-        if (strpos($credentials, ':') !== false) {
+        if (str_contains($credentials, ':')) {
             return 'Basic ' . base64_encode($credentials);
         }
 

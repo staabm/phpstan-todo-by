@@ -8,6 +8,9 @@ use PHPStan\Rules\Rule;
 use staabm\PHPStanTodoBy\utils\CommentMatcher;
 use staabm\PHPStanTodoBy\utils\ExpiredCommentErrorBuilder;
 use staabm\PHPStanTodoBy\utils\TicketStatusFetcher;
+
+use function in_array;
+use function strlen;
 use function trim;
 
 /**
@@ -16,15 +19,15 @@ use function trim;
 final class TodoByTicketRule implements Rule
 {
     private const PATTERN = <<<'REGEXP'
-/
-@?TODO # possible @ prefix
-@?[a-zA-Z0-9_-]*\s* # optional username
-\s*[:-]?\s* # optional colon or hyphen
-(?P<ticketKey>[A-Z0-9]+-\d+) # ticket key consisting of ABC-123 or F01-12345 format
-\s*[:-]?\s* # optional colon or hyphen
-(?P<comment>.*) # rest of line as comment text
-/ix
-REGEXP;
+        /
+        @?TODO # possible @ prefix
+        @?[a-zA-Z0-9_-]*\s* # optional username
+        \s*[:-]?\s* # optional colon or hyphen
+        (?P<ticketKey>[A-Z0-9]+-\d+) # ticket key consisting of ABC-123 or F01-12345 format
+        \s*[:-]?\s* # optional colon or hyphen
+        (?P<comment>.*) # rest of line as comment text
+        /ix
+        REGEXP;
 
     /** @var list<non-empty-string> */
     private array $resolvedStatuses;
@@ -55,7 +58,7 @@ REGEXP;
         $it = CommentMatcher::matchComments($node, self::PATTERN);
 
         $errors = [];
-        foreach($it as $comment => $matches) {
+        foreach ($it as $comment => $matches) {
             /** @var array<int, array<array{0: string, 1: int}>> $matches */
             foreach ($matches as $match) {
                 $ticketKey = $match['ticketKey'][0];
@@ -67,12 +70,12 @@ REGEXP;
 
                 $ticketStatus = $this->fetcher->fetchTicketStatus($ticketKey);
 
-                if ($ticketStatus === null || !in_array($ticketStatus, $this->resolvedStatuses, true)) {
+                if (null === $ticketStatus || !in_array($ticketStatus, $this->resolvedStatuses, true)) {
                     continue;
                 }
 
-                if ($todoText !== '') {
-                    $errorMessage = "Should have been resolved in {$ticketKey}: ". rtrim($todoText, '.') .".";
+                if ('' !== $todoText) {
+                    $errorMessage = "Should have been resolved in {$ticketKey}: ". rtrim($todoText, '.') .'.';
                 } else {
                     $errorMessage = "Comment should have been resolved in {$ticketKey}.";
                 }

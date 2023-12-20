@@ -9,6 +9,7 @@ use staabm\PHPStanTodoBy\utils\ExpiredCommentErrorBuilder;
 
 /**
  * @extends RuleTestCase<TodoByTicketRule>
+ * @internal
  */
 final class TodoByTicketRuleTest extends RuleTestCase
 {

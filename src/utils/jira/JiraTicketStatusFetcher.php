@@ -5,7 +5,12 @@ namespace staabm\PHPStanTodoBy\utils\jira;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use Psr\Http\Message\StreamInterface;
+use RuntimeException;
 use staabm\PHPStanTodoBy\utils\TicketStatusFetcher;
+
+use function array_key_exists;
+use function is_array;
+use function is_string;
 
 final class JiraTicketStatusFetcher implements TicketStatusFetcher
 {
@@ -35,10 +40,10 @@ final class JiraTicketStatusFetcher implements TicketStatusFetcher
                 ],
                 'headers' => [
                     'Authorization' => $this->authorizationHeader,
-                ]
+                ],
             ]);
         } catch (ClientException $exception) {
-            if ($exception->getResponse()->getStatusCode() === 404) {
+            if (404 === $exception->getResponse()->getStatusCode()) {
                 return null;
             }
 
@@ -72,7 +77,7 @@ final class JiraTicketStatusFetcher implements TicketStatusFetcher
 
         $name = $status['name'];
 
-        if (!is_string($name) || trim($name) === '') {
+        if (!is_string($name) || '' === trim($name)) {
             throw self::throwInvalidResponse();
         }
 
@@ -82,6 +87,6 @@ final class JiraTicketStatusFetcher implements TicketStatusFetcher
     /** @return never */
     private static function throwInvalidResponse(): void
     {
-        throw new \RuntimeException("Jira returned invalid response body");
+        throw new RuntimeException('Jira returned invalid response body');
     }
 }
