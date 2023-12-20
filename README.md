@@ -51,8 +51,8 @@ see examples of different comment variants which are supported:
 // todo - 2023-12-14 fix it
 // todo 2023-12-14 - fix it
 
-// TODO@lars 2023-12-14 - fix it
-// TODO@lars: 2023-12-14 - fix it
+// TODO@staabm 2023-12-14 - fix it
+// TODO@markus: 2023-12-14 - fix it
 
 /*
  * other text
@@ -65,7 +65,7 @@ see examples of different comment variants which are supported:
 // TODO >123.4: Must fix this or bump the version
 
 // TODO: phpunit/phpunit:<5 This has to be fixed when updating to phpunit 5.x
-// TODO: phpunit/phpunit:5.3.* This has to be fixed when updating to phpunit 5.3.*
+// TODO@markus: phpunit/phpunit:5.3.* This has to be fixed when updating to phpunit 5.3.*
 ```
 
 ## Configuration
