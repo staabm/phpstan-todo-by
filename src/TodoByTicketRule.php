@@ -20,7 +20,7 @@ final class TodoByTicketRule implements Rule
 @?TODO # possible @ prefix
 @?[a-zA-Z0-9_-]*\s* # optional username
 \s*[:-]?\s* # optional colon or hyphen
-(?P<ticket>[A-Z]+-\d+) # ticket id consisting of ABC-123 format
+(?P<ticketKey>[A-Z0-9]+-\d+) # ticket key consisting of ABC-123 or F01-12345 format
 \s*[:-]?\s* # optional colon or hyphen
 (?P<comment>.*) # rest of line as comment text
 /ix
@@ -58,7 +58,7 @@ REGEXP;
         foreach($it as $comment => $matches) {
             /** @var array<int, array<array{0: string, 1: int}>> $matches */
             foreach ($matches as $match) {
-                $ticketKey = $match['ticket'][0];
+                $ticketKey = $match['ticketKey'][0];
                 $todoText = trim($match['comment'][0]);
 
                 if (!$this->hasPrefix($ticketKey)) {
