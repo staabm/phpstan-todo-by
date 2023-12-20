@@ -34,7 +34,6 @@ final class TodoByVersionRule implements Rule
     \s+ # keyword/version separator
     (?P<version>[<>=]?[^\s:\-]+) # version
     \s*[:-]?\s* # optional colon or hyphen
-    \s+ # version/comment separator
     (?P<comment>.*) # rest of line as comment text
 }ix
 REGEXP;
