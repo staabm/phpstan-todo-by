@@ -40,7 +40,7 @@ When a text is given after the date, this text will be picked up for the PHPStan
 The comment can expire by different constraints, examples are:
 - by date with format of `YYYY-MM-DD`
 - by a semantic version constraint matched against the project itself
-- by a semantic version constraint matched again a Composer dependency
+- by a semantic version constraint matched against a Composer dependency
 
 see examples of different comment variants which are supported:
 
