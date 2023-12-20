@@ -58,8 +58,13 @@ final class TodoByVersionRuleTest extends RuleTestCase
                     $tip
                 ],
                 [
-                'Version requirement <1.0.0 not satisfied.',
+                    'Version requirement <1.0.0 not satisfied.',
                     10,
+                    $tip
+                ],
+                [
+                    'Version requirement <1.0 not satisfied.',
+                    11,
                     $tip
                 ]
             ]
@@ -78,7 +83,13 @@ final class TodoByVersionRuleTest extends RuleTestCase
                     'Version requirement <1.0.0 not satisfied.',
                     10,
                     $tip
+                ],
+                [
+                    'Version requirement <1.0 not satisfied.',
+                    11,
+                    $tip
                 ]
+
             ]
         ];
 
@@ -99,6 +110,11 @@ final class TodoByVersionRuleTest extends RuleTestCase
                 [
                     'Version requirement <1.0.0 not satisfied.',
                     10,
+                    $tip
+                ],
+                [
+                    'Version requirement <1.0 not satisfied.',
+                    11,
                     $tip
                 ]
             ]
@@ -134,6 +150,11 @@ final class TodoByVersionRuleTest extends RuleTestCase
                 [
                     'Version requirement <1.0.0 not satisfied.',
                     10,
+                    $tip
+                ],
+                [
+                    'Version requirement <1.0 not satisfied.',
+                    11,
                     $tip
                 ]
             ]
