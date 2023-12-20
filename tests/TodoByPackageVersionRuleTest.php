@@ -41,11 +41,11 @@ final class TodoByPackageVersionRuleTest extends RuleTestCase
         yield [
             [
                 [
-                    'phpunit/phpunit version requirement <5 not satisfied: This has to be fixed when updating to phpunit 5.x.',
-                    7
+                    '"phpunit/phpunit" version requirement "<50" satisfied: This has to be fixed before updating to phpunit 50.x.',
+                    5
                 ],
                 [
-                    'phpunit/phpunit version requirement 5.3.* not satisfied: This has to be fixed when updating to phpunit 5.3.*.',
+                    '"phpunit/phpunit" version requirement ">=5.3" satisfied: This has to be fixed when updating to phpunit 5.3.* or higher.',
                     8
                 ],
                 [
@@ -53,12 +53,20 @@ final class TodoByPackageVersionRuleTest extends RuleTestCase
                     11
                 ],
                 [
-                    'phpunit/phpunit version requirement <9 not satisfied.',
-                    13
+                    '"phpunit/phpunit" version requirement "<10" satisfied.',
+                    14
+                ],
+                [
+                    '"phpunit/phpunit" version requirement "<11" satisfied.',
+                    15
                 ],
                 [
                     'Invalid version constraint "<inValid.12" for package "phpunit/phpunit".',
                     17
+                ],
+                [
+                    '"php" version requirement "<7.4" satisfied: drop this code after min-version raise.',
+                    19
                 ]
             ]
         ];

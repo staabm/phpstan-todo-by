@@ -2,10 +2,10 @@
 
 namespace ExamplePackageVersion;
 
-// TODO: phpunit/phpunit:<50 This has to be fixed when updating to phpunit 50.x
+// TODO: phpunit/phpunit:<50 This has to be fixed before updating to phpunit 50.x
 
-// TODO: phpunit/phpunit:<5 This has to be fixed when updating to phpunit 5.x
-// TODO: phpunit/phpunit:5.3.* This has to be fixed when updating to phpunit 5.3.*
+
+// TODO: phpunit/phpunit:5.3 This has to be fixed when updating to phpunit 5.3.* or higher
 
 
 // TODO: not-installed/package:<5 this should error because package is not in composer.json
@@ -16,4 +16,5 @@ namespace ExamplePackageVersion;
 
 // TODO: phpunit/phpunit:<inValid.12
 
-// TODO php:<8.0 drop this code after min-version raise to 8.0
+// TODO php:<7.4 drop this code after min-version raise
+// TODO php:7 drop this code after min-version raise

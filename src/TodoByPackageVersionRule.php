@@ -27,6 +27,8 @@ use const PREG_SET_ORDER;
  */
 final class TodoByPackageVersionRule implements Rule
 {
+    private const COMPARATORS = ['<', '>', '='];
+
     // composer package-name pattern from https://getcomposer.org/doc/04-schema.md#name
     private const PATTERN = <<<'REGEXP'
 {
@@ -70,6 +72,11 @@ REGEXP;
                 $package = $match['package'][0];
                 $version = $match['version'][0];
                 $todoText = trim($match['comment'][0]);
+
+                // assume a min version constraint, when the comment does not specify a comparator
+                if ($this->getVersionComparator($version) === null) {
+                    $version = '>='. $version;
+                }
 
                 if ($package === 'php') {
                     // @phpstan-ignore-next-line missing bc promise
@@ -135,7 +142,7 @@ REGEXP;
                     }
 
                     try {
-                        if (InstalledVersions::satisfies(new VersionParser(), $package, $version)) {
+                        if (!InstalledVersions::satisfies(new VersionParser(), $package, $version)) {
                             continue;
                         }
                     } catch (\UnexpectedValueException $e) {
@@ -153,9 +160,9 @@ REGEXP;
                 // Have always present date at the start of the message.
                 // If there is further text, append it.
                 if ($todoText !== '') {
-                    $errorMessage = "{$package} version requirement {$version} not satisfied: ". rtrim($todoText, '.') .".";
+                    $errorMessage = '"'. $package .'" version requirement "'. $version .'" satisfied: '. rtrim($todoText, '.') .".";
                 } else {
-                    $errorMessage = "{$package} version requirement {$version} not satisfied.";
+                    $errorMessage = '"'. $package .'" version requirement "'. $version .'" satisfied.';
                 }
 
                 $errors[] = $this->errorBuilder->buildError(
@@ -170,4 +177,17 @@ REGEXP;
         return $errors;
     }
 
+    private function getVersionComparator(string $version): ?string
+    {
+        $comparator = null;
+        for($i = 0; $i < strlen($version); $i++) {
+            if (!in_array($version[$i], self::COMPARATORS)) {
+                break;
+            }
+            $comparator .= $version[$i];
+        }
+
+        return $comparator;
+
+    }
 }
