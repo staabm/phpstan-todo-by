@@ -48,7 +48,7 @@ final class TodoByPackageVersionRule implements Rule
     /**
      * @var null|string|RuleError
      */
-    private $platformPhpVersion;
+    private $phpPlatformVersion;
 
     public function __construct(
         string $workingDirectory,
@@ -145,14 +145,14 @@ final class TodoByPackageVersionRule implements Rule
      */
     private function readPhpPlatformVersion(Comment $comment, int $wholeMatchStartOffset)
     {
-        if (null !== $this->platformPhpVersion) {
-            return $this->platformPhpVersion;
+        if (null !== $this->phpPlatformVersion) {
+            return $this->phpPlatformVersion;
         }
 
         /** @phpstan-ignore-next-line missing bc promise */
         $config = ComposerHelper::getComposerConfig($this->workingDirectory);
         if (null === $config) {
-            return $this->platformPhpVersion = $this->errorBuilder->buildError(
+            return $this->phpPlatformVersion = $this->errorBuilder->buildError(
                 $comment,
                 'Unable to find composer.json in '. $this->workingDirectory,
                 null,
@@ -166,7 +166,7 @@ final class TodoByPackageVersionRule implements Rule
             || !isset($config['require']['php'])
             || !is_string($config['require']['php'])
         ) {
-            return $this->platformPhpVersion = $this->errorBuilder->buildError(
+            return $this->phpPlatformVersion = $this->errorBuilder->buildError(
                 $comment,
                 'Missing php platform requirement in '. $this->workingDirectory .'/composer.json',
                 null,
@@ -174,7 +174,7 @@ final class TodoByPackageVersionRule implements Rule
             );
         }
 
-        return $this->platformPhpVersion = $config['require']['php'];
+        return $this->phpPlatformVersion = $config['require']['php'];
     }
 
     /**
