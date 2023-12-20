@@ -174,30 +174,36 @@ The extension fetches issue tracker API for issue status. If the remote issue is
 
 Currently only JIRA is supported.
 
-This feature is disabled by default. To enable it, you must set `byTicketEnabled: true` parameter.
+This feature is disabled by default. To enable it, you must set `ticket.enabled` parameter to `true`.
 You also need to set these parameters:
 
 ```yaml
-# a case-sensitive list of status names.
-# only tickets having any of these statuses are considered resolved.
-ticketResolvedStatuses:
-    - Done
-    - Resolved
-    - Declined
+parameters:
+    todo_by:
+        ticket:
+            enabled: true
 
-# if your ticket key is FOO-12345, then this value should be ["FOO"].
-# multiple key prefixes are allowed, e.g. ["FOO", "APP"].
-# only comments with keys containing this prefix will be analyzed.
-ticketKeyPrefixes:
-    - FOO
+            # a case-sensitive list of status names.
+            # only tickets having any of these statuses are considered resolved.
+            resolvedStatuses:
+                - Done
+                - Resolved
+                - Declined
 
-# e.g. https://your-company.atlassian.net
-jiraServer: https://acme.atlassian.net
+            # if your ticket key is FOO-12345, then this value should be ["FOO"].
+            # multiple key prefixes are allowed, e.g. ["FOO", "APP"].
+            # only comments with keys containing this prefix will be analyzed.
+            keyPrefixes:
+                - FOO
 
-# path to a file containing a string with username and either a password or api key.
-# username and a password/key must be separated with ":", e.g. john.doe@example.com:p@ssword
-# this file must not be commited into the repository!
-jiraCredentialsFilePath: .secrets/jira-credentials.txt
+            jira:
+                # e.g. https://your-company.atlassian.net
+                server: https://acme.atlassian.net
+
+                # path to a file containing a string with username and either a password or api key.
+                # username and a password/key must be separated with ":", e.g. john.doe@example.com:p@ssword
+                # this file must not be commited into the repository!
+                credentialsFilePath: .secrets/jira-credentials.txt
 ```
 
 

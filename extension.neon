@@ -4,11 +4,15 @@ parametersSchema:
         referenceTime: string()
         referenceVersion: string()
         singleGitRepo: bool()
-        byTicketEnabled: bool()
-        ticketResolvedStatuses: listOf(string())
-        ticketKeyPrefixes: listOf(string())
-        jiraServer: schema(string(), nullable())
-        jiraCredentialsFilePath: schema(string(), nullable())
+        ticket: structure([
+            enabled: bool()
+            keyPrefixes: listOf(string())
+            resolvedStatuses: listOf(string())
+            jira: structure([
+                server: string()
+                credentialsFilePath: string()
+            ])
+        ])
     ])
 
 # default parameters
@@ -26,29 +30,31 @@ parameters:
         # If set to false, the git tags are fetched for each directory individually (slower)
         singleGitRepo: true
 
-        # whether to analyze comments by issue tracker ticket key
-        byTicketEnabled: false
+        ticket:
+            # whether to analyze comments by issue tracker ticket key
+            enabled: false
 
-        # a case-sensitive list of status names.
-        # only tickets having any of these statuses are considered resolved.
-        ticketResolvedStatuses: []
+            # a case-sensitive list of status names.
+            # only tickets having any of these statuses are considered resolved.
+            resolvedStatuses: []
 
-        # if your ticket key is FOO-12345, then this value should be ["FOO"].
-        # multiple key prefixes are allowed, e.g. ["FOO", "APP"].
-        # only comments with keys containing this prefix will be analyzed.
-        ticketKeyPrefixes: []
+            # if your ticket key is FOO-12345, then this value should be ["FOO"].
+            # multiple key prefixes are allowed, e.g. ["FOO", "APP"].
+            # only comments with keys containing this prefix will be analyzed.
+            keyPrefixes: []
 
-        # e.g. https://your-company.atlassian.net
-        jiraServer: null
+            jira:
+                # e.g. https://your-company.atlassian.net
+                server: https://jira.atlassian.com
 
-        # path to a file containing a string with username and either a password or api key.
-        # username and a password/key must be separated with ":", e.g. john.doe@example.com:p@ssword
-        # this file must not be commited into the repository!
-        jiraCredentialsFilePath: null
+                # path to a file containing a string with username and either a password or api key.
+                # username and a password/key must be separated with ":", e.g. john.doe@example.com:p@ssword
+                # this file must not be commited into the repository!
+                credentialsFilePath: ""
 
 conditionalTags:
     staabm\PHPStanTodoBy\TodoByTicketRule:
-        phpstan.rules.rule: %todo_by.byTicketEnabled%
+        phpstan.rules.rule: %todo_by.ticket.enabled%
 
 services:
     -
@@ -59,8 +65,8 @@ services:
     -
         class: staabm\PHPStanTodoBy\TodoByTicketRule
         arguments:
-            - %todo_by.ticketResolvedStatuses%
-            - %todo_by.ticketKeyPrefixes%
+            - %todo_by.ticket.resolvedStatuses%
+            - %todo_by.ticket.keyPrefixes%
 
     -
         class: staabm\PHPStanTodoBy\TodoByVersionRule
@@ -90,5 +96,5 @@ services:
     -
         class: staabm\PHPStanTodoBy\utils\JiraTicketStatusFetcher
         arguments:
-            - %todo_by.jiraServer%
-            - %todo_by.jiraCredentialsFilePath%
+            - %todo_by.ticket.jira.server%
+            - %todo_by.ticket.jira.credentialsFilePath%
