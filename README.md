@@ -19,6 +19,11 @@ function doBar() {
 
 }
 
+// TODO: phpunit/phpunit:5.3.* This has to be fixed when updating to phpunit 5.3.*
+function doFooBar() {
+
+}
+
 ```
 
 ## Supported todo formats
@@ -35,7 +40,7 @@ When a text is given after the date, this text will be picked up for the PHPStan
 The comment can expire by different constraints, examples are:
 - by date with format of `YYYY-MM-DD`
 - by semantic version matched against the project itself
-
+- by semantic version of a Composer dependency
 
 see examples of different comment variants which are supported:
 
@@ -58,6 +63,9 @@ see examples of different comment variants which are supported:
 
 // TODO: <1.0.0 This has to be in the first major release
 // TODO >123.4: Must fix this or bump the version
+
+// TODO: phpunit/phpunit:<5 This has to be fixed when updating to phpunit 5.x
+// TODO: phpunit/phpunit:5.3.* This has to be fixed when updating to phpunit 5.3.*
 ```
 
 ## Configuration
