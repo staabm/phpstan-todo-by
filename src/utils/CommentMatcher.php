@@ -44,7 +44,6 @@ final class CommentMatcher
                 continue;
             }
 
-
             yield $comment => $matches;
         }
     }
