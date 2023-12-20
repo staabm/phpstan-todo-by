@@ -25,6 +25,7 @@ use const PREG_SET_ORDER;
  */
 final class TodoByPackageVersionRule implements Rule
 {
+    // composer package-name pattern from https://getcomposer.org/doc/04-schema.md#name
     private const PATTERN = <<<'REGEXP'
 {
     @?TODO # possible @ prefix
@@ -37,16 +38,12 @@ final class TodoByPackageVersionRule implements Rule
 }ix
 REGEXP;
 
-    private VersionNormalizer $versionNormalizer;
-
     private ExpiredCommentErrorBuilder $errorBuilder;
 
     public function __construct(
-        VersionNormalizer $versionNormalizer,
         ExpiredCommentErrorBuilder $errorBuilder
     ) {
         $this->errorBuilder = $errorBuilder;
-        $this->versionNormalizer = $versionNormalizer;
     }
 
     public function getNodeType(): string

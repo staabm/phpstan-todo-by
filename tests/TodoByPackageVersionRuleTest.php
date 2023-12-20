@@ -19,7 +19,6 @@ final class TodoByPackageVersionRuleTest extends RuleTestCase
     protected function getRule(): Rule
     {
         return new TodoByPackageVersionRule(
-            new VersionNormalizer(),
             new ExpiredCommentErrorBuilder(true),
         );
     }
