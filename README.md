@@ -1,6 +1,6 @@
-# phpstan-todo-by: comments with expiration date/version
+# phpstan-todo-by: comments with expiration
 
-PHPStan extension to check for TODO comments with expiration date/version.
+PHPStan extension to check for TODO comments with expiration.
 Inspired by [parker-codes/todo-by](https://github.com/parker-codes/todo_by).
 
 
@@ -14,26 +14,28 @@ function doFoo() {
 
 }
 
-// TODO: <1.0.0 This has to be in the first major release
+// TODO: <1.0.0 This has to be in the first major release of this repo
 function doBar() {
 
 }
 
 ```
 
-
 ## Supported todo formats
 
-A todo comment can also consist of just a date without any text, like `// @todo 2023-12-14`.
+A todo comment can also consist of just a constraint without any text, like `// @todo 2023-12-14`.
 When a text is given after the date, this text will be picked up for the PHPStan error message.
 
 - the `todo`, `TODO`, `tOdO` keyword is case-insensitive
 - the `todo` keyword can be suffixed or prefixed by a `@` character
 - a username might be included after the `todo@`
 - the comment might be mixed with `:` or `-` characters
-- dateformat is `YYYY-MM-DD`
 - multi line `/* */` and `/** */` comments are supported
-- support for semantic version expiration constraints
+
+The comment can expire by different constraints, examples are:
+- by date with format of `YYYY-MM-DD`
+- by semantic version matched against the project itself
+
 
 see examples of different comment variants which are supported:
 
@@ -57,7 +59,6 @@ see examples of different comment variants which are supported:
 // TODO: <1.0.0 This has to be in the first major release
 // TODO >123.4: Must fix this or bump the version
 ```
-
 
 ## Configuration
 
