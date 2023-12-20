@@ -118,7 +118,7 @@ final class TodoByPackageVersionRule implements Rule
      */
     private function satisfiesPhpPlatformPackage(string $package, string $version, Comment $comment, int $wholeMatchStartOffset)
     {
-        $platformPhpVersion = $this->readPlatformPhpVersion($comment, $wholeMatchStartOffset);
+        $platformPhpVersion = $this->readPhpPlatformVersion($comment, $wholeMatchStartOffset);
         if ($platformPhpVersion instanceof RuleError) {
             return $platformPhpVersion;
         }
@@ -143,7 +143,7 @@ final class TodoByPackageVersionRule implements Rule
     /**
      * @return RuleError|string
      */
-    private function readPlatformPhpVersion(Comment $comment, int $wholeMatchStartOffset)
+    private function readPhpPlatformVersion(Comment $comment, int $wholeMatchStartOffset)
     {
         if (null !== $this->platformPhpVersion) {
             return $this->platformPhpVersion;
