@@ -27,12 +27,32 @@ final class TodoByVersionRuleSingleTimeFetchterTest extends RuleTestCase
 
     public function testMultiGitRepoCache(): void
     {
-        $this->referenceVersion = "0.1";
+        $tip = "Calculated reference version is '1.0.0.0'.\n\n   See also:\n https://github.com/staabm/phpstan-todo-by#reference-version";
+        $this->referenceVersion = "1.0";
 
         // scaning several files in the same folder should trigger only a single tag fetch
-        $this->analyse([__DIR__ . '/data/version.php'], []);
-        $this->analyse([__DIR__ . '/data/version.php'], []);
-        $this->analyse([__DIR__ . '/data/version.php'], []);
+        $this->analyse([__DIR__ . '/data/version.php'], [
+            [
+                'Version requirement >=1.0 satisfied.',
+                12,
+                $tip
+            ]
+        ]);
+        $this->analyse([__DIR__ . '/data/version.php'], [
+            [
+                'Version requirement >=1.0 satisfied.',
+                12,
+                $tip
+            ]
+
+        ]);
+        $this->analyse([__DIR__ . '/data/version.php'], [
+            [
+                'Version requirement >=1.0 satisfied.',
+                12,
+                $tip
+            ]
+        ]);
     }
 
 }

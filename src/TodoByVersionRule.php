@@ -3,6 +3,7 @@
 namespace staabm\PHPStanTodoBy;
 
 use Composer\Semver\Comparator;
+use Composer\Semver\VersionParser;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\VirtualNode;
@@ -26,14 +27,15 @@ final class TodoByVersionRule implements Rule
     private const COMPARATORS = ['<', '>', '='];
 
     private const PATTERN = <<<'REGEXP'
-/
-@?TODO # possible @ prefix
-@?[a-zA-Z0-9_-]*\s* # optional username
-\s*[:-]?\s* # optional colon or hyphen
-(?P<version>[<>=]+[^\s:\-]+) # version
-\s*[:-]?\s* # optional colon or hyphen
-(?P<comment>.*) # rest of line as comment text
-/ix
+{
+    @?TODO # possible @ prefix
+    @?[a-zA-Z0-9_-]*\s* # optional username
+    \s*[:-]?\s* # optional colon or hyphen
+    \s+ # keyword/version separator
+    (?P<version>[<>=]?[^\s:\-]+) # version
+    \s*[:-]?\s* # optional colon or hyphen
+    (?P<comment>.*) # rest of line as comment text
+}ix
 REGEXP;
 
     private VersionNormalizer $versionNormalizer;
@@ -71,8 +73,12 @@ REGEXP;
         $it = CommentMatcher::matchComments($node, self::PATTERN);
 
         $errors = [];
+        $versionParser = new VersionParser();
         foreach($it as $comment => $matches) {
             $referenceVersion = $this->getReferenceVersion($scope);
+            $provided = $versionParser->parseConstraints(
+                $referenceVersion
+            );
 
             /** @var array<int, array<array{0: string, 1: int}>> $matches */
             foreach ($matches as $match) {
@@ -80,27 +86,33 @@ REGEXP;
                 $version = $match['version'][0];
                 $todoText = trim($match['comment'][0]);
 
-                $versionComparator = $this->getVersionComparator($version);
-                $plainVersion = ltrim($version, implode("", self::COMPARATORS));
-                $normalized = $this->versionNormalizer->normalize($plainVersion);
-
-                $expired = false;
-                if ($versionComparator === '<') {
-                    $expired = Comparator::greaterThanOrEqualTo($referenceVersion, $normalized);
-                } elseif ($versionComparator === '>') {
-                    $expired = Comparator::greaterThan($referenceVersion, $normalized);
+                // assume a min version constraint, when the comment does not specify a comparator
+                if ($this->getVersionComparator($version) === null) {
+                    $version = '>='. $version;
                 }
 
-                if (!$expired) {
+                try {
+                    $constraint = $versionParser->parseConstraints($version);
+                } catch (\UnexpectedValueException $e) {
+                    $errors[] = $this->errorBuilder->buildError(
+                        $comment,
+                        'Invalid version constraint "' . $version . '".',
+                        null,
+                        $match[0][1]
+                    );
+
                     continue;
                 }
 
-                // Have always present date at the start of the message.
+                if (!$provided->matches($constraint)) {
+                    continue;
+                }
+
                 // If there is further text, append it.
                 if ($todoText !== '') {
-                    $errorMessage = "Version requirement {$version} not satisfied: ". rtrim($todoText, '.') .".";
+                    $errorMessage = "Version requirement {$version} satisfied: ". rtrim($todoText, '.') .".";
                 } else {
-                    $errorMessage = "Version requirement {$version} not satisfied.";
+                    $errorMessage = "Version requirement {$version} satisfied.";
                 }
 
                 $errors[] = $this->errorBuilder->buildError(

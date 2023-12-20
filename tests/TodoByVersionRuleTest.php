@@ -42,9 +42,26 @@ final class TodoByVersionRuleTest extends RuleTestCase
      */
     public static function provideErrors(): iterable
     {
+        $tip = "Calculated reference version is '0.1.0.0'.\n\n   See also:\n https://github.com/staabm/phpstan-todo-by#reference-version";
+
         yield [
             "0.1",
             [
+                [
+                    'Version requirement <1.0.0 satisfied: This has to be in the first major release.',
+                    5,
+                    $tip
+                ],
+                [
+                    'Version requirement <1.0.0 satisfied.',
+                    10,
+                    $tip
+                ],
+                [
+                    'Version requirement <1.0 satisfied.',
+                    11,
+                    $tip
+                ]
             ]
         ];
 
@@ -53,18 +70,8 @@ final class TodoByVersionRuleTest extends RuleTestCase
             "1.0",
             [
                 [
-                    'Version requirement <1.0.0 not satisfied: This has to be in the first major release.',
-                    5,
-                    $tip
-                ],
-                [
-                    'Version requirement <1.0.0 not satisfied.',
-                    10,
-                    $tip
-                ],
-                [
-                    'Version requirement <1.0 not satisfied.',
-                    11,
+                    'Version requirement >=1.0 satisfied.',
+                    12,
                     $tip
                 ]
             ]
@@ -75,21 +82,10 @@ final class TodoByVersionRuleTest extends RuleTestCase
             "123.4",
             [
                 [
-                    'Version requirement <1.0.0 not satisfied: This has to be in the first major release.',
-                    5,
-                    $tip
-                ],
-                [
-                    'Version requirement <1.0.0 not satisfied.',
-                    10,
-                    $tip
-                ],
-                [
-                    'Version requirement <1.0 not satisfied.',
-                    11,
+                    'Version requirement >=1.0 satisfied.',
+                    12,
                     $tip
                 ]
-
             ]
         ];
 
@@ -98,23 +94,13 @@ final class TodoByVersionRuleTest extends RuleTestCase
             "123.5",
             [
                 [
-                    'Version requirement <1.0.0 not satisfied: This has to be in the first major release.',
-                    5,
-                    $tip
-                ],
-                [
-                    'Version requirement >123.4 not satisfied: Must fix this or bump the version.',
+                    'Version requirement >123.4 satisfied: Must fix this or bump the version.',
                     7,
                     $tip
                 ],
                 [
-                    'Version requirement <1.0.0 not satisfied.',
-                    10,
-                    $tip
-                ],
-                [
-                    'Version requirement <1.0 not satisfied.',
-                    11,
+                    'Version requirement >=1.0 satisfied.',
+                    12,
                     $tip
                 ]
             ]
@@ -143,18 +129,8 @@ final class TodoByVersionRuleTest extends RuleTestCase
             'nextMajor', // we assume this resolves to 1.0
             [
                 [
-                    'Version requirement <1.0.0 not satisfied: This has to be in the first major release.',
-                    5,
-                    $tip
-                ],
-                [
-                    'Version requirement <1.0.0 not satisfied.',
-                    10,
-                    $tip
-                ],
-                [
-                    'Version requirement <1.0 not satisfied.',
-                    11,
+                    'Version requirement >=1.0 satisfied.',
+                    12,
                     $tip
                 ]
             ]
