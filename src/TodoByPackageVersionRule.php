@@ -31,8 +31,8 @@ final class TodoByPackageVersionRule implements Rule
     @?TODO # possible @ prefix
     @?[a-zA-Z0-9_-]*\s* # optional username
     \s*[:-]?\s* # optional colon or hyphen
-    (?:(?P<package>[a-z0-9]([_.-]?[a-z0-9]+)*/[a-z0-9](([_.]|-{1,2})?[a-z0-9]+)*):) # optional composer package name
-    (?P<version>[^\s:\-]+) # version
+    (?:(?P<package>[a-z0-9]([_.-]?[a-z0-9]+)*/[a-z0-9](([_.]|-{1,2})?[a-z0-9]+)*):) # composer package name, followed by ":"
+    (?P<version>[^\s:\-]+) # version constraint
     \s*[:-]?\s* # optional colon or hyphen
     (?P<comment>.*) # rest of line as comment text
 }ix
