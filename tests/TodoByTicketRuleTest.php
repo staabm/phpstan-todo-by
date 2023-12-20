@@ -6,6 +6,7 @@ use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use staabm\PHPStanTodoBy\TodoByTicketRule;
 use staabm\PHPStanTodoBy\Tests\StaticTicketStatusFetcher;
+use staabm\PHPStanTodoBy\utils\ExpiredCommentErrorBuilder;
 
 /**
  * @extends RuleTestCase<TodoByTicketRule>
@@ -20,7 +21,12 @@ final class TodoByTicketRuleTest extends RuleTestCase
             'APP-5000' => 'To Do',
         ]);
 
-        return new TodoByTicketRule(true, ['Done', 'Resolved'], 'APP', $fetcher);
+        return new TodoByTicketRule(
+            ['Done', 'Resolved'],
+            'APP',
+            $fetcher,
+            new ExpiredCommentErrorBuilder(true),
+        );
     }
 
     public function testRule(): void

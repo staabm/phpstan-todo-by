@@ -58,7 +58,6 @@ services:
     -
         class: staabm\PHPStanTodoBy\TodoByTicketRule
         arguments:
-            - %todo_by.nonIgnorable%
             - %todo_by.ticketResolvedStatuses%
             - %todo_by.ticketKeyPrefix%
 
