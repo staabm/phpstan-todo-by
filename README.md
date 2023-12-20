@@ -19,7 +19,7 @@ function doBar() {
 
 }
 
-// TODO: phpunit/phpunit:5.3.* This has to be fixed when updating to phpunit 5.3.*
+// TODO: phpunit/phpunit:5.3 This has to be fixed when updating phpunit to 5.3.x or higher
 function doFooBar() {
 
 }
