@@ -6,7 +6,9 @@
         "dev",
         "phpstan",
         "phpstan-extension",
-        "static analysis"
+        "static analysis",
+        "comments",
+        "expiration"
     ],
     "require": {
         "php": "^7.4 || ^8.0",
