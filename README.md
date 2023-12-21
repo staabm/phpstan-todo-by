@@ -177,6 +177,16 @@ includes:
 
 </details>
 
+## FAQ
+
+### Unexpected '"php" version requirement ">=XXX" satisfied' error
+
+If you get this errors too early, it might be caused by wrong version constraints in your `composer.json` file.
+A `php` version constraint of e.g. `^7.4` means `>=7.4.0 && <= 7.999999.99999`,
+which means comments like `// TODO >7.5` will emit an error.
+
+For the `php` declaration, it is recommended to use a version constraint with a fixed upper bound, e.g. `7.4.*` or `^7 || <8.3`.
+
 
 
 ## 💌 Give back some love
