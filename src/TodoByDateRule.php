@@ -62,6 +62,19 @@ final class TodoByDateRule implements Rule
                 $date = $match['date'][0];
                 $todoText = trim($match['comment'][0]);
 
+                sscanf($date, '%4s-%2s-%2s', $year, $month, $day);
+
+                if (!checkdate((int) $month, (int) $day, (int) $year)) {
+                    $errors[] = $this->errorBuilder->buildError(
+                        $comment,
+                        'Invalid date "'. $date .'". Expected format "YYYY-MM-DD".',
+                        null,
+                        $match[0][1]
+                    );
+
+                    continue;
+                }
+
                 /**
                  * strtotime() will parse date-only values with time set to 00:00:00.
                  * This is fine, because this will count any expiration matching
