@@ -133,4 +133,28 @@ final class TodoByDateRuleTest extends RuleTestCase
             ],
         ]);
     }
+
+    public function testInvalidDate(): void
+    {
+        $this->referenceTime = '18th january 2023';
+
+        $this->analyse([__DIR__ . '/data/invalidDate.php'], [
+            [
+                'Invalid date "2099-13-01". Expected format "YYYY-MM-DD".',
+                6,
+            ],
+            [
+                'Invalid date "2099-11-31". Expected format "YYYY-MM-DD".',
+                7,
+            ],
+            [
+                'Invalid date "2096-02-30". Expected format "YYYY-MM-DD".',
+                12,
+            ],
+            [
+                'Invalid date "2095-02-29". Expected format "YYYY-MM-DD".',
+                16,
+            ],
+        ]);
+    }
 }
