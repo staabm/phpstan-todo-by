@@ -43,7 +43,7 @@ When a text is given after the date, this text will be picked up for the PHPStan
 The comment can expire by different constraints, examples are:
 - by date with format of `YYYY-MM-DD`
 - by a semantic version constraint matched against the project itself
-- by a semantic version constraint matched against a Composer dependency
+- by a semantic version constraint matched against a Composer dependency (composer.lock based)
 
 see examples of different comment variants which are supported:
 
@@ -154,6 +154,7 @@ In case you are using git submodules, or the analyzed codebase consists of multi
 set the `singleGitRepo` option to `false` which resolves the reference version for each directory beeing analyzed.
 
 
+
 ## Installation
 
 To use this extension, require it in [Composer](https://getcomposer.org/):
@@ -175,6 +176,7 @@ includes:
 ```
 
 </details>
+
 
 
 ## 💌 Give back some love
