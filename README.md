@@ -28,6 +28,33 @@ function doFooBar() {
 
 ```
 
+## 💌 Give back some love
+
+[Consider supporting the project](https://github.com/sponsors/staabm), so we can make this tool even better even faster for everyone.
+
+## Installation
+
+To use this extension, require it in [Composer](https://getcomposer.org/):
+
+```
+composer require --dev staabm/phpstan-todo-by
+```
+
+If you also install [phpstan/extension-installer](https://github.com/phpstan/extension-installer) then you're all set!
+
+<details>
+  <summary>Manual installation</summary>
+
+If you don't want to use `phpstan/extension-installer`, include extension.neon in your project's PHPStan config:
+
+```
+includes:
+    - vendor/staabm/phpstan-todo-by/extension.neon
+```
+
+</details>
+
+
 ## Supported todo formats
 
 A todo comment can also consist of just a constraint without any text, like `// @todo 2023-12-14`.
@@ -69,33 +96,6 @@ see examples of different comment variants which are supported:
 // TODO: phpunit/phpunit:<5 This has to be fixed before updating to phpunit 5.x
 // TODO@markus: phpunit/phpunit:5.3 This has to be fixed when updating phpunit to 5.3.x or higher
 ```
-
-## Installation
-
-To use this extension, require it in [Composer](https://getcomposer.org/):
-
-```
-composer require --dev staabm/phpstan-todo-by
-```
-
-If you also install [phpstan/extension-installer](https://github.com/phpstan/extension-installer) then you're all set!
-
-<details>
-  <summary>Manual installation</summary>
-
-If you don't want to use `phpstan/extension-installer`, include extension.neon in your project's PHPStan config:
-
-```
-includes:
-    - vendor/staabm/phpstan-todo-by/extension.neon
-```
-
-</details>
-
-## 💌 Give back some love
-
-[Consider supporting the project](https://github.com/sponsors/staabm), so we can make this tool even better even faster for everyone.
-
 
 ## Configuration
 
