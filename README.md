@@ -70,6 +70,33 @@ see examples of different comment variants which are supported:
 // TODO@markus: phpunit/phpunit:5.3 This has to be fixed when updating phpunit to 5.3.x or higher
 ```
 
+## Installation
+
+To use this extension, require it in [Composer](https://getcomposer.org/):
+
+```
+composer require --dev staabm/phpstan-todo-by
+```
+
+If you also install [phpstan/extension-installer](https://github.com/phpstan/extension-installer) then you're all set!
+
+<details>
+  <summary>Manual installation</summary>
+
+If you don't want to use `phpstan/extension-installer`, include extension.neon in your project's PHPStan config:
+
+```
+includes:
+    - vendor/staabm/phpstan-todo-by/extension.neon
+```
+
+</details>
+
+## 💌 Give back some love
+
+[Consider supporting the project](https://github.com/sponsors/staabm), so we can make this tool even better even faster for everyone.
+
+
 ## Configuration
 
 
@@ -152,29 +179,3 @@ This behaviour can be configured with the `singleGitRepo` option.
 In case you are using git submodules, or the analyzed codebase consists of multiple git repositories,
 set the `singleGitRepo` option to `false` which resolves the reference version for each directory beeing analyzed.
 
-
-## Installation
-
-To use this extension, require it in [Composer](https://getcomposer.org/):
-
-```
-composer require --dev staabm/phpstan-todo-by
-```
-
-If you also install [phpstan/extension-installer](https://github.com/phpstan/extension-installer) then you're all set!
-
-<details>
-  <summary>Manual installation</summary>
-
-If you don't want to use `phpstan/extension-installer`, include extension.neon in your project's PHPStan config:
-
-```
-includes:
-    - vendor/staabm/phpstan-todo-by/extension.neon
-```
-
-</details>
-
-## 💌 Give back some love
-
-[Consider supporting the project](https://github.com/sponsors/staabm), so we can make this tool even better even faster for everyone.
