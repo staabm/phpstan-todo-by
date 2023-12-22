@@ -152,6 +152,13 @@ final class TodoByPackageVersionRule implements Rule
 
         /** @phpstan-ignore-next-line missing bc promise */
         $config = ComposerHelper::getComposerConfig($this->workingDirectory);
+
+        // fallback to current working directory
+        if (null === $config) {
+            /** @phpstan-ignore-next-line missing bc promise */
+            $config = ComposerHelper::getComposerConfig(getcwd());
+        }
+
         if (null === $config) {
             return $this->phpPlatformVersion = $this->errorBuilder->buildError(
                 $comment,
