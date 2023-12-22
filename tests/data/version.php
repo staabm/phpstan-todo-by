@@ -15,3 +15,6 @@ function doFoo():void {
 // TODO php:8.0.0
 // TODO php:8.0
 // TODO php:8
+
+// should not error because too unspecific
+// TODO: 1 abc

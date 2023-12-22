@@ -71,6 +71,10 @@ final class TodoByPackageVersionRuleTest extends RuleTestCase
                     '"php" version requirement ">=7" satisfied: drop this code after min-version raise.',
                     20,
                 ],
+                [
+                    '"php" version requirement ">=7" satisfied.',
+                    22,
+                ],
             ],
         ];
     }
