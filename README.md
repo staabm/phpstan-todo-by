@@ -133,7 +133,7 @@ parameters:
 
 As shown in the "Reference time"-paragraph above, you might even use a env variable instead.
 
-Make sure tags are available within your git clone, e.g. by running `git fetch --tags origin`.
+Make sure tags are available within your git clone, e.g. by running `git fetch --tags origin` - otherwise you are likely running into a 'Could not determine latest git tag' error.
 
 In a GitHub Action this can be done like this:
 
