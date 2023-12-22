@@ -117,7 +117,7 @@ parameters:
 
 By default version-todo-comments are checked against `"nextMajor"` version.
 
-_Note: The reference version is not applied to package-version-todo-comments._
+_Note: The reference version is not applied to package-version-todo-comments which are matched against `composer.lock` instead._
 
 This is determined by fetching the latest local available git tag and incrementing the major version number.
 
@@ -132,6 +132,8 @@ parameters:
 ```
 
 As shown in the "Reference time"-paragraph above, you might even use a env variable instead.
+
+#### Prerequisite
 
 Make sure tags are available within your git clone, e.g. by running `git fetch --tags origin` - otherwise you are likely running into a 'Could not determine latest git tag' error.
 
