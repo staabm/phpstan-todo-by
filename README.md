@@ -167,6 +167,7 @@ parameters:
     todo_by:
         virtualPackages:
             'staabm/mypackage': '2.1.0'
+            'staabm/my-api': '3.1.0'
 ```
 
 You can reference these virtual packages like any other package in your todo-comments:
