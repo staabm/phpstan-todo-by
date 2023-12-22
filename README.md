@@ -4,7 +4,7 @@ PHPStan extension to check for TODO comments with expiration.
 Inspired by [parker-codes/todo-by](https://github.com/parker-codes/todo_by).
 
 
-## Example:
+## Examples
 
 The main idea is, that comments within the source code will be turned into PHPStan errors when a condition is satisfied, e.g. a date reached, a version met.
 
