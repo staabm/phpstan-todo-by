@@ -15,6 +15,7 @@ use staabm\PHPStanTodoBy\utils\CommentMatcher;
 use staabm\PHPStanTodoBy\utils\ExpiredCommentErrorBuilder;
 use UnexpectedValueException;
 
+use function array_key_exists;
 use function in_array;
 use function is_array;
 use function is_string;
@@ -193,7 +194,6 @@ final class TodoByPackageVersionRule implements Rule
         return $provided->matches($constraint);
     }
 
-
     /**
      * @return RuleError|string
      */
@@ -279,5 +279,4 @@ final class TodoByPackageVersionRule implements Rule
 
         return $comparator;
     }
-
 }

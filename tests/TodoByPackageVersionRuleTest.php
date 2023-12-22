@@ -90,7 +90,8 @@ final class TodoByPackageVersionRuleTest extends RuleTestCase
         $this->analyse([__DIR__ . '/data/bug44.php'], []);
     }
 
-    public function testVirtualPackage(): void {
+    public function testVirtualPackage(): void
+    {
         $this->virtualPackages = [
             'virtual/package' => '1.0.0',
         ];
@@ -102,7 +103,8 @@ final class TodoByPackageVersionRuleTest extends RuleTestCase
         ]);
     }
 
-    public function testInvalidVirtualPackage(): void {
+    public function testInvalidVirtualPackage(): void
+    {
         $this->virtualPackages = [
             'virtual/package' => 'not-a-version',
         ];
