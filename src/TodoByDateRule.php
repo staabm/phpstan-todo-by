@@ -20,7 +20,7 @@ final class TodoByDateRule implements Rule
     private const PATTERN = <<<'REGEXP'
         {
             @?TODO # possible @ prefix
-            @?[a-zA-Z0-9_-]*\s* # optional username
+            @?[a-zA-Z0-9_-]* # optional username
             \s*[:-]?\s* # optional colon or hyphen
             \s+ # keyword/date separator
             (?P<date>\d{4}-\d{2}-\d{2}) # date consisting of YYYY-MM-DD format
