@@ -48,7 +48,7 @@ final class TodoByVersionRuleAlwaysThrowingFetchterTest extends RuleTestCase
             [
                 'Latest tag not found',
                 5,
-                'See https://github.com/staabm/phpstan-todo-by#could-not-determine-latest-git-tag-error'
+                'See https://github.com/staabm/phpstan-todo-by#could-not-determine-latest-git-tag-error',
             ],
         ]);
     }
