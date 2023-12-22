@@ -87,6 +87,12 @@ services:
             - %currentWorkingDirectory%
 
     -
+        class: staabm\PHPStanTodoBy\TodoByConfigVersionRule
+        tags: [phpstan.rules.rule]
+        arguments:
+            - %todo_by.config.versionToggles%
+
+    -
         class: staabm\PHPStanTodoBy\utils\GitTagFetcher
 
     -
