@@ -20,6 +20,7 @@ use function trim;
  */
 final class TodoByConfigVersionRule implements Rule
 {
+    private const RESERVED_PHP = 'php';
     private const COMPARATORS = ['<', '>', '='];
 
     private const PATTERN = <<<'REGEXP'
@@ -46,6 +47,9 @@ final class TodoByConfigVersionRule implements Rule
         array $configs,
         ExpiredCommentErrorBuilder $errorBuilder
     ) {
+        if (array_key_exists(self::RESERVED_PHP, $configs)) {
+            throw new \RuntimeException('Cannot use "php" as "versionToggle" name.');
+        }
         $this->configs = $configs;
         $this->errorBuilder = $errorBuilder;
     }
@@ -69,6 +73,10 @@ final class TodoByConfigVersionRule implements Rule
             /** @var array<int, array<array{0: string, 1: int}>> $matches */
             foreach ($matches as $match) {
                 $name = $match['name'][0];
+
+                if ($name === self::RESERVED_PHP) {
+                    continue;
+                }
 
                 if (!array_key_exists($name, $this->configs)) {
                     $errors[] = $this->errorBuilder->buildError(
