@@ -118,8 +118,6 @@ parameters:
 By default version-todo-comments are checked against `"nextMajor"` version.
 It is determined by fetching the latest local available git tag and incrementing the major version number.
 
-_Note: The reference version is not applied to package-version-todo-comments which are matched against `composer.lock` instead._
-
 The behaviour can be configured with the `referenceVersion` option.
 Possible values are `"nextMajor"`, `"nextMinor"`, `"nextPatch"` - which will be computed based on the latest local git tag - or any other version string like `"1.2.3"`.
 
@@ -131,6 +129,9 @@ parameters:
 ```
 
 As shown in the "Reference time"-paragraph above, you might even use a env variable instead.
+
+> [!NOTE]
+> The reference version is not applied to package-version-todo-comments which are matched against `composer.lock` instead.
 
 #### Prerequisite
 
