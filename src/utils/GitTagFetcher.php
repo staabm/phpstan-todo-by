@@ -2,8 +2,6 @@
 
 namespace staabm\PHPStanTodoBy\utils;
 
-use RuntimeException;
-
 use function count;
 
 final class GitTagFetcher implements TagFetcher
@@ -23,9 +21,9 @@ final class GitTagFetcher implements TagFetcher
 
         if (0 !== $returnCode || 1 !== count($output)) {
             if (null !== $workingDirectory) {
-                throw new RuntimeException('Could not determine latest git tag in working directory: "' . $workingDirectory .'"');
+                throw new LatestTagNotFoundException('Could not determine latest git tag in working directory: "' . $workingDirectory .'"');
             }
-            throw new RuntimeException('Could not determine latest git tag');
+            throw new LatestTagNotFoundException('Could not determine latest git tag');
         }
         return $output[0];
     }

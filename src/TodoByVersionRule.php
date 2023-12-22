@@ -6,8 +6,10 @@ use Composer\Semver\VersionParser;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
+use PHPStan\Rules\RuleErrorBuilder;
 use staabm\PHPStanTodoBy\utils\CommentMatcher;
 use staabm\PHPStanTodoBy\utils\ExpiredCommentErrorBuilder;
+use staabm\PHPStanTodoBy\utils\LatestTagNotFoundException;
 use staabm\PHPStanTodoBy\utils\ReferenceVersionFinder;
 use UnexpectedValueException;
 
@@ -69,7 +71,15 @@ final class TodoByVersionRule implements Rule
         $errors = [];
         $versionParser = new VersionParser();
         foreach ($it as $comment => $matches) {
-            $referenceVersion = $this->getReferenceVersion($scope);
+            try {
+                $referenceVersion = $this->getReferenceVersion($scope);
+            } catch (LatestTagNotFoundException $e) {
+                return [
+                    RuleErrorBuilder::message($e->getMessage())
+                        ->tip('See https://github.com/staabm/phpstan-todo-by#could-not-determine-latest-git-tag-error')
+                        ->build(),
+                ];
+            }
             $provided = $versionParser->parseConstraints(
                 $referenceVersion
             );
