@@ -166,16 +166,25 @@ final class TodoByPackageVersionRule implements Rule
     private function satisfiesVirtualPackage(string $package, string $version, Comment $comment, int $wholeMatchStartOffset)
     {
         $versionParser = new VersionParser();
-        $provided = $versionParser->parseConstraints(
-            $this->virtualPackages[$package]
-        );
+        try {
+            $provided = $versionParser->parseConstraints(
+                $this->virtualPackages[$package]
+            );
+        } catch (UnexpectedValueException $e) {
+            return $this->errorBuilder->buildError(
+                $comment,
+                'Invalid version "' . $this->virtualPackages[$package] . '" provided for virtual-package "' . $package . '" via PHPStan config file.',
+                null,
+                $wholeMatchStartOffset
+            );
+        }
 
         try {
             $constraint = $versionParser->parseConstraints($version);
         } catch (UnexpectedValueException $e) {
             return $this->errorBuilder->buildError(
                 $comment,
-                'Invalid version constraint "' . $version . '".',
+                'Invalid version constraint "' . $version . '" for virtual-package "' . $package . '".',
                 null,
                 $wholeMatchStartOffset
             );

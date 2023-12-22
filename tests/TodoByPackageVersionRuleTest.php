@@ -101,4 +101,20 @@ final class TodoByPackageVersionRuleTest extends RuleTestCase
             ],
         ]);
     }
+
+    public function testInvalidVirtualPackage(): void {
+        $this->virtualPackages = [
+            'virtual/package' => 'not-a-version',
+        ];
+        $this->analyse([__DIR__ . '/data/virtualPackages.php'], [
+            [
+                'Invalid version "not-a-version" provided for virtual-package "virtual/package" via PHPStan config file.',
+                5,
+            ],
+            [
+                'Invalid version "not-a-version" provided for virtual-package "virtual/package" via PHPStan config file.',
+                6,
+            ],
+        ]);
+    }
 }
