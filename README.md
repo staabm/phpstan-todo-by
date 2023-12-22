@@ -160,7 +160,7 @@ set the `singleGitRepo` option to `false` which resolves the reference version f
 
 #### Virtual packages
 
-Within your PHPStan config file you can define additional packages, to match against package-version-todo-comments.
+Within the PHPStan config file you can define additional packages, to match against package-version-todo-comments.
 
 ```neon
 parameters:
@@ -170,7 +170,7 @@ parameters:
             'staabm/my-api': '3.1.0'
 ```
 
-You can reference these virtual packages like any other package in your todo-comments:
+Reference these virtual packages like any other package in your todo-comments:
 
 `// TODO staabm/mypackage:2.2.0 remove the following function once staabm/mypackage is updated to 2.2.0`
 
