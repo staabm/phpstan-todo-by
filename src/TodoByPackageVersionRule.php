@@ -174,7 +174,7 @@ final class TodoByPackageVersionRule implements Rule
         } catch (UnexpectedValueException $e) {
             return $this->errorBuilder->buildError(
                 $comment,
-                'Invalid version "' . $this->virtualPackages[$package] . '" provided for virtual-package "' . $package . '" via PHPStan config file.',
+                'Invalid virtual-package "' . $package . '": "' . $this->virtualPackages[$package] . '" provided via PHPStan config file.',
                 null,
                 $wholeMatchStartOffset
             );
