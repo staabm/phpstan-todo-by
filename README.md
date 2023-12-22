@@ -262,6 +262,7 @@ Depending on chosen authentication method its value should be:
 * Access Token for token based authentication, e.g. `JATATT3xFfGF0Gv_pLFSsunmigz8wq5Y0wkogoTMgxDFHyR...`
 * `<username>:<passwordOrApiKey>` for basic authentication, e.g. `john.doe@example.com:p@ssword`
 
+
 ## Installation
 
 To use this extension, require it in [Composer](https://getcomposer.org/):
