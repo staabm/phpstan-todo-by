@@ -43,6 +43,9 @@ final class TodoByConfigVersionRule implements Rule
      */
     private array $configs;
 
+    /**
+     * @param array<string, string> $configs
+     */
     public function __construct(
         array $configs,
         ExpiredCommentErrorBuilder $errorBuilder

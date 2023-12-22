@@ -13,6 +13,9 @@ use staabm\PHPStanTodoBy\utils\ExpiredCommentErrorBuilder;
  */
 final class TodoByConfigVersionRuleTest extends RuleTestCase
 {
+    /**
+     * @var array<string, string>
+     */
     private array $configs;
 
     protected function getRule(): Rule
