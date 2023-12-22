@@ -26,7 +26,7 @@ function doFooBar() {
 
 }
 
-// TODO: php:>8 drop this polyfill when php 8.x is required
+// TODO: php:8 drop this polyfill when php 8.x is required
 
 ```
 
