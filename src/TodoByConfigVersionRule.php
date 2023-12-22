@@ -25,7 +25,7 @@ final class TodoByConfigVersionRule implements Rule
     private const PATTERN = <<<'REGEXP'
         {
             @?TODO # possible @ prefix
-            @?[a-zA-Z0-9_-]* # optional username
+            @?[a-zA-Z0-9_-]*\s* # optional username
             \s*[:-]?\s* # optional colon or hyphen
             \s+ # keyword/version separator
             (?:(?P<name>[a-z0-9]+):) # toggle name
