@@ -43,9 +43,9 @@ When a text is given after the date, this text will be picked up for the PHPStan
 - multi line `/* */` and `/** */` comments are supported
 
 The comment can expire by different constraints, examples are:
-- by date with format of `YYYY-MM-DD`
-- by a semantic version constraint matched against the project itself
-- by a semantic version constraint matched against a Composer dependency (composer.lock based)
+- by date with format of `YYYY-MM-DD` matched against the [reference-time](https://github.com/staabm/phpstan-todo-by#reference-time)
+- by a semantic version constraint matched against the projects [reference-version](https://github.com/staabm/phpstan-todo-by#reference-version)
+- by a semantic version constraint matched against a Composer dependency (matched against `composer.lock`)
 
 see examples of different comment variants which are supported:
 
