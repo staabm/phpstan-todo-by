@@ -148,7 +148,7 @@ In a GitHub Action this can be done like this:
 ```
 
 
-### Multiple GIT repository support
+#### Multiple GIT repository support
 
 By default the latest git tag to calculate the reference version is fetched once for all files beeing analyzed.
 
