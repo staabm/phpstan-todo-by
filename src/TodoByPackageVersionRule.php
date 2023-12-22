@@ -29,13 +29,14 @@ final class TodoByPackageVersionRule implements Rule
     private const COMPARATORS = ['<', '>', '='];
 
     // composer package-name pattern from https://getcomposer.org/doc/04-schema.md#name
+    // adjusted because of backtrack limit issues https://github.com/staabm/phpstan-todo-by/issues/44
     private const PATTERN = <<<'REGEXP'
         {
             @?TODO # possible @ prefix
             @?[a-zA-Z0-9_-]* # optional username
             \s*[:-]?\s* # optional colon or hyphen
             \s+ # keyword/version separator
-            (?:(?P<package>(php|[a-z0-9]([_.-]?[a-z0-9]+)*/[a-z0-9](([_.]|-{1,2})?[a-z0-9]+)*)):) # "php" or a composer package name, followed by ":"
+            (?:(?P<package>(php|[a-z0-9]([_.-]?[a-z0-9]++)*+/[a-z0-9](([_.]|-{1,2})?[a-z0-9]++)*+)):) # "php" or a composer package name, followed by ":"
             (?P<version>[<>=]?[^\s:\-]+) # version
             \s*[:-]?\s* # optional colon or hyphen
             (?P<comment>.*) # rest of line as comment text
