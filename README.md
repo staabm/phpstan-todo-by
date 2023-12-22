@@ -158,6 +158,22 @@ In case you are using git submodules, or the analyzed codebase consists of multi
 set the `singleGitRepo` option to `false` which resolves the reference version for each directory beeing analyzed.
 
 
+#### Virtual packages
+
+Within your PHPStan config file you can define additional packages, to match against package-version-todo-comments.
+
+```neon
+parameters:
+    todo_by:
+        virtualPackages:
+            'staabm/mypackage': '2.1.0'
+```
+
+You can reference these virtual packages like any other package in your todo-comments:
+
+`// TODO staabm/mypackage:2.2.0 remove the following function once staabm/mypackage is updated to 2.2.0`
+
+
 ### Issue tracker key support
 
 Optionally you can configure this extension to analyze your comments with issue tracker ticket keys.
@@ -245,7 +261,6 @@ parameters:
 Depending on chosen authentication method its value should be:
 * Access Token for token based authentication, e.g. `JATATT3xFfGF0Gv_pLFSsunmigz8wq5Y0wkogoTMgxDFHyR...`
 * `<username>:<passwordOrApiKey>` for basic authentication, e.g. `john.doe@example.com:p@ssword`
-
 
 ## Installation
 
