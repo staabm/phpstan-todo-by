@@ -189,7 +189,10 @@ which means comments like `// TODO >7.5` will emit an error.
 
 For the `php` declaration, it is recommended to use a version constraint with a fixed upper bound, e.g. `7.4.*` or `^7 || <8.3`.
 
+### 'Could not determine latest git tag' error
 
+This error is thrown, when no git tags are available within your git clone.
+Fetch git tags, as described in the ["Reference version"-chapter](https://github.com/staabm/phpstan-todo-by#reference-version) above.
 
 ## 💌 Give back some love
 
