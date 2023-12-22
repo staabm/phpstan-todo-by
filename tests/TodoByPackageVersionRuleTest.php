@@ -78,4 +78,9 @@ final class TodoByPackageVersionRuleTest extends RuleTestCase
             ],
         ];
     }
+
+    public function testBug44(): void
+    {
+        $this->analyse([__DIR__ . '/data/bug44.php'], []);
+    }
 }

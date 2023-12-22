@@ -18,8 +18,8 @@ final class IntegrationTest extends PHPStanTestCase
         $errors = $this->runAnalyse(__DIR__ . '/data/e2e.php');
         static::assertCount(2, $errors);
 
-        $this->assertSame('Expired on 2023-12-14: fix it.', $errors[0]->getMessage());
-        $this->assertSame('"php" version requirement ">=7" satisfied.', $errors[1]->getMessage());
+        static::assertSame('Expired on 2023-12-14: fix it.', $errors[0]->getMessage());
+        static::assertSame('"php" version requirement ">=7" satisfied.', $errors[1]->getMessage());
     }
 
     public static function getAdditionalConfigFiles(): array
@@ -33,7 +33,7 @@ final class IntegrationTest extends PHPStanTestCase
      * @param string[]|null $allAnalysedFiles
      * @return Error[]
      */
-    private function runAnalyse(string $file, ?array $allAnalysedFiles = null): array
+    private function runAnalyse(string $file, array $allAnalysedFiles = null): array
     {
         $file = $this->getFileHelper()->normalizePath($file);
         /** @var Analyser $analyser */
@@ -43,7 +43,7 @@ final class IntegrationTest extends PHPStanTestCase
         /** @phpstan-ignore-next-line missing bc promise */
         $errors = $analyser->analyse([$file], null, null, true, $allAnalysedFiles)->getErrors();
         foreach ($errors as $error) {
-            $this->assertSame($fileHelper->normalizePath($file), $error->getFilePath());
+            static::assertSame($fileHelper->normalizePath($file), $error->getFilePath());
         }
 
         return $errors;
