@@ -15,10 +15,16 @@ use function dirname;
  */
 final class TodoByPackageVersionRuleTest extends RuleTestCase
 {
+    /**
+     * @var array<string, string>
+     */
+    private array $virtualPackages = [];
+
     protected function getRule(): Rule
     {
         return new TodoByPackageVersionRule(
             dirname(__DIR__),
+            $this->virtualPackages,
             new ExpiredCommentErrorBuilder(true),
         );
     }
@@ -82,5 +88,17 @@ final class TodoByPackageVersionRuleTest extends RuleTestCase
     public function testBug44(): void
     {
         $this->analyse([__DIR__ . '/data/bug44.php'], []);
+    }
+
+    public function testVirtualPackage(): void {
+        $this->virtualPackages = [
+            'virtual/package' => '1.0.0',
+        ];
+        $this->analyse([__DIR__ . '/data/virtualPackages.php'], [
+            [
+                '"virtual/package" version requirement ">=1.0" satisfied: comment v1.',
+                5,
+            ],
+        ]);
     }
 }

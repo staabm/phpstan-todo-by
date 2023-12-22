@@ -4,6 +4,7 @@ parametersSchema:
         referenceTime: string()
         referenceVersion: string()
         singleGitRepo: bool()
+        virtualPackages: arrayOf(string(), string())
         ticket: structure([
             enabled: bool()
             keyPrefixes: listOf(string())
@@ -30,6 +31,9 @@ parameters:
         # whether all files beeing analyzed are contained in the same git repository.
         # If set to false, the git tags are fetched for each directory individually (slower)
         singleGitRepo: true
+
+        # a map of additional packages to match package-comments against
+        virtualPackages: []
 
         ticket:
             # whether to analyze comments by issue tracker ticket key
@@ -85,12 +89,7 @@ services:
         tags: [phpstan.rules.rule]
         arguments:
             - %currentWorkingDirectory%
-
-    -
-        class: staabm\PHPStanTodoBy\TodoByConfigVersionRule
-        tags: [phpstan.rules.rule]
-        arguments:
-            - %todo_by.config.versionToggles%
+            - %todo_by.virtualPackages%
 
     -
         class: staabm\PHPStanTodoBy\utils\GitTagFetcher

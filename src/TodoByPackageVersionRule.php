@@ -52,11 +52,21 @@ final class TodoByPackageVersionRule implements Rule
      */
     private $phpPlatformVersion;
 
+    /**
+     * @var array<string, string>
+     */
+    private array $virtualPackages;
+
+    /**
+     * @param array<string, string> $virtualPackages
+     */
     public function __construct(
         string $workingDirectory,
+        array $virtualPackages,
         ExpiredCommentErrorBuilder $errorBuilder
     ) {
         $this->workingDirectory = $workingDirectory;
+        $this->virtualPackages = $virtualPackages;
         $this->errorBuilder = $errorBuilder;
 
         // require the top level installed versions, so we don't mix it up with the one in phpstan.phar
@@ -90,6 +100,8 @@ final class TodoByPackageVersionRule implements Rule
 
                 if ('php' === $package) {
                     $satisfiesOrError = $this->satisfiesPhpPlatformPackage($package, $version, $comment, $match[0][1]);
+                } elseif (array_key_exists($package, $this->virtualPackages)) {
+                    $satisfiesOrError = $this->satisfiesVirtualPackage($package, $version, $comment, $match[0][1]);
                 } else {
                     $satisfiesOrError = $this->satisfiesInstalledPackage($package, $version, $comment, $match[0][1]);
                 }
@@ -147,6 +159,31 @@ final class TodoByPackageVersionRule implements Rule
 
         return $provided->matches($constraint);
     }
+
+    /**
+     * @return bool|\PHPStan\Rules\RuleError
+     */
+    private function satisfiesVirtualPackage(string $package, string $version, Comment $comment, int $wholeMatchStartOffset)
+    {
+        $versionParser = new VersionParser();
+        $provided = $versionParser->parseConstraints(
+            $this->virtualPackages[$package]
+        );
+
+        try {
+            $constraint = $versionParser->parseConstraints($version);
+        } catch (UnexpectedValueException $e) {
+            return $this->errorBuilder->buildError(
+                $comment,
+                'Invalid version constraint "' . $version . '".',
+                null,
+                $wholeMatchStartOffset
+            );
+        }
+
+        return $provided->matches($constraint);
+    }
+
 
     /**
      * @return RuleError|string
@@ -233,4 +270,5 @@ final class TodoByPackageVersionRule implements Rule
 
         return $comparator;
     }
+
 }
