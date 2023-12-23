@@ -249,7 +249,7 @@ final class TodoByPackageVersionRule implements Rule
         if (!InstalledVersions::isInstalled($package)) {
             return $this->errorBuilder->buildError(
                 $comment,
-                'Package "' . $package . '" is not installed via Composer.',
+                'Unknown package "' . $package . '". It is neither installed via composer.json nor declared as virtual package via PHPStan config.',
                 null,
                 $wholeMatchStartOffset
             );

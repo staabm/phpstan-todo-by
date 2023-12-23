@@ -54,7 +54,7 @@ final class TodoByPackageVersionRuleTest extends RuleTestCase
                     8,
                 ],
                 [
-                    'Package "not-installed/package" is not installed via Composer.',
+                    'Unknown package "not-installed/package". It is neither installed via composer.json nor declared as virtual package via PHPStan config.',
                     11,
                 ],
                 [
@@ -100,6 +100,10 @@ final class TodoByPackageVersionRuleTest extends RuleTestCase
                 '"my-virtual/package" version requirement ">=1.0" satisfied: comment v1.',
                 5,
             ],
+            [
+                'Unknown package "some/unknown". It is neither installed via composer.json nor declared as virtual package via PHPStan config.',
+                8,
+            ],
         ]);
     }
 
@@ -116,6 +120,10 @@ final class TodoByPackageVersionRuleTest extends RuleTestCase
             [
                 'Invalid virtual-package "my-virtual/package": "not-a-version" provided via PHPStan config file.',
                 6,
+            ],
+            [
+                'Unknown package "some/unknown". It is neither installed via composer.json nor declared as virtual package via PHPStan config.',
+                8,
             ],
         ]);
     }
