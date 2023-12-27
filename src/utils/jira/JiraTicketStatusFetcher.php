@@ -57,24 +57,24 @@ final class JiraTicketStatusFetcher implements TicketStatusFetcher
         $data = json_decode($body, true);
 
         if (!is_array($data) || !array_key_exists('fields', $data)) {
-            throw self::throwInvalidResponse();
+            self::throwInvalidResponse();
         }
 
         $fields = $data['fields'];
 
         if (!is_array($fields) || !array_key_exists('status', $fields)) {
-            throw self::throwInvalidResponse();
+            self::throwInvalidResponse();
         }
 
         $status = $fields['status'];
         if (!is_array($status) || !array_key_exists('name', $status)) {
-            throw self::throwInvalidResponse();
+            self::throwInvalidResponse();
         }
 
         $name = $status['name'];
 
         if (!is_string($name) || '' === trim($name)) {
-            throw self::throwInvalidResponse();
+            self::throwInvalidResponse();
         }
 
         return $data;
