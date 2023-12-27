@@ -12,6 +12,8 @@
     ],
     "require": {
         "php": "^7.4 || ^8.0",
+        "ext-curl": "*",
+        "ext-json": "*",
         "composer-runtime-api": "^2",
         "composer/semver": "^3.4",
         "nikolaposa/version": "^4.1"

@@ -4,6 +4,16 @@ parametersSchema:
         referenceTime: string()
         referenceVersion: string()
         singleGitRepo: bool()
+        ticket: structure([
+            enabled: bool()
+            keyPrefixes: listOf(string())
+            resolvedStatuses: listOf(string())
+            jira: structure([
+                server: string()
+                credentials: schema(string(), nullable())
+                credentialsFilePath: schema(string(), nullable())
+            ])
+        ])
     ])
 
 # default parameters
@@ -21,12 +31,48 @@ parameters:
         # If set to false, the git tags are fetched for each directory individually (slower)
         singleGitRepo: true
 
+        ticket:
+            # whether to analyze comments by issue tracker ticket key
+            enabled: false
+
+            # a case-sensitive list of status names.
+            # only tickets having any of these statuses are considered resolved.
+            resolvedStatuses: []
+
+            # if your ticket key is FOO-12345, then this value should be ["FOO"].
+            # multiple key prefixes are allowed, e.g. ["FOO", "APP"].
+            # only comments with keys containing this prefix will be analyzed.
+            keyPrefixes: []
+
+            jira:
+                # e.g. https://your-company.atlassian.net
+                server: https://jira.atlassian.com
+
+                # see README for possible formats.
+                # if this value is empty, credentials file will be used instead.
+                credentials: null
+
+                # path to a file containing Jira credentials.
+                # see README for possible formats.
+                # if credentials parameter is not empty, it will be used instead of this file.
+                # this file must not be commited into the repository!
+                credentialsFilePath: null
+
+conditionalTags:
+    staabm\PHPStanTodoBy\TodoByTicketRule:
+        phpstan.rules.rule: %todo_by.ticket.enabled%
+
 services:
     -
         class: staabm\PHPStanTodoBy\TodoByDateRule
         tags: [phpstan.rules.rule]
         arguments:
             - %todo_by.referenceTime%
+    -
+        class: staabm\PHPStanTodoBy\TodoByTicketRule
+        arguments:
+            - %todo_by.ticket.resolvedStatuses%
+            - %todo_by.ticket.keyPrefixes%
 
     -
         class: staabm\PHPStanTodoBy\TodoByVersionRule
@@ -52,3 +98,10 @@ services:
         class: staabm\PHPStanTodoBy\utils\ExpiredCommentErrorBuilder
         arguments:
             - %todo_by.nonIgnorable%
+
+    -
+        class: staabm\PHPStanTodoBy\utils\jira\JiraTicketStatusFetcher
+        arguments:
+            - %todo_by.ticket.jira.server%
+            - %todo_by.ticket.jira.credentials%
+            - %todo_by.ticket.jira.credentialsFilePath%
