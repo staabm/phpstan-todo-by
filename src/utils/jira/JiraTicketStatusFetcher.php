@@ -16,16 +16,27 @@ final class JiraTicketStatusFetcher implements TicketStatusFetcher
     private string $host;
     private string $authorizationHeader;
 
+    /**
+     * @var array<string, ?string>
+     */
+    private array $cache;
+
     public function __construct(string $host, ?string $credentials, ?string $credentialsFilePath)
     {
         $credentials = JiraAuthorization::getCredentials($credentials, $credentialsFilePath);
 
         $this->host = $host;
         $this->authorizationHeader = JiraAuthorization::createAuthorizationHeader($credentials);
+
+        $this->cache = [];
     }
 
     public function fetchTicketStatus(string $ticketKey): ?string
     {
+        if (array_key_exists($ticketKey, $this->cache)) {
+            return $this->cache[$ticketKey];
+        }
+
         $apiVersion = self::API_VERSION;
 
         $curl = curl_init("{$this->host}/rest/api/$apiVersion/issue/$ticketKey?expand=status");
@@ -48,7 +59,7 @@ final class JiraTicketStatusFetcher implements TicketStatusFetcher
 
         $data = self::decodeAndValidateResponse($response);
 
-        return $data['fields']['status']['name'];
+        return $this->cache[$ticketKey] = $data['fields']['status']['name'];
     }
 
     /** @return array{fields: array{status: array{name: string}}} */
