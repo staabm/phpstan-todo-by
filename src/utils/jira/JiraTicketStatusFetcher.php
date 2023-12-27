@@ -2,9 +2,6 @@
 
 namespace staabm\PHPStanTodoBy\utils\jira;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ClientException;
-use Psr\Http\Message\StreamInterface;
 use RuntimeException;
 use staabm\PHPStanTodoBy\utils\TicketStatusFetcher;
 
@@ -16,47 +13,46 @@ final class JiraTicketStatusFetcher implements TicketStatusFetcher
 {
     private const API_VERSION = 2;
 
-    private Client $client;
+    private string $host;
     private string $authorizationHeader;
 
     public function __construct(string $host, ?string $credentials, ?string $credentialsFilePath)
     {
         $credentials = JiraAuthorization::getCredentials($credentials, $credentialsFilePath);
 
+        $this->host = $host;
         $this->authorizationHeader = JiraAuthorization::createAuthorizationHeader($credentials);
-        $this->client = new Client([
-            'base_uri' => $host,
-        ]);
     }
 
     public function fetchTicketStatus(string $ticketKey): ?string
     {
         $apiVersion = self::API_VERSION;
 
-        try {
-            $response = $this->client->get("/rest/api/$apiVersion/issue/$ticketKey", [
-                'query' => [
-                    'expand' => 'status',
-                ],
-                'headers' => [
-                    'Authorization' => $this->authorizationHeader,
-                ],
-            ]);
-        } catch (ClientException $exception) {
-            if (404 === $exception->getResponse()->getStatusCode()) {
-                return null;
-            }
-
-            throw $exception;
+        $curl = curl_init("{$this->host}/rest/api/$apiVersion/issue/$ticketKey?expand=status");
+        if (!$curl) {
+            throw new RuntimeException('Could not initialize cURL connection');
         }
 
-        $data = self::decodeAndValidateResponse($response->getBody());
+        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, [
+            "Authorization: $this->authorizationHeader",
+        ]);
+
+        $response = curl_exec($curl);
+        if (!is_string($response) || curl_getinfo($curl, CURLINFO_RESPONSE_CODE) !== 200) {
+            throw new RuntimeException("Could not fetch ticket's status from Jira");
+        }
+
+        curl_close($curl);
+
+        $data = self::decodeAndValidateResponse($response);
 
         return $data['fields']['status']['name'];
     }
 
     /** @return array{fields: array{status: array{name: string}}} */
-    private static function decodeAndValidateResponse(StreamInterface $body): array
+    private static function decodeAndValidateResponse(string $body): array
     {
         $data = json_decode($body, true);
 
