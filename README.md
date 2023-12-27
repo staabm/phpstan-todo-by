@@ -28,7 +28,7 @@ function doFooBar() {
 
 // TODO: php:8 drop this polyfill when php 8.x is required
 
-// TODO: APP-2137 This has to be fixed
+// TODO: APP-2137 A comment which errors when the issue tracker ticket get resolved
 function doBaz() {
 
 }
