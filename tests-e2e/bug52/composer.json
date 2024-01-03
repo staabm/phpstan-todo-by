@@ -7,7 +7,7 @@
         {
             "type": "path",
             "url": "packages/*"
-        },
+        }
     ],
     "require": {
         "codappix/example-package": "^1.0",
