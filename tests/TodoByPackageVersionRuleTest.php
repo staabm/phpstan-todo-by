@@ -23,9 +23,9 @@ final class TodoByPackageVersionRuleTest extends RuleTestCase
     protected function getRule(): Rule
     {
         return new TodoByPackageVersionRule(
+            new ExpiredCommentErrorBuilder(true),
             dirname(__DIR__),
             $this->virtualPackages,
-            new ExpiredCommentErrorBuilder(true),
         );
     }
 
