@@ -17,7 +17,7 @@ final class TicketRuleConfigurationFactory
 
     public function create(): TicketRuleConfiguration
     {
-        /** @var array{ticket:array{resolvedStatuses: list<non-empty-string>, keyPrefixes: list<non-empty-string>, tracker: 'github'|'jira'}} $extensionParameters */
+        /** @var array{ticket:array{resolvedStatuses: list<string>, keyPrefixes: list<string>, tracker: 'github'|'jira'}} $extensionParameters */
         $extensionParameters = $this->container->getParameter('todo_by');
 
         $parameters = $extensionParameters['ticket'];
