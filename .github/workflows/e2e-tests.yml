@@ -15,7 +15,7 @@ jobs:
             matrix:
                 include:
                     -   os: ubuntu-latest
-                        php-version: '8.1'
+                        php-version: '8.2'
                         script: |
                             cd tests-e2e/bug52/
                             composer install
