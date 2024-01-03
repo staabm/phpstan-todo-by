@@ -63,7 +63,7 @@ final class TodoByPackageVersionRule implements Rule
      */
     public function __construct(
         string $workingDirectory,
-        array $virtualPackages,
+        array $virtualPackages = [],
         ExpiredCommentErrorBuilder $errorBuilder
     ) {
         $this->workingDirectory = $workingDirectory;
