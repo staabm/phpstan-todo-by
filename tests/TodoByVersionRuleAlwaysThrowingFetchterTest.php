@@ -52,4 +52,11 @@ final class TodoByVersionRuleAlwaysThrowingFetchterTest extends RuleTestCase
             ],
         ]);
     }
+
+    public function testNotMatchingDates(): void
+    {
+        $this->referenceVersion = 'nextMajor';
+
+        $this->analyse([__DIR__ . '/data/bug59.php'], $errors);
+    }
 }
