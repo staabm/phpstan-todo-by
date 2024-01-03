@@ -125,7 +125,7 @@ final class TodoByDateRuleTest extends RuleTestCase
                 65,
             ],
             [
-                'Expired on 2023-1-22: support single digit day.',
+                'Expired on 2023-1-22: support single digit month.',
                 66,
             ],
         ]);
