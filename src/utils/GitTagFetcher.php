@@ -27,6 +27,6 @@ final class GitTagFetcher implements TagFetcher
         }
 
         // a repo might not contain any tags
-        return isset($output[0]) ? $output[0] : null;
+        return $output[0] ?? null;
     }
 }
