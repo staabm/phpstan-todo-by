@@ -61,7 +61,7 @@ final class TodoByPackageVersionRule implements Rule
 
         // require the top level installed versions, so we don't mix it up with the one in phpstan.phar
         $installedVersions = $this->workingDirectory . '/vendor/composer/InstalledVersions.php';
-        if (is_readable($installedVersions)) {
+        if (!class_exists(InstalledVersions::class, false) && is_readable($installedVersions)) {
             require_once $installedVersions;
         }
     }
