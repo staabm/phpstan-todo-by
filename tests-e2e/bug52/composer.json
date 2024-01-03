@@ -2,18 +2,13 @@
     "repositories": [
         {
             "type": "path",
-            "url": "../../*"
-        },
-        {
-            "type": "path",
             "url": "packages/*"
         }
     ],
     "require": {
         "codappix/example-package": "^1.0",
         "typo3/minimal": "^12.4",
-        "typo3/cms-core": "^12.4",
-        "staabm/phpstan-todo-by": "*"
+        "typo3/cms-core": "^12.4"
     },
     "config": {
         "allow-plugins": {
