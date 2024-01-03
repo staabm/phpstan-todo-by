@@ -18,7 +18,6 @@
         }
     },
     "require-dev": {
-        "staabm/phpstan-todo-by": "^0.1.16",
         "phpstan/phpstan": "^1.10",
         "phpstan/extension-installer": "^1.3"
     }

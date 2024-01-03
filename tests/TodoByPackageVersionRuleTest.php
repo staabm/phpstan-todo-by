@@ -15,11 +15,17 @@ use function dirname;
  */
 final class TodoByPackageVersionRuleTest extends RuleTestCase
 {
+    /**
+     * @var array<string, string>
+     */
+    private array $virtualPackages = [];
+
     protected function getRule(): Rule
     {
         return new TodoByPackageVersionRule(
-            dirname(__DIR__),
             new ExpiredCommentErrorBuilder(true),
+            dirname(__DIR__),
+            $this->virtualPackages,
         );
     }
 
@@ -48,7 +54,7 @@ final class TodoByPackageVersionRuleTest extends RuleTestCase
                     8,
                 ],
                 [
-                    'Package "not-installed/package" is not installed via Composer.',
+                    'Unknown package "not-installed/package". It is neither installed via composer.json nor declared as virtual package via PHPStan config.',
                     11,
                 ],
                 [
@@ -82,5 +88,43 @@ final class TodoByPackageVersionRuleTest extends RuleTestCase
     public function testBug44(): void
     {
         $this->analyse([__DIR__ . '/data/bug44.php'], []);
+    }
+
+    public function testVirtualPackage(): void
+    {
+        $this->virtualPackages = [
+            'my-virtual/package' => '1.0.0',
+        ];
+        $this->analyse([__DIR__ . '/data/virtualPackages.php'], [
+            [
+                '"my-virtual/package" version requirement ">=1.0" satisfied: comment v1.',
+                5,
+            ],
+            [
+                'Unknown package "some/unknown". It is neither installed via composer.json nor declared as virtual package via PHPStan config.',
+                8,
+            ],
+        ]);
+    }
+
+    public function testInvalidVirtualPackage(): void
+    {
+        $this->virtualPackages = [
+            'my-virtual/package' => 'not-a-version',
+        ];
+        $this->analyse([__DIR__ . '/data/virtualPackages.php'], [
+            [
+                'Invalid virtual-package "my-virtual/package": "not-a-version" provided via PHPStan config file.',
+                5,
+            ],
+            [
+                'Invalid virtual-package "my-virtual/package": "not-a-version" provided via PHPStan config file.',
+                6,
+            ],
+            [
+                'Unknown package "some/unknown". It is neither installed via composer.json nor declared as virtual package via PHPStan config.',
+                8,
+            ],
+        ]);
     }
 }

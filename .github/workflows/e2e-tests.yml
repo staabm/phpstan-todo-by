@@ -16,10 +16,10 @@ jobs:
                 include:
                     -   os: ubuntu-latest
                         php-version: '8.2'
+                        test-dir: tests-e2e/bug52/
                         script: |
-                            cd tests-e2e/bug52/
                             composer install
-                            ../../vendor/bin/phpstan analyse
+                            vendor/bin/phpstan analyse
 
         steps:
             -   name: Checkout
@@ -35,10 +35,9 @@ jobs:
                     extensions: gd, intl, pdo_mysql
                     coverage: none # disable xdebug, pcov
 
-            -   name: Composer install
-                uses: ramsey/composer-install@v2
-                with:
-                    composer-options: '--ansi --prefer-dist'
+            -   run: "composer require --dev staabm/phpstan-todo-by:dev-${{ github.head_ref || github.ref_name }}"
+                working-directory: ${{ matrix.test-dir }}
 
             -   name: "Tests"
                 run: "${{ matrix.script }}"
+                working-directory: ${{ matrix.test-dir }}

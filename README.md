@@ -42,7 +42,7 @@ When a text is given after the date, this text will be picked up for the PHPStan
 The comment can expire by different constraints, examples are:
 - by date with format of `YYYY-MM-DD` matched against the [reference-time](https://github.com/staabm/phpstan-todo-by#reference-time)
 - by a semantic version constraint matched against the projects [reference-version](https://github.com/staabm/phpstan-todo-by#reference-version)
-- by a semantic version constraint matched against a Composer dependency (via `composer.lock`)
+- by a semantic version constraint matched against a Composer dependency (via `composer.lock` or [`virtualPackages`](https://github.com/staabm/phpstan-todo-by#virtual-packages) config)
 - by ticket reference, matched against the status of a ticket (e.g. in JIRA)
 
 see examples of different comment variants which are supported:
@@ -156,6 +156,23 @@ This behaviour can be configured with the `singleGitRepo` option.
 
 In case you are using git submodules, or the analyzed codebase consists of multiple git repositories,
 set the `singleGitRepo` option to `false` which resolves the reference version for each directory beeing analyzed.
+
+
+#### Virtual packages
+
+Within the PHPStan config file you can define additional packages, to match against package-version-todo-comments.
+
+```neon
+parameters:
+    todo_by:
+        virtualPackages:
+            'staabm/mypackage': '2.1.0'
+            'staabm/my-api': '3.1.0'
+```
+
+Reference these virtual packages like any other package in your todo-comments:
+
+`// TODO staabm/mypackage:2.2.0 remove the following function once staabm/mypackage is updated to 2.2.0`
 
 
 ### Issue tracker key support
