@@ -26,7 +26,7 @@ final class ReferenceVersionFinder
     {
         if (in_array($this->referenceVersion, ['nextMajor', 'nextMinor', 'nextPatch'], true)) {
             $latestTagVersion = $this->fetcher->fetchLatestTagVersion($workingDirectory);
-            
+
             if ($latestTagVersion !== null) {
                 return $this->nextVersion($latestTagVersion);
             }
