@@ -88,8 +88,8 @@ services:
         class: staabm\PHPStanTodoBy\TodoByPackageVersionRule
         tags: [phpstan.rules.rule]
         arguments:
-            - %currentWorkingDirectory%
-            - %todo_by.virtualPackages%
+            workingDirectory: %currentWorkingDirectory%
+            virtualPackages: %todo_by.virtualPackages%
 
     -
         class: staabm\PHPStanTodoBy\utils\GitTagFetcher
