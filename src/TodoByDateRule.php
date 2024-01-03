@@ -23,7 +23,7 @@ final class TodoByDateRule implements Rule
             @?[a-zA-Z0-9_-]* # optional username
             \s*[:-]?\s* # optional colon or hyphen
             \s+ # keyword/date separator
-            (?P<date>\d{4}-\d{2}-\d{2}) # date consisting of YYYY-MM-DD format
+            (?P<date>\d{4}-\d\d?-\d\d?) # date consisting of YYYY-MM-DD format
             \s*[:-]?\s* # optional colon or hyphen
             (?P<comment>.*) # rest of line as comment text
         }ix
@@ -62,7 +62,7 @@ final class TodoByDateRule implements Rule
                 $date = $match['date'][0];
                 $todoText = trim($match['comment'][0]);
 
-                sscanf($date, '%4s-%2s-%2s', $year, $month, $day);
+                sscanf($date, '%4d-%2d-%2d', $year, $month, $day);
 
                 if (!checkdate((int) $month, (int) $day, (int) $year)) {
                     $errors[] = $this->errorBuilder->buildError(

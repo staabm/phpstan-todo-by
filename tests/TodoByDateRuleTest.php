@@ -112,6 +112,22 @@ final class TodoByDateRuleTest extends RuleTestCase
                 'Expired on 2023-12-14: classic multi line comment.',
                 59,
             ],
+            [
+                'Expired on 2024-1-2: support single digit month, day.',
+                63,
+            ],
+            [
+                'Expired on 2024-1-3: support single digit month, day.',
+                64,
+            ],
+            [
+                'Expired on 2023-11-2: support single digit day.',
+                65,
+            ],
+            [
+                'Expired on 2023-1-22: support single digit month.',
+                66,
+            ],
         ]);
     }
 
