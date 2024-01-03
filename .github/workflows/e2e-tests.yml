@@ -35,8 +35,9 @@ jobs:
                     extensions: gd, intl, pdo_mysql
                     coverage: none # disable xdebug, pcov
 
-            -   run: "cd ${{ matrix.test-dir }}"
             -   run: "composer require --dev staabm/phpstan-todo-by:dev-${{ github.head_ref || github.ref_name }}"
+                working-directory: ${{ matrix.test-dir }}
 
             -   name: "Tests"
                 run: "${{ matrix.script }}"
+                working-directory: ${{ matrix.test-dir }}
