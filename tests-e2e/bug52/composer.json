@@ -1,0 +1,25 @@
+{
+    "repositories": [
+        {
+            "type": "path",
+            "url": "packages/*"
+        }
+    ],
+    "require": {
+        "codappix/example-package": "^1.0",
+        "typo3/minimal": "^12.4",
+        "typo3/cms-core": "^12.4"
+    },
+    "config": {
+        "allow-plugins": {
+            "typo3/cms-composer-installers": true,
+            "typo3/class-alias-loader": true,
+            "phpstan/extension-installer": true
+        }
+    },
+    "require-dev": {
+        "staabm/phpstan-todo-by": "^0.1.16",
+        "phpstan/phpstan": "^1.10",
+        "phpstan/extension-installer": "^1.3"
+    }
+}
