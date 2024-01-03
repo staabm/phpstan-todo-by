@@ -25,4 +25,9 @@ final class StaticTicketStatusFetcher implements TicketStatusFetcher
 
         return $this->statuses[$ticketKey];
     }
+
+    public static function getKeyPattern(): string
+    {
+        return '[A-Z0-9]+-\d+';
+    }
 }
