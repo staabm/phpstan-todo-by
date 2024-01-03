@@ -3,6 +3,7 @@
 namespace staabm\PHPStanTodoBy\utils\jira;
 
 use RuntimeException;
+use staabm\PHPStanTodoBy\utils\CredentialsHelper;
 use staabm\PHPStanTodoBy\utils\TicketStatusFetcher;
 
 use function array_key_exists;
@@ -23,10 +24,10 @@ final class JiraTicketStatusFetcher implements TicketStatusFetcher
 
     public function __construct(string $host, ?string $credentials, ?string $credentialsFilePath)
     {
-        $credentials = JiraAuthorization::getCredentials($credentials, $credentialsFilePath);
+        $credentials = CredentialsHelper::getCredentials($credentials, $credentialsFilePath);
 
         $this->host = $host;
-        $this->authorizationHeader = $credentials ? JiraAuthorization::createAuthorizationHeader($credentials) : null;
+        $this->authorizationHeader = $credentials ? self::createAuthorizationHeader($credentials) : null;
 
         $this->cache = [];
     }
@@ -70,6 +71,11 @@ final class JiraTicketStatusFetcher implements TicketStatusFetcher
         return $this->cache[$ticketKey] = $data['fields']['status']['name'];
     }
 
+    public static function getKeyPattern(): string
+    {
+        return '[A-Z0-9]+-\d+';
+    }
+
     /** @return array{fields: array{status: array{name: string}}} */
     private static function decodeAndValidateResponse(string $body): array
     {
@@ -97,6 +103,15 @@ final class JiraTicketStatusFetcher implements TicketStatusFetcher
         }
 
         return $data;
+    }
+
+    private static function createAuthorizationHeader(string $credentials): string
+    {
+        if (str_contains($credentials, ':')) {
+            return 'Basic ' . base64_encode($credentials);
+        }
+
+        return "Bearer $credentials";
     }
 
     /** @return never */

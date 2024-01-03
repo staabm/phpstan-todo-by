@@ -7,7 +7,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
 use staabm\PHPStanTodoBy\utils\CommentMatcher;
 use staabm\PHPStanTodoBy\utils\ExpiredCommentErrorBuilder;
-use staabm\PHPStanTodoBy\utils\TicketStatusFetcher;
+use staabm\PHPStanTodoBy\utils\TicketRuleConfiguration;
 
 use function in_array;
 use function strlen;
@@ -18,34 +18,12 @@ use function trim;
  */
 final class TodoByTicketRule implements Rule
 {
-    private const PATTERN = <<<'REGEXP'
-        {
-            @?TODO # possible @ prefix
-            @?[a-zA-Z0-9_-]* # optional username
-            \s*[:-]?\s* # optional colon or hyphen
-            \s+ # keyword/ticket separator
-            (?P<ticketKey>[A-Z0-9]+-\d+) # ticket key consisting of ABC-123 or F01-12345 format
-            \s*[:-]?\s* # optional colon or hyphen
-            (?P<comment>(?:(?!\*+/).)*) # rest of line as comment text, excluding block end
-        }ix
-        REGEXP;
-
-    /** @var list<non-empty-string> */
-    private array $resolvedStatuses;
-    /** @var list<non-empty-string> */
-    private array $keyPrefixes;
-    private TicketStatusFetcher $fetcher;
+    private TicketRuleConfiguration $configuration;
     private ExpiredCommentErrorBuilder $errorBuilder;
 
-    /**
-     * @param list<non-empty-string> $resolvedStatuses
-     * @param list<non-empty-string> $keyPrefixes
-     */
-    public function __construct(array $resolvedStatuses, array $keyPrefixes, TicketStatusFetcher $fetcher, ExpiredCommentErrorBuilder $errorBuilder)
+    public function __construct(TicketRuleConfiguration $configuration, ExpiredCommentErrorBuilder $errorBuilder)
     {
-        $this->resolvedStatuses = $resolvedStatuses;
-        $this->keyPrefixes = $keyPrefixes;
-        $this->fetcher = $fetcher;
+        $this->configuration = $configuration;
         $this->errorBuilder = $errorBuilder;
     }
 
@@ -56,7 +34,7 @@ final class TodoByTicketRule implements Rule
 
     public function processNode(Node $node, Scope $scope): array
     {
-        $it = CommentMatcher::matchComments($node, self::PATTERN);
+        $it = CommentMatcher::matchComments($node, $this->createPattern());
 
         $errors = [];
         foreach ($it as $comment => $matches) {
@@ -69,7 +47,7 @@ final class TodoByTicketRule implements Rule
                     continue;
                 }
 
-                $ticketStatus = $this->fetcher->fetchTicketStatus($ticketKey);
+                $ticketStatus = $this->configuration->getFetcher()->fetchTicketStatus($ticketKey);
 
                 if (null === $ticketStatus) {
                     $errors[] = $this->errorBuilder->buildError(
@@ -82,7 +60,7 @@ final class TodoByTicketRule implements Rule
                     continue;
                 }
 
-                if (!in_array($ticketStatus, $this->resolvedStatuses, true)) {
+                if (!in_array($ticketStatus, $this->configuration->getResolvedStatuses(), true)) {
                     continue;
                 }
 
@@ -104,9 +82,26 @@ final class TodoByTicketRule implements Rule
         return $errors;
     }
 
+    private function createPattern(): string
+    {
+        $keyRegex = $this->configuration->getKeyPattern();
+
+        return <<<"REGEXP"
+            {
+                @?TODO # possible @ prefix
+                @?[a-zA-Z0-9_-]* # optional username
+                \s*[:-]?\s* # optional colon or hyphen
+                \s+ # keyword/ticket separator
+                (?P<ticketKey>$keyRegex) # ticket key
+                \s*[:-]?\s* # optional colon or hyphen
+                (?P<comment>.*) # rest of line as comment text
+            }ix
+            REGEXP;
+    }
+
     private function hasPrefix(string $ticketKey): bool
     {
-        foreach ($this->keyPrefixes as $prefix) {
+        foreach ($this->configuration->getKeyPrefixes() as $prefix) {
             if (substr($ticketKey, 0, strlen($prefix)) === $prefix) {
                 return true;
             }

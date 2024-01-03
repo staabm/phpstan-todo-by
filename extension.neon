@@ -7,10 +7,17 @@ parametersSchema:
         virtualPackages: arrayOf(string(), string())
         ticket: structure([
             enabled: bool()
+            tracker: anyOf('jira', 'github')
             keyPrefixes: listOf(string())
             resolvedStatuses: listOf(string())
             jira: structure([
                 server: string()
+                credentials: schema(string(), nullable())
+                credentialsFilePath: schema(string(), nullable())
+            ])
+            github: structure([
+                owner: string()
+                repo: string()
                 credentials: schema(string(), nullable())
                 credentialsFilePath: schema(string(), nullable())
             ])
@@ -39,18 +46,40 @@ parameters:
             # whether to analyze comments by issue tracker ticket key
             enabled: false
 
+            # one of: jira, github
+            tracker: jira
+
             # a case-sensitive list of status names.
             # only tickets having any of these statuses are considered resolved.
+            # ignored when tracker is GitHub.
             resolvedStatuses: []
 
             # if your ticket key is FOO-12345, then this value should be ["FOO"].
             # multiple key prefixes are allowed, e.g. ["FOO", "APP"].
             # only comments with keys containing this prefix will be analyzed.
+            # ignored when tracker is GitHub.
             keyPrefixes: []
 
             jira:
                 # e.g. https://your-company.atlassian.net
                 server: https://jira.atlassian.com
+
+                # see README for possible formats.
+                # if this value is empty, credentials file will be used instead.
+                credentials: null
+
+                # path to a file containing Jira credentials.
+                # see README for possible formats.
+                # if credentials parameter is not empty, it will be used instead of this file.
+                # this file must not be commited into the repository!
+                credentialsFilePath: null
+
+            github:
+                # The account owner of the repository.
+                owner: ~
+
+                # The name of the repository without the .git extension.
+                repo: ~
 
                 # see README for possible formats.
                 # if this value is empty, credentials file will be used instead.
@@ -74,9 +103,6 @@ services:
             - %todo_by.referenceTime%
     -
         class: staabm\PHPStanTodoBy\TodoByTicketRule
-        arguments:
-            - %todo_by.ticket.resolvedStatuses%
-            - %todo_by.ticket.keyPrefixes%
 
     -
         class: staabm\PHPStanTodoBy\TodoByVersionRule
@@ -103,6 +129,21 @@ services:
         class: staabm\PHPStanTodoBy\utils\ExpiredCommentErrorBuilder
         arguments:
             - %todo_by.nonIgnorable%
+
+    -
+        class: staabm\PHPStanTodoBy\utils\TicketRuleConfigurationFactory
+
+    -
+        class: staabm\PHPStanTodoBy\utils\TicketRuleConfiguration
+        factory: @staabm\PHPStanTodoBy\utils\TicketRuleConfigurationFactory::create
+
+    -
+        class: staabm\PHPStanTodoBy\utils\github\GitHubTicketStatusFetcher
+        arguments:
+            - %todo_by.ticket.github.owner%
+            - %todo_by.ticket.github.repo%
+            - %todo_by.ticket.github.credentials%
+            - %todo_by.ticket.github.credentialsFilePath%
 
     -
         class: staabm\PHPStanTodoBy\utils\jira\JiraTicketStatusFetcher
