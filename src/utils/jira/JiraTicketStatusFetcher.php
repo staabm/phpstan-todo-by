@@ -51,7 +51,12 @@ final class JiraTicketStatusFetcher implements TicketStatusFetcher
         ]);
 
         $response = curl_exec($curl);
-        if (!is_string($response) || 200 !== curl_getinfo($curl, CURLINFO_RESPONSE_CODE)) {
+
+        if (404 === $responseCode = curl_getinfo($curl, CURLINFO_RESPONSE_CODE)) {
+            return null;
+        }
+
+        if (!is_string($response) || 200 !== $responseCode) {
             throw new RuntimeException("Could not fetch ticket's status from Jira");
         }
 
