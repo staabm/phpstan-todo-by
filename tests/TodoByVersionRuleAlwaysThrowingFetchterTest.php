@@ -52,4 +52,12 @@ final class TodoByVersionRuleAlwaysThrowingFetchterTest extends RuleTestCase
             ],
         ]);
     }
+
+    public function testDateCommentsNotPickedUpByVersionRule(): void
+    {
+        $this->referenceVersion = 'nextMajor';
+        $this->exception = new RuntimeException('This should never happen');
+
+        $this->analyse([__DIR__ . '/data/bug59.php'], []);
+    }
 }
