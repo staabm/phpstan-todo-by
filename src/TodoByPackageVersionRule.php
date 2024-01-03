@@ -58,6 +58,12 @@ final class TodoByPackageVersionRule implements Rule
     ) {
         $this->workingDirectory = $workingDirectory;
         $this->errorBuilder = $errorBuilder;
+
+        // require the top level installed versions, so we don't mix it up with the one in phpstan.phar
+        $installedVersions = $this->workingDirectory . '/vendor/composer/InstalledVersions.php';
+        if (is_readable($installedVersions)) {
+            require_once $installedVersions;
+        }
     }
 
     public function getNodeType(): string
