@@ -1,0 +1,15 @@
+{
+    "name": "codappix/example-package",
+    "description": "Example",
+    "type": "typo3-cms-extension",
+    "license": "GPL-2.0-or-later",
+    "version": "v1.0.0",
+    "extra": {
+        "typo3/cms": {
+            "extension-key": "example_package"
+        }
+    },
+    "require": {
+        "typo3/cms-core": "*"
+    }
+}
