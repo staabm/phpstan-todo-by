@@ -19,7 +19,7 @@ jobs:
                         script: |
                             cd tests-e2e/bug52/
                             composer install
-                            ../../vendor/bin/phpstan analyse
+                            vendor/bin/phpstan analyse
 
         steps:
             -   name: Checkout
