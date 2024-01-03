@@ -74,7 +74,7 @@ final class TodoByTicketRule implements Rule
                 if (null === $ticketStatus) {
                     $errors[] = $this->errorBuilder->buildError(
                         $comment,
-                        "Ticket $ticketKey doesn't exist.",
+                        "Ticket $ticketKey doesn't exist or provided credentials do not allow for viewing it.",
                         null,
                         $match[0][1]
                     );

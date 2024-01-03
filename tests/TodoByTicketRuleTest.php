@@ -44,7 +44,7 @@ final class TodoByTicketRuleTest extends RuleTestCase
     public function testTicketNotFound(): void
     {
         $this->analyse([__DIR__ . '/data/ticket-not-found.php'], [
-            ["Ticket APP-000 doesn't exist.", 5],
+            ["Ticket APP-000 doesn't exist or provided credentials do not allow for viewing it.", 5],
         ]);
     }
 }
