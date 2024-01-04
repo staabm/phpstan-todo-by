@@ -40,7 +40,7 @@ final class TicketRuleConfigurationFactory
             return new TicketRuleConfiguration(
                 $fetcher::getKeyPattern(),
                 ['closed'],
-                ['#'],
+                [],
                 $fetcher,
             );
         }

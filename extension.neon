@@ -16,8 +16,8 @@ parametersSchema:
                 credentialsFilePath: schema(string(), nullable())
             ])
             github: structure([
-                owner: string()
-                repo: string()
+                defaultOwner: string()
+                defaultRepo: string()
                 credentials: schema(string(), nullable())
                 credentialsFilePath: schema(string(), nullable())
             ])
@@ -76,10 +76,10 @@ parameters:
 
             github:
                 # The account owner of the repository.
-                owner: ~
+                defaultOwner: ~
 
                 # The name of the repository without the .git extension.
-                repo: ~
+                defaultRepo: ~
 
                 # see README for possible formats.
                 # if this value is empty, credentials file will be used instead.
@@ -140,8 +140,8 @@ services:
     -
         class: staabm\PHPStanTodoBy\utils\ticket\GitHubTicketStatusFetcher
         arguments:
-            - %todo_by.ticket.github.owner%
-            - %todo_by.ticket.github.repo%
+            - %todo_by.ticket.github.defaultOwner%
+            - %todo_by.ticket.github.defaultRepo%
             - %todo_by.ticket.github.credentials%
             - %todo_by.ticket.github.credentialsFilePath%
 

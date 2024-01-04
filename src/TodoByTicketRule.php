@@ -43,7 +43,7 @@ final class TodoByTicketRule implements Rule
                 $ticketKey = $match['ticketKey'][0];
                 $todoText = trim($match['comment'][0]);
 
-                if (!$this->hasPrefix($ticketKey)) {
+                if ([] !== $this->configuration->getKeyPrefixes() && !$this->hasPrefix($ticketKey)) {
                     continue;
                 }
 

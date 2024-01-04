@@ -12,9 +12,14 @@ use function is_string;
 final class GitHubTicketStatusFetcher implements TicketStatusFetcher
 {
     private const API_VERSION = '2022-11-28';
+    private const KEY_REGEX = '
+          ((?P<githubOwner>[\w\-\.]+)\/)? # optional owner with slash separator
+          (?P<githubRepo>[\w\-\.]+)? # optional repo
+          \#(?P<githubNumber>\d+) # ticket number
+        ';
 
-    private string $owner;
-    private string $repo;
+    private string $defaultOwner;
+    private string $defaultRepo;
     private ?string $accessToken;
 
     /**
@@ -22,10 +27,10 @@ final class GitHubTicketStatusFetcher implements TicketStatusFetcher
      */
     private array $cache;
 
-    public function __construct(string $owner, string $repo, ?string $credentials, ?string $credentialsFilePath)
+    public function __construct(string $defaultOwner, string $defaultRepo, ?string $credentials, ?string $credentialsFilePath)
     {
-        $this->owner = $owner;
-        $this->repo = $repo;
+        $this->defaultOwner = $defaultOwner;
+        $this->defaultRepo = $defaultRepo;
         $this->accessToken = CredentialsHelper::getCredentials($credentials, $credentialsFilePath);
 
         $this->cache = [];
@@ -33,19 +38,24 @@ final class GitHubTicketStatusFetcher implements TicketStatusFetcher
 
     public function fetchTicketStatus(string $ticketKey): ?string
     {
-        // trim "#"
-        $ticketKey = substr($ticketKey, 1);
+        $keyRegex = self::KEY_REGEX;
+        preg_match_all("/$keyRegex/ix", $ticketKey, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER);
 
-        if (array_key_exists($ticketKey, $this->cache)) {
-            return $this->cache[$ticketKey];
+        $owner = $matches[0]['githubOwner'][0] ?: $this->defaultOwner;
+        $repo = $matches[0]['githubRepo'][0] ?: $this->defaultRepo;
+        $number = $matches[0]['githubNumber'][0];
+        $cacheKey = "$owner/$repo#$number";
+
+        if (array_key_exists($cacheKey, $this->cache)) {
+            return $this->cache[$cacheKey];
         }
 
-        $apiVersion = self::API_VERSION;
-
-        $curl = curl_init("https://api.github.com/repos/$this->owner/$this->repo/issues/$ticketKey");
+        $curl = curl_init("https://api.github.com/repos/$owner/$repo/issues/$number");
         if (!$curl) {
             throw new RuntimeException('Could not initialize cURL connection');
         }
+
+        $apiVersion = self::API_VERSION;
 
         $headers = [
             'User-agent: phpstan-todo-by',
@@ -80,11 +90,11 @@ final class GitHubTicketStatusFetcher implements TicketStatusFetcher
             throw new RuntimeException('GitHub returned invalid response body');
         }
 
-        return $this->cache[$ticketKey] = $data['state'];
+        return $this->cache[$cacheKey] = $data['state'];
     }
 
     public static function getKeyPattern(): string
     {
-        return '\#\d+';
+        return self::KEY_REGEX;
     }
 }
