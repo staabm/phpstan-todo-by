@@ -40,4 +40,11 @@ final class TodoByTicketRuleTest extends RuleTestCase
             ['Should have been resolved in F01-12345: please change me.', 13],
         ]);
     }
+
+    public function testTicketNotFound(): void
+    {
+        $this->analyse([__DIR__ . '/data/ticket-not-found.php'], [
+            ["Ticket APP-000 doesn't exist or provided credentials do not allow for viewing it.", 5],
+        ]);
+    }
 }

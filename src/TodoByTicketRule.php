@@ -71,7 +71,18 @@ final class TodoByTicketRule implements Rule
 
                 $ticketStatus = $this->fetcher->fetchTicketStatus($ticketKey);
 
-                if (null === $ticketStatus || !in_array($ticketStatus, $this->resolvedStatuses, true)) {
+                if (null === $ticketStatus) {
+                    $errors[] = $this->errorBuilder->buildError(
+                        $comment,
+                        "Ticket $ticketKey doesn't exist or provided credentials do not allow for viewing it.",
+                        null,
+                        $match[0][1]
+                    );
+
+                    continue;
+                }
+
+                if (!in_array($ticketStatus, $this->resolvedStatuses, true)) {
                     continue;
                 }
 
