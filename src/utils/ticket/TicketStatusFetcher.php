@@ -1,6 +1,6 @@
 <?php
 
-namespace staabm\PHPStanTodoBy\utils;
+namespace staabm\PHPStanTodoBy\utils\ticket;
 
 /** @internal */
 interface TicketStatusFetcher

@@ -2,7 +2,7 @@
 
 namespace staabm\PHPStanTodoBy\Tests;
 
-use staabm\PHPStanTodoBy\utils\TicketStatusFetcher;
+use staabm\PHPStanTodoBy\utils\ticket\TicketStatusFetcher;
 
 use function array_key_exists;
 

@@ -131,14 +131,14 @@ services:
             - %todo_by.nonIgnorable%
 
     -
-        class: staabm\PHPStanTodoBy\utils\TicketRuleConfigurationFactory
+        class: staabm\PHPStanTodoBy\utils\ticket\TicketRuleConfigurationFactory
 
     -
-        class: staabm\PHPStanTodoBy\utils\TicketRuleConfiguration
-        factory: @staabm\PHPStanTodoBy\utils\TicketRuleConfigurationFactory::create
+        class: staabm\PHPStanTodoBy\utils\ticket\TicketRuleConfiguration
+        factory: @staabm\PHPStanTodoBy\utils\ticket\TicketRuleConfigurationFactory::create
 
     -
-        class: staabm\PHPStanTodoBy\utils\github\GitHubTicketStatusFetcher
+        class: staabm\PHPStanTodoBy\utils\ticket\GitHubTicketStatusFetcher
         arguments:
             - %todo_by.ticket.github.owner%
             - %todo_by.ticket.github.repo%
@@ -146,7 +146,7 @@ services:
             - %todo_by.ticket.github.credentialsFilePath%
 
     -
-        class: staabm\PHPStanTodoBy\utils\jira\JiraTicketStatusFetcher
+        class: staabm\PHPStanTodoBy\utils\ticket\JiraTicketStatusFetcher
         arguments:
             - %todo_by.ticket.jira.server%
             - %todo_by.ticket.jira.credentials%
