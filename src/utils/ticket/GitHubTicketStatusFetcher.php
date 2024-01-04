@@ -72,9 +72,8 @@ final class GitHubTicketStatusFetcher implements TicketStatusFetcher
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
 
         $response = curl_exec($curl);
-        $responseCode = curl_getinfo($curl, CURLINFO_RESPONSE_CODE);
 
-        if (404 === $responseCode) {
+        if (404 === $responseCode = curl_getinfo($curl, CURLINFO_RESPONSE_CODE)) {
             return null;
         }
 
