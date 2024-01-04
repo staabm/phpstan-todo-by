@@ -6,7 +6,7 @@ use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use staabm\PHPStanTodoBy\TodoByTicketRule;
 use staabm\PHPStanTodoBy\utils\ExpiredCommentErrorBuilder;
-use staabm\PHPStanTodoBy\utils\TicketRuleConfiguration;
+use staabm\PHPStanTodoBy\utils\ticket\TicketRuleConfiguration;
 
 /**
  * @extends RuleTestCase<TodoByTicketRule>

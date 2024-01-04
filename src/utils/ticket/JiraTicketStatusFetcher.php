@@ -1,10 +1,9 @@
 <?php
 
-namespace staabm\PHPStanTodoBy\utils\jira;
+namespace staabm\PHPStanTodoBy\utils\ticket;
 
 use RuntimeException;
 use staabm\PHPStanTodoBy\utils\CredentialsHelper;
-use staabm\PHPStanTodoBy\utils\TicketStatusFetcher;
 
 use function array_key_exists;
 use function is_array;

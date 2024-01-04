@@ -7,7 +7,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
 use staabm\PHPStanTodoBy\utils\CommentMatcher;
 use staabm\PHPStanTodoBy\utils\ExpiredCommentErrorBuilder;
-use staabm\PHPStanTodoBy\utils\TicketRuleConfiguration;
+use staabm\PHPStanTodoBy\utils\ticket\TicketRuleConfiguration;
 
 use function in_array;
 use function strlen;

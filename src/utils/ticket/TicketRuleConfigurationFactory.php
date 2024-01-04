@@ -1,10 +1,8 @@
 <?php
 
-namespace staabm\PHPStanTodoBy\utils;
+namespace staabm\PHPStanTodoBy\utils\ticket;
 
 use PHPStan\DependencyInjection\Container;
-use staabm\PHPStanTodoBy\utils\github\GitHubTicketStatusFetcher;
-use staabm\PHPStanTodoBy\utils\jira\JiraTicketStatusFetcher;
 
 final class TicketRuleConfigurationFactory
 {
