@@ -2,6 +2,7 @@
 
 namespace staabm\PHPStanTodoBy\utils;
 
+/** @internal */
 interface TicketStatusFetcher
 {
     /** @return string|null Status name or null if ticket doesn't exist */
