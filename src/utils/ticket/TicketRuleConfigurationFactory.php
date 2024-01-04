@@ -3,6 +3,7 @@
 namespace staabm\PHPStanTodoBy\utils\ticket;
 
 use PHPStan\DependencyInjection\Container;
+use RuntimeException;
 
 final class TicketRuleConfigurationFactory
 {
@@ -15,7 +16,6 @@ final class TicketRuleConfigurationFactory
 
     public function create(): TicketRuleConfiguration
     {
-        /** @var array{ticket:array{resolvedStatuses: list<string>, keyPrefixes: list<string>, tracker: 'github'|'jira'}} $extensionParameters */
         $extensionParameters = $this->container->getParameter('todo_by');
 
         $parameters = $extensionParameters['ticket'];
@@ -44,5 +44,7 @@ final class TicketRuleConfigurationFactory
                 $fetcher,
             );
         }
+
+        throw new RuntimeException("Unsupported tracker type: $tracker");
     }
 }
