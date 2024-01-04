@@ -51,13 +51,13 @@ parameters:
 
             # a case-sensitive list of status names.
             # only tickets having any of these statuses are considered resolved.
-            # ignored when tracker is GitHub.
+            # supported trackers: jira. Other trackers ignore this parameter.
             resolvedStatuses: []
 
             # if your ticket key is FOO-12345, then this value should be ["FOO"].
             # multiple key prefixes are allowed, e.g. ["FOO", "APP"].
             # only comments with keys containing this prefix will be analyzed.
-            # ignored when tracker is GitHub.
+            # supported trackers: jira. Other trackers ignore this parameter.
             keyPrefixes: []
 
             jira:
