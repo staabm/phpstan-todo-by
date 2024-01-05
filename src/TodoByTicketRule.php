@@ -94,7 +94,7 @@ final class TodoByTicketRule implements Rule
                 \s+ # keyword/ticket separator
                 (?P<ticketKey>$keyRegex) # ticket key
                 \s*[:-]?\s* # optional colon or hyphen
-                (?P<comment>.*) # rest of line as comment text
+                (?P<comment>(?:(?!\*+/).)*) # rest of line as comment text, excluding block end
             }ix
             REGEXP;
     }
