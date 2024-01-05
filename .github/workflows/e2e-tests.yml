@@ -20,6 +20,12 @@ jobs:
                         script: |
                             composer install
                             vendor/bin/phpstan analyse
+                    -   os: ubuntu-latest
+                        php-version: '8.2'
+                        test-dir: tests-e2e/github/
+                        script: |
+                            composer install
+                            diff <(vendor/bin/phpstan analyse --error-format=raw --no-progress | sed "s|$(pwd)/||") expected-errors.txt
 
         steps:
             -   name: Checkout
