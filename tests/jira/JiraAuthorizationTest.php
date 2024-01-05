@@ -3,7 +3,6 @@
 namespace staabm\PHPStanTodoBy\Tests\jira;
 
 use PHPUnit\Framework\TestCase;
-use RuntimeException;
 use staabm\PHPStanTodoBy\utils\jira\JiraAuthorization;
 
 /**
@@ -11,12 +10,9 @@ use staabm\PHPStanTodoBy\utils\jira\JiraAuthorization;
  */
 final class JiraAuthorizationTest extends TestCase
 {
-    public function testThrowsIfNeitherCredentialsNorFilePathConfigured(): void
+    public function testReturnsNullIfNeitherCredentialsNorFilePathConfigured(): void
     {
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Either credentials or credentialsFilePath parameter must be configured');
-
-        JiraAuthorization::getCredentials(null, null);
+        static::assertNull(JiraAuthorization::getCredentials(null, null));
     }
 
     public function testCredentialsStringIsPreferredOverFilePath(): void
