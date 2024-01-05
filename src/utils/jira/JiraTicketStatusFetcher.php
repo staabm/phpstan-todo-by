@@ -14,7 +14,7 @@ final class JiraTicketStatusFetcher implements TicketStatusFetcher
     private const API_VERSION = 2;
 
     private string $host;
-    private string $authorizationHeader;
+    private ?string $authorizationHeader;
 
     /**
      * @var array<string, ?string>
@@ -26,7 +26,7 @@ final class JiraTicketStatusFetcher implements TicketStatusFetcher
         $credentials = JiraAuthorization::getCredentials($credentials, $credentialsFilePath);
 
         $this->host = $host;
-        $this->authorizationHeader = JiraAuthorization::createAuthorizationHeader($credentials);
+        $this->authorizationHeader = $credentials ? JiraAuthorization::createAuthorizationHeader($credentials) : null;
 
         $this->cache = [];
     }
@@ -46,9 +46,12 @@ final class JiraTicketStatusFetcher implements TicketStatusFetcher
 
         curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, [
-            "Authorization: $this->authorizationHeader",
-        ]);
+
+        if (null !== $this->authorizationHeader) {
+            curl_setopt($curl, CURLOPT_HTTPHEADER, [
+                "Authorization: $this->authorizationHeader",
+            ]);
+        }
 
         $response = curl_exec($curl);
 

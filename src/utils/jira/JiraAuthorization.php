@@ -6,14 +6,14 @@ use RuntimeException;
 
 final class JiraAuthorization
 {
-    public static function getCredentials(?string $credentials, ?string $credentialsFilePath): string
+    public static function getCredentials(?string $credentials, ?string $credentialsFilePath): ?string
     {
         if (null !== $credentials) {
             return trim($credentials);
         }
 
         if (null === $credentialsFilePath) {
-            throw new RuntimeException('Either credentials or credentialsFilePath parameter must be configured');
+            return null;
         }
 
         $credentials = file_get_contents($credentialsFilePath);
