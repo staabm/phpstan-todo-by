@@ -173,4 +173,24 @@ final class TodoByDateRuleTest extends RuleTestCase
             ],
         ]);
     }
+
+    public function testBug64(): void
+    {
+        $this->referenceTime = '2022-12-01';
+
+        $this->analyse([__DIR__ . '/data/bug64.php'], [
+            [
+                'Expired on 2000-12-08: Fix me.',
+                3,
+            ],
+            [
+                'Expired on 2000-12-08: Fix me.',
+                4,
+            ],
+            [
+                'Expired on 2000-12-08: Fix me.',
+                5,
+            ],
+        ]);
+    }
 }
