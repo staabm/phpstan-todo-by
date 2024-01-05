@@ -1,0 +1,11 @@
+parameters:
+  level: max
+  paths:
+    - src/
+  todo_by:
+      ticket:
+          enabled: true
+          tracker: github
+          github:
+              defaultOwner: staabm
+              defaultRepo: phpstan-todo-by
