@@ -46,7 +46,7 @@ parameters:
             # whether to analyze comments by issue tracker ticket key
             enabled: false
 
-            # one of: jira, github
+            # one of: jira, github (case-sensitive)
             tracker: jira
 
             # a case-sensitive list of status names.
@@ -75,20 +75,19 @@ parameters:
                 credentialsFilePath: null
 
             github:
-                # The account owner of the repository.
+                # The account owner of referenced repositories.
                 defaultOwner: ~
 
                 # The name of the repository without the .git extension.
                 defaultRepo: ~
 
-                # see README for possible formats.
+                # GitHub Access Token
                 # if this value is empty, credentials file will be used instead.
                 credentials: null
 
-                # path to a file containing Jira credentials.
-                # see README for possible formats.
+                # path to a file containing GitHub Access Token.
                 # if credentials parameter is not empty, it will be used instead of this file.
-                # this file must not be commited into the repository!
+                # this file must not be committed into the repository!
                 credentialsFilePath: null
 
 conditionalTags:
