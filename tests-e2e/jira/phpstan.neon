@@ -1,0 +1,14 @@
+parameters:
+  level: max
+  paths:
+    - src/
+  todo_by:
+      ticket:
+          enabled: true
+          tracker: jira
+          keyPrefixes:
+              - JRA
+          resolvedStatuses:
+              - Closed
+          jira:
+              server: https://jira.atlassian.com
