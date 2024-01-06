@@ -47,4 +47,18 @@ final class TodoByTicketRuleTest extends RuleTestCase
             ["Ticket APP-000 doesn't exist or provided credentials do not allow for viewing it.", 5],
         ]);
     }
+
+    public function testBug64(): void
+    {
+        $this->analyse([__DIR__ . '/data/bug64.php'], [
+            [
+                'Should have been resolved in F01-12345: please change me.',
+                9,
+            ],
+            [
+                'Should have been resolved in F01-12345: please * change me.',
+                13,
+            ],
+        ]);
+    }
 }

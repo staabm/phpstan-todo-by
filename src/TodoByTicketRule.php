@@ -26,7 +26,7 @@ final class TodoByTicketRule implements Rule
             \s+ # keyword/ticket separator
             (?P<ticketKey>[A-Z0-9]+-\d+) # ticket key consisting of ABC-123 or F01-12345 format
             \s*[:-]?\s* # optional colon or hyphen
-            (?P<comment>.*) # rest of line as comment text
+            (?P<comment>(?:(?!\*+/).)*) # rest of line as comment text, excluding block end
         }ix
         REGEXP;
 

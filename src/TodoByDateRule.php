@@ -25,7 +25,7 @@ final class TodoByDateRule implements Rule
             \s+ # keyword/date separator
             (?P<date>\d{4}-\d\d?-\d\d?) # date consisting of YYYY-MM-DD format
             \s*[:-]?\s* # optional colon or hyphen
-            (?P<comment>.*) # rest of line as comment text
+            (?P<comment>(?:(?!\*+/).)*) # rest of line as comment text, excluding block end
         }ix
         REGEXP;
 

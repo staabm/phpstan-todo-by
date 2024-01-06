@@ -40,7 +40,7 @@ final class TodoByPackageVersionRule implements Rule
             (?:(?P<package>(php|[a-z0-9]([_.-]?[a-z0-9]++)*+/[a-z0-9](([_.]|-{1,2})?[a-z0-9]++)*+)):) # "php" or a composer package name, followed by ":"
             (?P<version>[<>=]?[^\s:\-]+) # version
             \s*[:-]?\s* # optional colon or hyphen
-            (?P<comment>.*) # rest of line as comment text
+            (?P<comment>(?:(?!\*+/).)*) # rest of line as comment text, excluding block end
         }ix
         REGEXP;
 

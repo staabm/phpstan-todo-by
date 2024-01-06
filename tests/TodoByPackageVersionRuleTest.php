@@ -90,6 +90,16 @@ final class TodoByPackageVersionRuleTest extends RuleTestCase
         $this->analyse([__DIR__ . '/data/bug44.php'], []);
     }
 
+    public function testBug64(): void
+    {
+        $this->analyse([__DIR__ . '/data/bug64.php'], [
+            [
+                '"php" version requirement ">=7" satisfied: drop this code after min-version raise.',
+                7,
+            ],
+        ]);
+    }
+
     public function testVirtualPackage(): void
     {
         $this->virtualPackages = [
