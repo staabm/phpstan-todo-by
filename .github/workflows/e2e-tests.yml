@@ -35,6 +35,9 @@ jobs:
                     extensions: gd, intl, pdo_mysql
                     coverage: none # disable xdebug, pcov
 
+            -   run: "composer config repositories.repo-name vcs http://github.com/${{ github.repository_owner }}/${{ github.event.repository.name }}/"
+                working-directory: ${{ matrix.test-dir }}
+
             -   run: "composer require --dev staabm/phpstan-todo-by:dev-${{ github.head_ref || github.ref_name }}"
                 working-directory: ${{ matrix.test-dir }}
 
