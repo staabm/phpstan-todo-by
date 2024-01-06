@@ -2,7 +2,7 @@
 
 namespace staabm\PHPStanTodoBy\Tests;
 
-use staabm\PHPStanTodoBy\utils\TicketStatusFetcher;
+use staabm\PHPStanTodoBy\utils\ticket\TicketStatusFetcher;
 
 use function array_key_exists;
 
@@ -24,5 +24,10 @@ final class StaticTicketStatusFetcher implements TicketStatusFetcher
         }
 
         return $this->statuses[$ticketKey];
+    }
+
+    public static function getKeyPattern(): string
+    {
+        return '[A-Z0-9]+-\d+';
     }
 }

@@ -70,7 +70,9 @@ see examples of different comment variants which are supported:
 // TODO: phpunit/phpunit:<5 This has to be fixed before updating to phpunit 5.x
 // TODO@markus: phpunit/phpunit:5.3 This has to be fixed when updating phpunit to 5.3.x or higher
 
-// TODO: APP-123 fix it
+// TODO: APP-123 fix it when this Jira ticket is closed
+// TODO: #123 fix it when this GitHub issue is closed
+// TODO: some-organization/some-repo#123 change me if this GitHub pull request is closed
 ```
 
 ## Configuration
@@ -180,7 +182,7 @@ Reference these virtual packages like any other package in your todo-comments:
 Optionally you can configure this extension to analyze your comments with issue tracker ticket keys.
 The extension fetches issue tracker API for issue status. If the remote issue is resolved, the comment will be reported.
 
-Currently only Jira is supported.
+Currently, Jira and GitHub are supported.
 
 This feature is disabled by default. To enable it, you must set `ticket.enabled` parameter to `true`.
 You also need to set these parameters:
@@ -191,8 +193,12 @@ parameters:
         ticket:
             enabled: true
 
+            # one of: jira, github (case-sensitive)
+            tracker: jira
+
             # a case-sensitive list of status names.
             # only tickets having any of these statuses are considered resolved.
+            # supported trackers: jira. Other trackers ignore this parameter.
             resolvedStatuses:
                 - Done
                 - Resolved
@@ -201,6 +207,7 @@ parameters:
             # if your ticket key is FOO-12345, then this value should be ["FOO"].
             # multiple key prefixes are allowed, e.g. ["FOO", "APP"].
             # only comments with keys containing this prefix will be analyzed.
+            # supported trackers: jira. Other trackers ignore this parameter.
             keyPrefixes:
                 - FOO
 
@@ -217,6 +224,22 @@ parameters:
                 # if credentials parameter is not empty, it will be used instead of this file.
                 # this file must not be commited into the repository!
                 credentialsFilePath: .secrets/jira-credentials.txt
+
+            github:
+                # The account owner of referenced repositories.
+                defaultOwner: your-name
+
+                # The name of the repository without the .git extension.
+                defaultRepo: your-repository
+
+                # GitHub Access Token
+                # if this value is empty, credentials file will be used instead.
+                credentials: null
+
+                # path to a file containing GitHub Access Token.
+                # if credentials parameter is not empty, it will be used instead of this file.
+                # this file must not be committed into the repository!
+                credentialsFilePath: null
 ```
 
 #### Jira Credentials
@@ -263,6 +286,20 @@ Depending on chosen authentication method its value should be:
 * Access Token for token based authentication, e.g. `JATATT3xFfGF0Gv_pLFSsunmigz8wq5Y0wkogoTMgxDFHyR...`
 * `<username>:<passwordOrApiKey>` for basic authentication, e.g. `john.doe@example.com:p@ssword`
 
+#### GitHub
+Both issues and pull requests are supported. The comment will be reported if the referenced issue/PR is closed.
+There are multiple ways to reference GitHub issue/PR:
+
+##### Only number
+```php
+// TODO: #123 - fix me
+```
+If the `defaultOwner` is set to `acme` and `defaultRepo` is set to `hello-world`, the referenced issue is resolved to `acme/hello-world#123`.
+
+##### Owner + repository name + number
+```php
+// TODO: acme/hello-world#123 - fix me
+```
 
 ## Installation
 

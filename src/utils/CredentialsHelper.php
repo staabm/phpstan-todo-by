@@ -1,10 +1,10 @@
 <?php
 
-namespace staabm\PHPStanTodoBy\utils\jira;
+namespace staabm\PHPStanTodoBy\utils;
 
 use RuntimeException;
 
-final class JiraAuthorization
+final class CredentialsHelper
 {
     public static function getCredentials(?string $credentials, ?string $credentialsFilePath): ?string
     {
@@ -23,14 +23,5 @@ final class JiraAuthorization
         }
 
         return trim($credentials);
-    }
-
-    public static function createAuthorizationHeader(string $credentials): string
-    {
-        if (str_contains($credentials, ':')) {
-            return 'Basic ' . base64_encode($credentials);
-        }
-
-        return "Bearer $credentials";
     }
 }

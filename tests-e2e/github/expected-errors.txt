@@ -1,0 +1,4 @@
+src/github-issues-and-prs.php:3:Should have been resolved in #59: fix me.
+src/github-issues-and-prs.php:4:Should have been resolved in phpstan-dba#452: change me after https://github.com/staabm/phpstan-dba/issues/452 is closed.
+src/github-issues-and-prs.php:5:Comment should have been resolved in phpstan/phpstan#3.
+src/github-issues-and-prs.php:6:Should have been resolved in #26: needs https://github.com/staabm/phpstan-todo-by/pull/26.

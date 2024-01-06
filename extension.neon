@@ -7,10 +7,17 @@ parametersSchema:
         virtualPackages: arrayOf(string(), string())
         ticket: structure([
             enabled: bool()
+            tracker: anyOf('jira', 'github')
             keyPrefixes: listOf(string())
             resolvedStatuses: listOf(string())
             jira: structure([
                 server: string()
+                credentials: schema(string(), nullable())
+                credentialsFilePath: schema(string(), nullable())
+            ])
+            github: structure([
+                defaultOwner: string()
+                defaultRepo: string()
                 credentials: schema(string(), nullable())
                 credentialsFilePath: schema(string(), nullable())
             ])
@@ -39,13 +46,18 @@ parameters:
             # whether to analyze comments by issue tracker ticket key
             enabled: false
 
+            # one of: jira, github (case-sensitive)
+            tracker: jira
+
             # a case-sensitive list of status names.
             # only tickets having any of these statuses are considered resolved.
+            # supported trackers: jira. Other trackers ignore this parameter.
             resolvedStatuses: []
 
             # if your ticket key is FOO-12345, then this value should be ["FOO"].
             # multiple key prefixes are allowed, e.g. ["FOO", "APP"].
             # only comments with keys containing this prefix will be analyzed.
+            # supported trackers: jira. Other trackers ignore this parameter.
             keyPrefixes: []
 
             jira:
@@ -62,6 +74,22 @@ parameters:
                 # this file must not be commited into the repository!
                 credentialsFilePath: null
 
+            github:
+                # The account owner of referenced repositories.
+                defaultOwner: ~
+
+                # The name of the repository without the .git extension.
+                defaultRepo: ~
+
+                # GitHub Access Token
+                # if this value is empty, credentials file will be used instead.
+                credentials: null
+
+                # path to a file containing GitHub Access Token.
+                # if credentials parameter is not empty, it will be used instead of this file.
+                # this file must not be committed into the repository!
+                credentialsFilePath: null
+
 conditionalTags:
     staabm\PHPStanTodoBy\TodoByTicketRule:
         phpstan.rules.rule: %todo_by.ticket.enabled%
@@ -74,9 +102,6 @@ services:
             - %todo_by.referenceTime%
     -
         class: staabm\PHPStanTodoBy\TodoByTicketRule
-        arguments:
-            - %todo_by.ticket.resolvedStatuses%
-            - %todo_by.ticket.keyPrefixes%
 
     -
         class: staabm\PHPStanTodoBy\TodoByVersionRule
@@ -105,7 +130,22 @@ services:
             - %todo_by.nonIgnorable%
 
     -
-        class: staabm\PHPStanTodoBy\utils\jira\JiraTicketStatusFetcher
+        class: staabm\PHPStanTodoBy\utils\ticket\TicketRuleConfigurationFactory
+
+    -
+        class: staabm\PHPStanTodoBy\utils\ticket\TicketRuleConfiguration
+        factory: @staabm\PHPStanTodoBy\utils\ticket\TicketRuleConfigurationFactory::create
+
+    -
+        class: staabm\PHPStanTodoBy\utils\ticket\GitHubTicketStatusFetcher
+        arguments:
+            - %todo_by.ticket.github.defaultOwner%
+            - %todo_by.ticket.github.defaultRepo%
+            - %todo_by.ticket.github.credentials%
+            - %todo_by.ticket.github.credentialsFilePath%
+
+    -
+        class: staabm\PHPStanTodoBy\utils\ticket\JiraTicketStatusFetcher
         arguments:
             - %todo_by.ticket.jira.server%
             - %todo_by.ticket.jira.credentials%
