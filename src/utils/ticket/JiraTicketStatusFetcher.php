@@ -39,7 +39,8 @@ final class JiraTicketStatusFetcher implements TicketStatusFetcher
 
         $apiVersion = self::API_VERSION;
 
-        $curl = curl_init("{$this->host}/rest/api/$apiVersion/issue/$ticketKey?expand=status");
+        $url = "{$this->host}/rest/api/$apiVersion/issue/$ticketKey?expand=status";
+        $curl = curl_init($url);
         if (!$curl) {
             throw new RuntimeException('Could not initialize cURL connection');
         }
@@ -60,7 +61,7 @@ final class JiraTicketStatusFetcher implements TicketStatusFetcher
         }
 
         if (!is_string($response) || 200 !== $responseCode) {
-            throw new RuntimeException("Could not fetch ticket's status from Jira");
+            throw new RuntimeException("Could not fetch ticket's status from Jira with url $url");
         }
 
         curl_close($curl);

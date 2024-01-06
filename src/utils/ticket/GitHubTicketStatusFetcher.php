@@ -50,7 +50,8 @@ final class GitHubTicketStatusFetcher implements TicketStatusFetcher
             return $this->cache[$cacheKey];
         }
 
-        $curl = curl_init("https://api.github.com/repos/$owner/$repo/issues/$number");
+        $url = "https://api.github.com/repos/$owner/$repo/issues/$number";
+        $curl = curl_init($url);
         if (!$curl) {
             throw new RuntimeException('Could not initialize cURL connection');
         }
@@ -78,7 +79,7 @@ final class GitHubTicketStatusFetcher implements TicketStatusFetcher
         }
 
         if (!is_string($response) || 200 !== $responseCode) {
-            throw new RuntimeException("Could not fetch ticket's status from GitHub");
+            throw new RuntimeException("Could not fetch ticket's status from GitHub with $url");
         }
 
         curl_close($curl);
@@ -86,7 +87,7 @@ final class GitHubTicketStatusFetcher implements TicketStatusFetcher
         $data = json_decode($response, true);
 
         if (!is_array($data) || !array_key_exists('state', $data) || !is_string($data['state'])) {
-            throw new RuntimeException('GitHub returned invalid response body');
+            throw new RuntimeException("GitHub returned invalid response body with $url");
         }
 
         return $this->cache[$cacheKey] = $data['state'];
