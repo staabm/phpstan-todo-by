@@ -22,6 +22,8 @@ jobs:
                         php-version: '8.1'
                     -   os: ubuntu-latest
                         php-version: '8.2'
+                    -   os: ubuntu-latest
+                        php-version: '8.3'
 
         steps:
             -   name: Checkout
@@ -34,7 +36,6 @@ jobs:
                 uses: shivammathur/setup-php@v2
                 with:
                     php-version: ${{ matrix.php-version }}
-                    extensions: gd, intl, pdo_mysql
                     coverage: none # disable xdebug, pcov
 
             -   name: Composer install
