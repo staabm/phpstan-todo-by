@@ -107,7 +107,7 @@ final class TodoByPackageVersionRule implements Rule
                     $satisfiesOrError = $this->satisfiesInstalledPackage($package, $version, $comment, $match[0][1]);
                 }
 
-                if ($satisfiesOrError instanceof \PHPStan\Rules\RuleError) {
+                if ($satisfiesOrError instanceof RuleError) {
                     $errors[] = $satisfiesOrError;
                     continue;
                 }
