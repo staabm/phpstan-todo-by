@@ -41,7 +41,6 @@ jobs:
                 uses: shivammathur/setup-php@v2
                 with:
                     php-version: ${{ matrix.php-version }}
-                    extensions: gd, intl, pdo_mysql
                     coverage: none # disable xdebug, pcov
 
             -   run: "composer config repositories.repo-name vcs http://github.com/${{ github.event.pull_request.head.repo.full_name }}/"
