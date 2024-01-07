@@ -4,6 +4,7 @@ namespace staabm\PHPStanTodoBy\utils\ticket;
 
 use RuntimeException;
 use staabm\PHPStanTodoBy\utils\CredentialsHelper;
+use staabm\PHPStanTodoBy\utils\HttpClient;
 
 use function array_key_exists;
 use function is_array;
@@ -27,13 +28,16 @@ final class GitHubTicketStatusFetcher implements TicketStatusFetcher
      */
     private array $cache;
 
-    public function __construct(string $defaultOwner, string $defaultRepo, ?string $credentials, ?string $credentialsFilePath)
+    private HttpClient $httpClient;
+
+    public function __construct(string $defaultOwner, string $defaultRepo, ?string $credentials, ?string $credentialsFilePath, HttpClient $httpClient)
     {
         $this->defaultOwner = $defaultOwner;
         $this->defaultRepo = $defaultRepo;
         $this->accessToken = CredentialsHelper::getCredentials($credentials, $credentialsFilePath);
 
         $this->cache = [];
+        $this->httpClient = $httpClient;
     }
 
     public function fetchTicketStatus(string $ticketKey): ?string
@@ -51,11 +55,6 @@ final class GitHubTicketStatusFetcher implements TicketStatusFetcher
         }
 
         $url = "https://api.github.com/repos/$owner/$repo/issues/$number";
-        $curl = curl_init($url);
-        if (!$curl) {
-            throw new RuntimeException('Could not initialize cURL connection');
-        }
-
         $apiVersion = self::API_VERSION;
 
         $headers = [
@@ -68,21 +67,15 @@ final class GitHubTicketStatusFetcher implements TicketStatusFetcher
             $headers[] = "Authorization: Bearer $this->accessToken";
         }
 
-        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+        [$responseCode, $response] = $this->httpClient->get($url, $headers);
 
-        $response = curl_exec($curl);
-
-        if (404 === $responseCode = curl_getinfo($curl, CURLINFO_RESPONSE_CODE)) {
+        if (404 === $responseCode) {
             return null;
         }
 
-        if (!is_string($response) || 200 !== $responseCode) {
+        if (200 !== $responseCode) {
             throw new RuntimeException("Could not fetch ticket's status from GitHub with $url");
         }
-
-        curl_close($curl);
 
         $data = json_decode($response, true);
 

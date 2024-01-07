@@ -4,6 +4,7 @@ namespace staabm\PHPStanTodoBy\utils\ticket;
 
 use RuntimeException;
 use staabm\PHPStanTodoBy\utils\CredentialsHelper;
+use staabm\PHPStanTodoBy\utils\HttpClient;
 
 use function array_key_exists;
 use function is_array;
@@ -21,7 +22,9 @@ final class JiraTicketStatusFetcher implements TicketStatusFetcher
      */
     private array $cache;
 
-    public function __construct(string $host, ?string $credentials, ?string $credentialsFilePath)
+    private HttpClient $httpClient;
+
+    public function __construct(string $host, ?string $credentials, ?string $credentialsFilePath, HttpClient $httpClient)
     {
         $credentials = CredentialsHelper::getCredentials($credentials, $credentialsFilePath);
 
@@ -29,6 +32,7 @@ final class JiraTicketStatusFetcher implements TicketStatusFetcher
         $this->authorizationHeader = $credentials ? self::createAuthorizationHeader($credentials) : null;
 
         $this->cache = [];
+        $this->httpClient = $httpClient;
     }
 
     public function fetchTicketStatus(string $ticketKey): ?string
@@ -40,31 +44,22 @@ final class JiraTicketStatusFetcher implements TicketStatusFetcher
         $apiVersion = self::API_VERSION;
 
         $url = "{$this->host}/rest/api/$apiVersion/issue/$ticketKey?expand=status";
-        $curl = curl_init($url);
-        if (!$curl) {
-            throw new RuntimeException('Could not initialize cURL connection');
-        }
-
-        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-
+        $headers = [];
         if (null !== $this->authorizationHeader) {
-            curl_setopt($curl, CURLOPT_HTTPHEADER, [
+            $headers = [
                 "Authorization: $this->authorizationHeader",
-            ]);
+            ];
         }
 
-        $response = curl_exec($curl);
+        [$responseCode, $response] = $this->httpClient->get($url, $headers);
 
-        if (404 === $responseCode = curl_getinfo($curl, CURLINFO_RESPONSE_CODE)) {
+        if (404 === $responseCode) {
             return null;
         }
 
-        if (!is_string($response) || 200 !== $responseCode) {
+        if (200 !== $responseCode) {
             throw new RuntimeException("Could not fetch ticket's status from Jira with url $url");
         }
-
-        curl_close($curl);
 
         $data = self::decodeAndValidateResponse($response);
 

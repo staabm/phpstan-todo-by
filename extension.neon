@@ -150,3 +150,6 @@ services:
             - %todo_by.ticket.jira.server%
             - %todo_by.ticket.jira.credentials%
             - %todo_by.ticket.jira.credentialsFilePath%
+
+    -
+        class: staabm\PHPStanTodoBy\utils\HttpClient
