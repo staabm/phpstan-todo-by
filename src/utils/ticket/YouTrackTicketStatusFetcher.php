@@ -3,16 +3,16 @@
 namespace staabm\PHPStanTodoBy\utils\ticket;
 
 use RuntimeException;
+use staabm\PHPStanTodoBy\utils\CredentialsHelper;
 use staabm\PHPStanTodoBy\utils\HttpClient;
 use function array_key_exists;
 use function is_array;
 use function is_null;
-use function is_string;
 
 final class YouTrackTicketStatusFetcher implements TicketStatusFetcher
 {
     private string $host;
-    private string $authorizationHeader;
+    private ?string $authorizationHeader;
 
     private HttpClient $httpClient;
 
@@ -23,10 +23,11 @@ final class YouTrackTicketStatusFetcher implements TicketStatusFetcher
 
     public function __construct(string $host, ?string $credentials, ?string $credentialsFilePath, HttpClient $httpClient)
     {
-        $credentials = self::getCredentials($credentials, $credentialsFilePath);
+        $credentials = CredentialsHelper::getCredentials($credentials, $credentialsFilePath);
 
         $this->host = $host;
-        $this->authorizationHeader = self::createAuthorizationHeader($credentials);
+        $this->authorizationHeader = $credentials ? self::createAuthorizationHeader($credentials) : null;
+
 
         $this->cache = [];
         $this->httpClient = $httpClient;
@@ -39,9 +40,12 @@ final class YouTrackTicketStatusFetcher implements TicketStatusFetcher
         }
 
         $url = "{$this->host}/api/issues/$ticketKey?fields=resolved";
-        $headers = [
-            "Authorization: $this->authorizationHeader",
-        ];
+        $headers = [];
+        if (null !== $this->authorizationHeader) {
+            $headers = [
+                "Authorization: $this->authorizationHeader",
+            ];
+        }
 
         [$responseCode, $response] = $this->httpClient->get($url, $headers);
 
@@ -51,31 +55,12 @@ final class YouTrackTicketStatusFetcher implements TicketStatusFetcher
 
         $data = self::decodeAndValidateResponse($response);
 
-        return $this->cache[$ticketKey] = is_null($data['resolved']) ? 'Open' : 'Resolved';
+        return $this->cache[$ticketKey] = is_null($data['resolved']) ? 'open' : 'resolved';
     }
 
     public static function getKeyPattern(): string
     {
         return '[A-Z0-9]+-\d+';
-    }
-
-    private static function getCredentials(?string $credentials, ?string $credentialsFilePath): string
-    {
-        if (null !== $credentials) {
-            return trim($credentials);
-        }
-
-        if (null === $credentialsFilePath) {
-            throw new RuntimeException('Either credentials or credentialsFilePath parameter must be configured');
-        }
-
-        $credentials = file_get_contents($credentialsFilePath);
-
-        if (false === $credentials) {
-            throw new RuntimeException("Cannot read $credentialsFilePath file");
-        }
-
-        return trim($credentials);
     }
 
     private static function createAuthorizationHeader(string $credentials): string

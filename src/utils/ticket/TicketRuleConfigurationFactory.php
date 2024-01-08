@@ -50,7 +50,7 @@ final class TicketRuleConfigurationFactory
 
             return new TicketRuleConfiguration(
                 $fetcher::getKeyPattern(),
-                $resolvedStatuses,
+                ['resolved'],
                 $keyPrefixes,
                 $fetcher,
             );
