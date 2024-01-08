@@ -5,9 +5,9 @@ namespace staabm\PHPStanTodoBy\utils\ticket;
 use RuntimeException;
 use staabm\PHPStanTodoBy\utils\CredentialsHelper;
 use staabm\PHPStanTodoBy\utils\HttpClient;
+
 use function array_key_exists;
 use function is_array;
-use function is_null;
 
 final class YouTrackTicketStatusFetcher implements TicketStatusFetcher
 {
@@ -27,7 +27,6 @@ final class YouTrackTicketStatusFetcher implements TicketStatusFetcher
 
         $this->host = $host;
         $this->authorizationHeader = $credentials ? self::createAuthorizationHeader($credentials) : null;
-
 
         $this->cache = [];
         $this->httpClient = $httpClient;
@@ -55,7 +54,7 @@ final class YouTrackTicketStatusFetcher implements TicketStatusFetcher
 
         $data = self::decodeAndValidateResponse($response);
 
-        return $this->cache[$ticketKey] = is_null($data['resolved']) ? 'open' : 'resolved';
+        return $this->cache[$ticketKey] = null === $data['resolved'] ? 'open' : 'resolved';
     }
 
     public static function getKeyPattern(): string
