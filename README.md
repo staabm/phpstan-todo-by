@@ -245,7 +245,7 @@ parameters:
                 # e.g. https://your-company.youtrack.cloud
                 server: https://acme.youtrack.cloud
 
-                # see below for possible formats.
+                # YouTrack permanent token
                 # if this value is empty, credentials file will be used instead.
                 credentials: %env.YOUTRACK_TOKEN%
 
