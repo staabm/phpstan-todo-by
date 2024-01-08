@@ -50,7 +50,7 @@ final class YouTrackTicketStatusFetcher implements TicketStatusFetcher
         [$responseCode, $response] = $this->httpClient->get($url, $headers);
 
         if (200 !== $responseCode) {
-            throw new RuntimeException("Could not fetch ticket's status from Jira with url $url");
+            throw new RuntimeException("Could not fetch ticket's status from YouTrack with url $url");
         }
 
         $data = self::decodeAndValidateResponse($response);
