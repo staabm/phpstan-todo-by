@@ -45,6 +45,17 @@ final class TicketRuleConfigurationFactory
             );
         }
 
+        if ('youtrack' === $tracker) {
+            $fetcher = $this->container->getByType(YouTrackTicketStatusFetcher::class);
+
+            return new TicketRuleConfiguration(
+                $fetcher::getKeyPattern(),
+                ['resolved'],
+                $keyPrefixes,
+                $fetcher,
+            );
+        }
+
         throw new RuntimeException("Unsupported tracker type: $tracker");
     }
 }

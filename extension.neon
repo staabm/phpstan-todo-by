@@ -7,7 +7,7 @@ parametersSchema:
         virtualPackages: arrayOf(string(), string())
         ticket: structure([
             enabled: bool()
-            tracker: anyOf('jira', 'github')
+            tracker: anyOf('jira', 'github', 'youtrack')
             keyPrefixes: listOf(string())
             resolvedStatuses: listOf(string())
             jira: structure([
@@ -18,6 +18,11 @@ parametersSchema:
             github: structure([
                 defaultOwner: string()
                 defaultRepo: string()
+                credentials: schema(string(), nullable())
+                credentialsFilePath: schema(string(), nullable())
+            ])
+            youtrack: structure([
+                server: string()
                 credentials: schema(string(), nullable())
                 credentialsFilePath: schema(string(), nullable())
             ])
@@ -90,6 +95,20 @@ parameters:
                 # this file must not be committed into the repository!
                 credentialsFilePath: null
 
+            youtrack:
+                # e.g. https://your-company.youtrack.cloud
+                server: https://youtrack.jetbrains.com
+
+                # see README for possible formats.
+                # if this value is empty, credentials file will be used instead.
+                credentials: null
+
+                # path to a file containing YouTrack credentials.
+                # see README for possible formats.
+                # if credentials parameter is not empty, it will be used instead of this file.
+                # this file must not be commited into the repository!
+                credentialsFilePath: null
+
 conditionalTags:
     staabm\PHPStanTodoBy\TodoByTicketRule:
         phpstan.rules.rule: %todo_by.ticket.enabled%
@@ -150,6 +169,13 @@ services:
             - %todo_by.ticket.jira.server%
             - %todo_by.ticket.jira.credentials%
             - %todo_by.ticket.jira.credentialsFilePath%
+
+    -
+        class: staabm\PHPStanTodoBy\utils\ticket\YouTrackTicketStatusFetcher
+        arguments:
+            - %todo_by.ticket.youtrack.server%
+            - %todo_by.ticket.youtrack.credentials%
+            - %todo_by.ticket.youtrack.credentialsFilePath%
 
     -
         class: staabm\PHPStanTodoBy\utils\HttpClient

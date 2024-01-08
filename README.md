@@ -182,7 +182,7 @@ Reference these virtual packages like any other package in your todo-comments:
 Optionally you can configure this extension to analyze your comments with issue tracker ticket keys.
 The extension fetches issue tracker API for issue status. If the remote issue is resolved, the comment will be reported.
 
-Currently, Jira and GitHub are supported.
+Currently, Jira, GitHub and YouTrack are supported.
 
 This feature is disabled by default. To enable it, you must set `ticket.enabled` parameter to `true`.
 You also need to set these parameters:
@@ -222,7 +222,7 @@ parameters:
                 # path to a file containing Jira credentials.
                 # see below for possible formats.
                 # if credentials parameter is not empty, it will be used instead of this file.
-                # this file must not be commited into the repository!
+                # this file must not be committed into the repository!
                 credentialsFilePath: .secrets/jira-credentials.txt
 
             github:
@@ -240,6 +240,19 @@ parameters:
                 # if credentials parameter is not empty, it will be used instead of this file.
                 # this file must not be committed into the repository!
                 credentialsFilePath: null
+
+            youtrack:
+                # e.g. https://your-company.youtrack.cloud
+                server: https://acme.youtrack.cloud
+
+                # YouTrack permanent token
+                # if this value is empty, credentials file will be used instead.
+                credentials: %env.YOUTRACK_TOKEN%
+
+                # path to a file containing a YouTrack permanent token
+                # if credentials parameter is not empty, it will be used instead of this file.
+                # this file must not be committed into the repository!
+                credentialsFilePath: .secrets/youtrack-credentials.txt
 ```
 
 #### Jira Credentials

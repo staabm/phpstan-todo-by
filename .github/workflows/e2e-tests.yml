@@ -29,6 +29,11 @@ jobs:
                         test-dir: tests-e2e/jira/
                         script: |
                             diff <(vendor/bin/phpstan analyse --error-format=raw --no-progress | sed "s|$(pwd)/||") expected-errors.txt
+                    -   os: ubuntu-latest
+                        php-version: '8.2'
+                        test-dir: tests-e2e/youtrack/
+                        script: |
+                            diff <(vendor/bin/phpstan analyse --error-format=raw --no-progress | sed "s|$(pwd)/||") expected-errors.txt
 
         steps:
             -   name: Checkout
