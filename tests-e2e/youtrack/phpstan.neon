@@ -1,0 +1,12 @@
+parameters:
+  level: max
+  paths:
+    - src/
+  todo_by:
+    ticket:
+        enabled: true
+        tracker: youtrack
+        keyPrefixes:
+            - WI
+        jira:
+            server: https://youtrack.jetbrains.com/
