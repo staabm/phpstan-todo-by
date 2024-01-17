@@ -4,6 +4,7 @@ namespace staabm\PHPStanTodoBy;
 
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
+use PHPStan\Node\CollectedDataNode;
 use PHPStan\Rules\Rule;
 use staabm\PHPStanTodoBy\utils\CommentMatcher;
 use staabm\PHPStanTodoBy\utils\ExpiredCommentErrorBuilder;
@@ -14,7 +15,7 @@ use function strlen;
 use function trim;
 
 /**
- * @implements Rule<Node>
+ * @implements Rule<CollectedDataNode>
  */
 final class TodoByTicketRule implements Rule
 {
@@ -29,74 +30,55 @@ final class TodoByTicketRule implements Rule
 
     public function getNodeType(): string
     {
-        return Node::class;
+        return CollectedDataNode::class;
     }
 
     public function processNode(Node $node, Scope $scope): array
     {
-        $it = CommentMatcher::matchComments($node, $this->createPattern());
+        $collectorData = $node->get(TodoByTicketCollector::class);
 
         $errors = [];
-        foreach ($it as $comment => $matches) {
-            /** @var array<int, array<array{0: string, 1: int}>> $matches */
-            foreach ($matches as $match) {
-                $ticketKey = $match['ticketKey'][0];
-                $todoText = trim($match['comment'][0]);
+        foreach ($collectorData as $file => $declarations) {
+            foreach ($declarations as $tickets) {
+                foreach($tickets as [$comment, $ticketKey, $todoText, $wholeMatchStartOffset]) {
+                    if ([] !== $this->configuration->getKeyPrefixes() && !$this->hasPrefix($ticketKey)) {
+                        continue;
+                    }
 
-                if ([] !== $this->configuration->getKeyPrefixes() && !$this->hasPrefix($ticketKey)) {
-                    continue;
-                }
+                    $ticketStatus = $this->configuration->getFetcher()->fetchTicketStatus($ticketKey);
 
-                $ticketStatus = $this->configuration->getFetcher()->fetchTicketStatus($ticketKey);
+                    if (null === $ticketStatus) {
+                        $errors[] = $this->errorBuilder->buildError(
+                            $comment,
+                            "Ticket $ticketKey doesn't exist or provided credentials do not allow for viewing it.",
+                            null,
+                            $wholeMatchStartOffset
+                        );
 
-                if (null === $ticketStatus) {
+                        continue;
+                    }
+
+                    if (!in_array($ticketStatus, $this->configuration->getResolvedStatuses(), true)) {
+                        continue;
+                    }
+
+                    if ('' !== $todoText) {
+                        $errorMessage = "Should have been resolved in {$ticketKey}: ". rtrim($todoText, '.') .'.';
+                    } else {
+                        $errorMessage = "Comment should have been resolved in {$ticketKey}.";
+                    }
+
                     $errors[] = $this->errorBuilder->buildError(
                         $comment,
-                        "Ticket $ticketKey doesn't exist or provided credentials do not allow for viewing it.",
+                        $errorMessage,
                         null,
-                        $match[0][1]
+                        $wholeMatchStartOffset
                     );
-
-                    continue;
                 }
-
-                if (!in_array($ticketStatus, $this->configuration->getResolvedStatuses(), true)) {
-                    continue;
-                }
-
-                if ('' !== $todoText) {
-                    $errorMessage = "Should have been resolved in {$ticketKey}: ". rtrim($todoText, '.') .'.';
-                } else {
-                    $errorMessage = "Comment should have been resolved in {$ticketKey}.";
-                }
-
-                $errors[] = $this->errorBuilder->buildError(
-                    $comment,
-                    $errorMessage,
-                    null,
-                    $match[0][1]
-                );
             }
         }
 
         return $errors;
-    }
-
-    private function createPattern(): string
-    {
-        $keyRegex = $this->configuration->getKeyPattern();
-
-        return <<<"REGEXP"
-            {
-                @?TODO # possible @ prefix
-                @?[a-zA-Z0-9_-]* # optional username
-                \s*[:-]?\s* # optional colon or hyphen
-                \s+ # keyword/ticket separator
-                (?P<ticketKey>$keyRegex) # ticket key
-                \s*[:-]?\s* # optional colon or hyphen
-                (?P<comment>(?:(?!\*+/).)*) # rest of line as comment text, excluding block end
-            }ix
-            REGEXP;
     }
 
     private function hasPrefix(string $ticketKey): bool

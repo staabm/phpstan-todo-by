@@ -4,6 +4,7 @@ namespace staabm\PHPStanTodoBy\Tests;
 
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
+use staabm\PHPStanTodoBy\TodoByTicketCollector;
 use staabm\PHPStanTodoBy\TodoByTicketRule;
 use staabm\PHPStanTodoBy\utils\ExpiredCommentErrorBuilder;
 use staabm\PHPStanTodoBy\utils\ticket\TicketRuleConfiguration;
@@ -16,6 +17,20 @@ final class TodoByTicketRuleTest extends RuleTestCase
 {
     protected function getRule(): Rule
     {
+        return new TodoByTicketRule(
+            $this->getTicketConfiguration(),
+            new ExpiredCommentErrorBuilder(true),
+        );
+    }
+
+    protected function getCollectors(): array
+    {
+        return [
+            new TodoByTicketCollector($this->getTicketConfiguration()),
+        ];
+    }
+
+    private function getTicketConfiguration(): TicketRuleConfiguration {
         $fetcher = new StaticTicketStatusFetcher([
             'APP-123' => 'Done',
             'FOO-0001' => 'Done',
@@ -24,14 +39,11 @@ final class TodoByTicketRuleTest extends RuleTestCase
             'APP-5000' => 'To Do',
         ]);
 
-        return new TodoByTicketRule(
-            new TicketRuleConfiguration(
-                '[A-Z0-9]+-\d+',
-                ['Done', 'Resolved'],
-                ['APP', 'FOO', 'F01'],
-                $fetcher,
-            ),
-            new ExpiredCommentErrorBuilder(true),
+        return new TicketRuleConfiguration(
+            '[A-Z0-9]+-\d+',
+            ['Done', 'Resolved'],
+            ['APP', 'FOO', 'F01'],
+            $fetcher,
         );
     }
 
