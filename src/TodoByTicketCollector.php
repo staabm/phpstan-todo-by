@@ -46,6 +46,7 @@ final class TodoByTicketCollector implements Collector
                 ];
             }
         }
+        
 
         return $tickets;
     }
