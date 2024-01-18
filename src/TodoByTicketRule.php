@@ -40,6 +40,7 @@ final class TodoByTicketRule implements Rule
         $errors = [];
         foreach ($collectorData as $file => $declarations) {
             foreach ($declarations as $tickets) {
+                var_dump($tickets);
                 foreach($tickets as [$comment, $ticketKey, $todoText, $wholeMatchStartOffset]) {
                     if ([] !== $this->configuration->getKeyPrefixes() && !$this->hasPrefix($ticketKey)) {
                         continue;
