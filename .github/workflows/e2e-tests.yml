@@ -52,9 +52,6 @@ jobs:
                 working-directory: ${{ matrix.test-dir }}
                 if: "github.event_name != 'push' && github.event.pull_request.head.repo.full_name != github.repository"
 
-            -   run: "composer require --dev phpstan/extension-installer"
-                working-directory: ${{ matrix.test-dir }}
-
             -   run: "composer require --dev staabm/phpstan-todo-by:dev-${{ github.head_ref || github.ref_name }}"
                 working-directory: ${{ matrix.test-dir }}
 
