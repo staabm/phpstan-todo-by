@@ -21,7 +21,7 @@ final class CommentMatcher
             || $node instanceof Node\Expr
         ) {
             // prevent duplicate errors
-            return [];
+            return;
         }
 
         foreach ($node->getComments() as $comment) {
