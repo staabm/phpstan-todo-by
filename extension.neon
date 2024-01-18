@@ -156,6 +156,11 @@ services:
         factory: @staabm\PHPStanTodoBy\utils\ticket\TicketRuleConfigurationFactory::create
 
     -
+        class: staabm\PHPStanTodoBy\TodoByTicketCollector
+        tags:
+            - phpstan.collector
+
+    -
         class: staabm\PHPStanTodoBy\utils\ticket\GitHubTicketStatusFetcher
         arguments:
             - %todo_by.ticket.github.defaultOwner%
