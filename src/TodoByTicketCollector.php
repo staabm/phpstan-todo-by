@@ -12,7 +12,7 @@ use staabm\PHPStanTodoBy\utils\ticket\TicketRuleConfiguration;
 use function trim;
 
 /**
- * @implements Collector<Node, list<array{Comment, string, string, int}>>
+ * @implements Collector<Node, list<array{string, string, string, int}>>
  */
 final class TodoByTicketCollector implements Collector
 {
@@ -38,15 +38,21 @@ final class TodoByTicketCollector implements Collector
                 $ticketKey = $match['ticketKey'][0];
                 $todoText = trim($match['comment'][0]);
 
+                // collectors do not support serializing objects
+                $json = json_encode($comment);
+                if (false === $json) {
+                    throw new \RuntimeException('Failed to encode comment as JSON: ' . json_last_error_msg());
+                }
+
                 $tickets[] = [
-                    $comment,
+                    $json,
                     $ticketKey,
                     $todoText,
                     $match[0][1] // wholeMatchStartOffset
                 ];
             }
         }
-        
+
 
         return $tickets;
     }

@@ -2,6 +2,7 @@
 
 namespace staabm\PHPStanTodoBy;
 
+use PhpParser\Comment;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\CollectedDataNode;
@@ -40,8 +41,8 @@ final class TodoByTicketRule implements Rule
         $errors = [];
         foreach ($collectorData as $file => $declarations) {
             foreach ($declarations as $tickets) {
-                var_dump($tickets);
-                foreach($tickets as [$comment, $ticketKey, $todoText, $wholeMatchStartOffset]) {
+                foreach($tickets as [$json, $ticketKey, $todoText, $wholeMatchStartOffset]) {
+                    $comment = $this->commentFromJson($json);
                     if ([] !== $this->configuration->getKeyPrefixes() && !$this->hasPrefix($ticketKey)) {
                         continue;
                     }
@@ -91,5 +92,32 @@ final class TodoByTicketRule implements Rule
         }
 
         return false;
+    }
+
+    private function commentFromJson(string $json): Comment
+    {
+        $arr = json_decode($json, true);
+
+        if ($arr['nodeType'] === 'Comment_Doc') {
+            return new Comment\Doc(
+                $arr['text'],
+                $arr['line'],
+                $arr['filePos'],
+                $arr['tokenPos'],
+                $arr['endLine'],
+                $arr['endFilePos'],
+                $arr['endTokenPos']
+            );
+        }
+
+        return new Comment(
+            $arr['text'],
+            $arr['line'],
+            $arr['filePos'],
+            $arr['tokenPos'],
+            $arr['endLine'],
+            $arr['endFilePos'],
+            $arr['endTokenPos']
+        );
     }
 }
