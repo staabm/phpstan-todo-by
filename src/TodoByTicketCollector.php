@@ -2,10 +2,10 @@
 
 namespace staabm\PHPStanTodoBy;
 
-use PhpParser\Comment;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Collectors\Collector;
+use RuntimeException;
 use staabm\PHPStanTodoBy\utils\CommentMatcher;
 use staabm\PHPStanTodoBy\utils\ticket\TicketRuleConfiguration;
 
@@ -17,6 +17,7 @@ use function trim;
 final class TodoByTicketCollector implements Collector
 {
     private TicketRuleConfiguration $configuration;
+
     public function __construct(TicketRuleConfiguration $configuration)
     {
         $this->configuration = $configuration;
@@ -44,7 +45,7 @@ final class TodoByTicketCollector implements Collector
                 // collectors do not support serializing objects
                 $json = json_encode($comment);
                 if (false === $json) {
-                    throw new \RuntimeException('Failed to encode comment as JSON: ' . json_last_error_msg());
+                    throw new RuntimeException('Failed to encode comment as JSON: ' . json_last_error_msg());
                 }
 
                 $tickets[] = [
@@ -52,11 +53,10 @@ final class TodoByTicketCollector implements Collector
                     $ticketKey,
                     $todoText,
                     $match[0][1], // wholeMatchStartOffset
-                    $line
+                    $line,
                 ];
             }
         }
-
 
         return $tickets;
     }
@@ -77,5 +77,4 @@ final class TodoByTicketCollector implements Collector
             }ix
             REGEXP;
     }
-
 }

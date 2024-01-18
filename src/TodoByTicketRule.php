@@ -7,13 +7,11 @@ use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\CollectedDataNode;
 use PHPStan\Rules\Rule;
-use staabm\PHPStanTodoBy\utils\CommentMatcher;
 use staabm\PHPStanTodoBy\utils\ExpiredCommentErrorBuilder;
 use staabm\PHPStanTodoBy\utils\ticket\TicketRuleConfiguration;
 
 use function in_array;
 use function strlen;
-use function trim;
 
 /**
  * @implements Rule<CollectedDataNode>
@@ -41,7 +39,7 @@ final class TodoByTicketRule implements Rule
         $errors = [];
         foreach ($collectorData as $file => $declarations) {
             foreach ($declarations as $tickets) {
-                foreach($tickets as [$json, $ticketKey, $todoText, $wholeMatchStartOffset, $line]) {
+                foreach ($tickets as [$json, $ticketKey, $todoText, $wholeMatchStartOffset, $line]) {
                     $comment = $this->commentFromJson($json);
                     if ([] !== $this->configuration->getKeyPrefixes() && !$this->hasPrefix($ticketKey)) {
                         continue;
@@ -102,7 +100,7 @@ final class TodoByTicketRule implements Rule
     {
         $arr = json_decode($json, true);
 
-        if ($arr['nodeType'] === 'Comment_Doc') {
+        if ('Comment_Doc' === $arr['nodeType']) {
             return new Comment\Doc(
                 $arr['text'],
                 $arr['line'],

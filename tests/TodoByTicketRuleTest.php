@@ -30,7 +30,8 @@ final class TodoByTicketRuleTest extends RuleTestCase
         ];
     }
 
-    private function getTicketConfiguration(): TicketRuleConfiguration {
+    private function getTicketConfiguration(): TicketRuleConfiguration
+    {
         $fetcher = new StaticTicketStatusFetcher([
             'APP-123' => 'Done',
             'FOO-0001' => 'Done',

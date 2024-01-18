@@ -63,10 +63,10 @@ final class ExpiredCommentErrorBuilder
         $messageLine = $comment->getStartLine() + $newLines;
 
         $errBuilder = RuleErrorBuilder::message($errorMessage)->line($messageLine);
-        if ($file !== null) {
+        if (null !== $file) {
             $errBuilder->file($file);
         }
-        if ($line !== null) {
+        if (null !== $line) {
             $errBuilder->line($line);
         }
         if ($this->nonIgnorable) {
