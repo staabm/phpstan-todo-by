@@ -41,7 +41,7 @@ final class TodoByTicketRule implements Rule
         $errors = [];
         foreach ($collectorData as $file => $declarations) {
             foreach ($declarations as $tickets) {
-                foreach($tickets as [$json, $ticketKey, $todoText, $wholeMatchStartOffset]) {
+                foreach($tickets as [$json, $ticketKey, $todoText, $wholeMatchStartOffset, $line]) {
                     $comment = $this->commentFromJson($json);
                     if ([] !== $this->configuration->getKeyPrefixes() && !$this->hasPrefix($ticketKey)) {
                         continue;
@@ -50,11 +50,13 @@ final class TodoByTicketRule implements Rule
                     $ticketStatus = $this->configuration->getFetcher()->fetchTicketStatus($ticketKey);
 
                     if (null === $ticketStatus) {
-                        $errors[] = $this->errorBuilder->buildError(
+                        $errors[] = $this->errorBuilder->buildFileError(
                             $comment,
                             "Ticket $ticketKey doesn't exist or provided credentials do not allow for viewing it.",
                             null,
-                            $wholeMatchStartOffset
+                            $wholeMatchStartOffset,
+                            $file,
+                            $line
                         );
 
                         continue;
@@ -70,11 +72,13 @@ final class TodoByTicketRule implements Rule
                         $errorMessage = "Comment should have been resolved in {$ticketKey}.";
                     }
 
-                    $errors[] = $this->errorBuilder->buildError(
+                    $errors[] = $this->errorBuilder->buildFileError(
                         $comment,
                         $errorMessage,
                         null,
-                        $wholeMatchStartOffset
+                        $wholeMatchStartOffset,
+                        $file,
+                        $line
                     );
                 }
             }
