@@ -19,6 +19,10 @@ final class HttpClient
             throw new RuntimeException('Could not initialize cURL connection');
         }
 
+        // see https://stackoverflow.com/a/27776164/1597388
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 3);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 10);
+
         curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
