@@ -9,7 +9,7 @@ use function is_string;
 final class HttpClient
 {
     /**
-     * @param array<non-empty-string> $urls
+     * @param non-empty-array<non-empty-string> $urls
      * @param list<string> $headers
      *
      * @return non-empty-array<non-empty-string, array{int, string}>
@@ -17,6 +17,10 @@ final class HttpClient
     public function getMulti(array $urls, array $headers): array
     {
         $mh = curl_multi_init();
+        if (!$mh) { // @phpstan-ignore-line
+            throw new RuntimeException('Could not initialize cURL multi connection');
+        }
+
         $handles = [];
 
         foreach ($urls as $url) {
