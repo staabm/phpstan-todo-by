@@ -1,5 +1,6 @@
 includes:
     - extension.neon
+    - ignore-by-php-version.neon.php
 
 parameters:
     level: 8
