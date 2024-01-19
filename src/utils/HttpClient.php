@@ -17,7 +17,7 @@ final class HttpClient
     public function getMulti(array $urls, array $headers): array
     {
         $mh = curl_multi_init();
-        if (!$mh) { // @phpstan-ignore-line
+        if (!$mh) {
             throw new RuntimeException('Could not initialize cURL multi connection');
         }
 
