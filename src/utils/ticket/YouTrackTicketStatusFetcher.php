@@ -30,7 +30,7 @@ final class YouTrackTicketStatusFetcher implements TicketStatusFetcher
     {
         $ticketUrls = [];
 
-        foreach($ticketKeys as $ticketKey) {
+        foreach ($ticketKeys as $ticketKey) {
             $ticketUrls[$ticketKey] = "{$this->host}/api/issues/$ticketKey?fields=resolved";
         }
 
@@ -45,7 +45,7 @@ final class YouTrackTicketStatusFetcher implements TicketStatusFetcher
 
         $results = [];
         $urlsToKeys = array_flip($ticketUrls);
-        foreach($responses as $url => [$responseCode, $response]) {
+        foreach ($responses as $url => [$responseCode, $response]) {
             if (200 !== $responseCode) {
                 throw new RuntimeException("Could not fetch ticket's status from YouTrack with url $url");
             }

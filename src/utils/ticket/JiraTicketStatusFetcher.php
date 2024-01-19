@@ -34,7 +34,7 @@ final class JiraTicketStatusFetcher implements TicketStatusFetcher
         $ticketUrls = [];
 
         $apiVersion = self::API_VERSION;
-        foreach($ticketKeys as $ticketKey) {
+        foreach ($ticketKeys as $ticketKey) {
             $ticketUrls[$ticketKey] = "{$this->host}/rest/api/$apiVersion/issue/$ticketKey?expand=status";
         }
 
@@ -49,7 +49,7 @@ final class JiraTicketStatusFetcher implements TicketStatusFetcher
 
         $results = [];
         $urlsToKeys = array_flip($ticketUrls);
-        foreach($responses as $url => [$responseCode, $response]) {
+        foreach ($responses as $url => [$responseCode, $response]) {
             if (404 === $responseCode) {
                 $results[$url] = null;
                 continue;

@@ -39,7 +39,7 @@ final class GitHubTicketStatusFetcher implements TicketStatusFetcher
         $ticketUrls = [];
 
         $keyRegex = self::KEY_REGEX;
-        foreach($ticketKeys as $ticketKey) {
+        foreach ($ticketKeys as $ticketKey) {
             preg_match_all("/$keyRegex/ix", $ticketKey, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER);
 
             $owner = $matches[0]['githubOwner'][0] ?: $this->defaultOwner;
@@ -65,7 +65,7 @@ final class GitHubTicketStatusFetcher implements TicketStatusFetcher
 
         $results = [];
         $urlsToKeys = array_flip($ticketUrls);
-        foreach($responses as $url => [$responseCode, $response]) {
+        foreach ($responses as $url => [$responseCode, $response]) {
             if (404 === $responseCode) {
                 $results[$url] = null;
                 continue;

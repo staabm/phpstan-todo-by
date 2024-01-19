@@ -7,9 +7,11 @@ use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\CollectedDataNode;
 use PHPStan\Rules\Rule;
+use RuntimeException;
 use staabm\PHPStanTodoBy\utils\ExpiredCommentErrorBuilder;
 use staabm\PHPStanTodoBy\utils\ticket\TicketRuleConfiguration;
 
+use function array_key_exists;
 use function in_array;
 use function strlen;
 
@@ -43,7 +45,7 @@ final class TodoByTicketRule implements Rule
                     if ([] !== $this->configuration->getKeyPrefixes() && !$this->hasPrefix($ticketKey)) {
                         continue;
                     }
-                    if ($ticketKey === '') {
+                    if ('' === $ticketKey) {
                         continue;
                     }
                     $ticketKeys[] = $ticketKey;
@@ -51,7 +53,7 @@ final class TodoByTicketRule implements Rule
             }
         }
 
-        if ($ticketKeys === []) {
+        if ([] === $ticketKeys) {
             return [];
         }
 
@@ -66,7 +68,7 @@ final class TodoByTicketRule implements Rule
                     }
 
                     if (!array_key_exists($ticketKey, $keyToTicketStatus)) {
-                        throw new \RuntimeException("Missing ticket-status for key $ticketKey");
+                        throw new RuntimeException("Missing ticket-status for key $ticketKey");
                     }
                     $ticketStatus = $keyToTicketStatus[$ticketKey];
 

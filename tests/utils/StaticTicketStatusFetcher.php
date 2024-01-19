@@ -20,7 +20,7 @@ final class StaticTicketStatusFetcher implements TicketStatusFetcher
     public function fetchTicketStatus(array $ticketKeys): array
     {
         $result = [];
-        foreach($ticketKeys as $ticketKey) {
+        foreach ($ticketKeys as $ticketKey) {
             if (!array_key_exists($ticketKey, $this->statuses)) {
                 $result[$ticketKey] = null;
                 continue;

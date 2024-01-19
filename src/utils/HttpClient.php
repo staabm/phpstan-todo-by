@@ -19,7 +19,7 @@ final class HttpClient
         $mh = curl_multi_init();
         $handles = [];
 
-        foreach($urls as $url) {
+        foreach ($urls as $url) {
             $curl = curl_init($url);
             if (!$curl) {
                 throw new RuntimeException('Could not initialize cURL connection');
@@ -39,7 +39,7 @@ final class HttpClient
             $handles[$url] = $curl;
         }
 
-        foreach($handles as $handle) {
+        foreach ($handles as $handle) {
             curl_multi_add_handle($mh, $handle);
         }
 
@@ -49,16 +49,16 @@ final class HttpClient
                 // Wait a short time for more activity
                 curl_multi_select($mh);
             }
-        } while ($active && $status == CURLM_OK);
+        } while ($active && CURLM_OK == $status);
 
         $result = [];
-        foreach($handles as $url => $handle) {
+        foreach ($handles as $url => $handle) {
             $response = curl_multi_getcontent($handle);
             $errno = curl_multi_errno($mh);
 
             if ($errno || !is_string($response)) {
                 $message = curl_multi_strerror($errno);
-                if ($message === null) {
+                if (null === $message) {
                     $message = "Could not fetch url $url";
                 }
                 throw new RuntimeException($message);
