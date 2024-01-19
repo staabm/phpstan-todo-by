@@ -17,13 +17,19 @@ final class StaticTicketStatusFetcher implements TicketStatusFetcher
         $this->statuses = $statuses;
     }
 
-    public function fetchTicketStatus(string $ticketKey): ?string
+    public function fetchTicketStatus(array $ticketKeys): array
     {
-        if (!array_key_exists($ticketKey, $this->statuses)) {
-            return null;
+        $result = [];
+        foreach($ticketKeys as $ticketKey) {
+            if (!array_key_exists($ticketKey, $this->statuses)) {
+                $result[$ticketKey] = null;
+                continue;
+            }
+
+            $result[$ticketKey] = $this->statuses[$ticketKey];
         }
 
-        return $this->statuses[$ticketKey];
+        return $result;
     }
 
     public static function getKeyPattern(): string

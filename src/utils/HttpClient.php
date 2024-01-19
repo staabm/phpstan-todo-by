@@ -9,9 +9,10 @@ use function is_string;
 final class HttpClient
 {
     /**
-     * @param list<string> $urls
+     * @param array<non-empty-string> $urls
      * @param list<string> $headers
-     * @return array<string, array{int, string}>
+     *
+     * @return non-empty-array<non-empty-string, array{int, string}>
      */
     public function getMulti(array $urls, array $headers): array
     {
@@ -53,9 +54,14 @@ final class HttpClient
         $result = [];
         foreach($handles as $url => $handle) {
             $response = curl_multi_getcontent($handle);
+            $errno = curl_multi_errno($mh);
 
-            if (!is_string($response)) {
-                throw new RuntimeException("Could not fetch url $url");
+            if ($errno || !is_string($response)) {
+                $message = curl_multi_strerror($errno);
+                if ($message === null) {
+                    $message = "Could not fetch url $url";
+                }
+                throw new RuntimeException($message);
             }
 
             $responseCode = curl_getinfo($handle, CURLINFO_RESPONSE_CODE);
@@ -66,6 +72,5 @@ final class HttpClient
         curl_multi_close($mh);
 
         return $result;
-
     }
 }
