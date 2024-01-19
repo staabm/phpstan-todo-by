@@ -48,7 +48,8 @@ final class TodoByTicketRule implements Rule
                     if ('' === $ticketKey) {
                         continue;
                     }
-                    $ticketKeys[] = $ticketKey;
+                    // de-duplicate keys
+                    $ticketKeys[$ticketKey] = true;
                 }
             }
         }
@@ -57,7 +58,9 @@ final class TodoByTicketRule implements Rule
             return [];
         }
 
-        $keyToTicketStatus = $this->configuration->getFetcher()->fetchTicketStatus($ticketKeys);
+        $keyToTicketStatus = $this->configuration->getFetcher()->fetchTicketStatus(
+            array_keys($ticketKeys)
+        );
 
         $errors = [];
         foreach ($collectorData as $file => $collected) {
