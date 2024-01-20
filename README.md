@@ -207,7 +207,7 @@ parameters:
             # if your ticket key is FOO-12345, then this value should be ["FOO"].
             # multiple key prefixes are allowed, e.g. ["FOO", "APP"].
             # only comments with keys containing this prefix will be analyzed.
-            # supported trackers: jira. Other trackers ignore this parameter.
+            # supported trackers: jira, youtrack. Other trackers ignore this parameter.
             keyPrefixes:
                 - FOO
 
@@ -257,7 +257,7 @@ parameters:
 
 #### Jira Credentials
 
-This extension uses Jira's REST API to fetch ticket's status. In order for it to work, you need to configure valid credentials.
+This extension uses Jira's REST API to fetch ticket's status. If your board is not public, you need to configure valid credentials.
 These authentication methods are supported:
 - [OAuth 2.0 Access Tokens](https://confluence.atlassian.com/adminjiraserver/jira-oauth-2-0-provider-api-1115659070.html)
 - [Personal Access Tokens](https://confluence.atlassian.com/enterprise/using-personal-access-tokens-1026032365.html)
