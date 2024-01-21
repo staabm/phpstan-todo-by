@@ -62,7 +62,7 @@ parameters:
             # if your ticket key is FOO-12345, then this value should be ["FOO"].
             # multiple key prefixes are allowed, e.g. ["FOO", "APP"].
             # only comments with keys containing this prefix will be analyzed.
-            # supported trackers: jira. Other trackers ignore this parameter.
+            # supported trackers: jira, youtrack. Other trackers ignore this parameter.
             keyPrefixes: []
 
             jira:
