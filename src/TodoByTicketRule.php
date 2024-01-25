@@ -7,9 +7,11 @@ use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\CollectedDataNode;
 use PHPStan\Rules\Rule;
+use RuntimeException;
 use staabm\PHPStanTodoBy\utils\ExpiredCommentErrorBuilder;
 use staabm\PHPStanTodoBy\utils\ticket\TicketRuleConfiguration;
 
+use function array_key_exists;
 use function in_array;
 use function strlen;
 
@@ -36,20 +38,46 @@ final class TodoByTicketRule implements Rule
     {
         $collectorData = $node->get(TodoByTicketCollector::class);
 
-        $errors = [];
-        foreach ($collectorData as $file => $declarations) {
-            foreach ($declarations as $tickets) {
+        $ticketKeys = [];
+        foreach ($collectorData as $collected) {
+            foreach ($collected as $tickets) {
                 foreach ($tickets as [$json, $ticketKey, $todoText, $wholeMatchStartOffset, $line]) {
-                    $comment = $this->commentFromJson($json);
+                    if ([] !== $this->configuration->getKeyPrefixes() && !$this->hasPrefix($ticketKey)) {
+                        continue;
+                    }
+                    if ('' === $ticketKey) {
+                        continue;
+                    }
+                    // de-duplicate keys
+                    $ticketKeys[$ticketKey] = true;
+                }
+            }
+        }
+
+        if ([] === $ticketKeys) {
+            return [];
+        }
+
+        $keyToTicketStatus = $this->configuration->getFetcher()->fetchTicketStatus(
+            array_keys($ticketKeys)
+        );
+
+        $errors = [];
+        foreach ($collectorData as $file => $collected) {
+            foreach ($collected as $tickets) {
+                foreach ($tickets as [$json, $ticketKey, $todoText, $wholeMatchStartOffset, $line]) {
                     if ([] !== $this->configuration->getKeyPrefixes() && !$this->hasPrefix($ticketKey)) {
                         continue;
                     }
 
-                    $ticketStatus = $this->configuration->getFetcher()->fetchTicketStatus($ticketKey);
+                    if (!array_key_exists($ticketKey, $keyToTicketStatus)) {
+                        throw new RuntimeException("Missing ticket-status for key $ticketKey");
+                    }
+                    $ticketStatus = $keyToTicketStatus[$ticketKey];
 
                     if (null === $ticketStatus) {
                         $errors[] = $this->errorBuilder->buildFileError(
-                            $comment,
+                            $this->commentFromJson($json),
                             "Ticket $ticketKey doesn't exist or provided credentials do not allow for viewing it.",
                             null,
                             $wholeMatchStartOffset,
@@ -71,7 +99,7 @@ final class TodoByTicketRule implements Rule
                     }
 
                     $errors[] = $this->errorBuilder->buildFileError(
-                        $comment,
+                        $this->commentFromJson($json),
                         $errorMessage,
                         null,
                         $wholeMatchStartOffset,

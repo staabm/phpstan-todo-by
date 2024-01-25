@@ -42,7 +42,7 @@ final class TodoByTicketCollector implements Collector
                 $ticketKey = $match['ticketKey'][0];
                 $todoText = trim($match['comment'][0]);
 
-                // collectors do not support serializing objects
+                // collectors do not support serializing objects, pass a string instead.
                 $json = json_encode($comment);
                 if (false === $json) {
                     throw new RuntimeException('Failed to encode comment as JSON: ' . json_last_error_msg());

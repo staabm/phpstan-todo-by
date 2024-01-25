@@ -23,11 +23,6 @@ final class GitHubTicketStatusFetcher implements TicketStatusFetcher
     private string $defaultRepo;
     private ?string $accessToken;
 
-    /**
-     * @var array<string, ?string>
-     */
-    private array $cache;
-
     private HttpClient $httpClient;
 
     public function __construct(string $defaultOwner, string $defaultRepo, ?string $credentials, ?string $credentialsFilePath, HttpClient $httpClient)
@@ -36,25 +31,24 @@ final class GitHubTicketStatusFetcher implements TicketStatusFetcher
         $this->defaultRepo = $defaultRepo;
         $this->accessToken = CredentialsHelper::getCredentials($credentials, $credentialsFilePath);
 
-        $this->cache = [];
         $this->httpClient = $httpClient;
     }
 
-    public function fetchTicketStatus(string $ticketKey): ?string
+    public function fetchTicketStatus(array $ticketKeys): array
     {
+        $ticketUrls = [];
+
         $keyRegex = self::KEY_REGEX;
-        preg_match_all("/$keyRegex/ix", $ticketKey, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER);
+        foreach ($ticketKeys as $ticketKey) {
+            preg_match_all("/$keyRegex/ix", $ticketKey, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER);
 
-        $owner = $matches[0]['githubOwner'][0] ?: $this->defaultOwner;
-        $repo = $matches[0]['githubRepo'][0] ?: $this->defaultRepo;
-        $number = $matches[0]['githubNumber'][0];
-        $cacheKey = "$owner/$repo#$number";
+            $owner = $matches[0]['githubOwner'][0] ?: $this->defaultOwner;
+            $repo = $matches[0]['githubRepo'][0] ?: $this->defaultRepo;
+            $number = $matches[0]['githubNumber'][0];
 
-        if (array_key_exists($cacheKey, $this->cache)) {
-            return $this->cache[$cacheKey];
+            $ticketUrls[$ticketKey] = "https://api.github.com/repos/$owner/$repo/issues/$number";
         }
 
-        $url = "https://api.github.com/repos/$owner/$repo/issues/$number";
         $apiVersion = self::API_VERSION;
 
         $headers = [
@@ -67,23 +61,30 @@ final class GitHubTicketStatusFetcher implements TicketStatusFetcher
             $headers[] = "Authorization: Bearer $this->accessToken";
         }
 
-        [$responseCode, $response] = $this->httpClient->get($url, $headers);
+        $responses = $this->httpClient->getMulti($ticketUrls, $headers);
 
-        if (404 === $responseCode) {
-            return null;
+        $results = [];
+        $urlsToKeys = array_flip($ticketUrls);
+        foreach ($responses as $url => [$responseCode, $response]) {
+            if (404 === $responseCode) {
+                $results[$url] = null;
+                continue;
+            }
+
+            if (200 !== $responseCode) {
+                throw new RuntimeException("Could not fetch ticket's status from GitHub with $url");
+            }
+
+            $data = json_decode($response, true);
+            if (!is_array($data) || !array_key_exists('state', $data) || !is_string($data['state'])) {
+                throw new RuntimeException("GitHub returned invalid response body with $url");
+            }
+
+            $ticketKey = $urlsToKeys[$url];
+            $results[$ticketKey] = $data['state'];
         }
 
-        if (200 !== $responseCode) {
-            throw new RuntimeException("Could not fetch ticket's status from GitHub with $url");
-        }
-
-        $data = json_decode($response, true);
-
-        if (!is_array($data) || !array_key_exists('state', $data) || !is_string($data['state'])) {
-            throw new RuntimeException("GitHub returned invalid response body with $url");
-        }
-
-        return $this->cache[$cacheKey] = $data['state'];
+        return $results;
     }
 
     public static function getKeyPattern(): string

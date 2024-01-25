@@ -16,11 +16,6 @@ final class YouTrackTicketStatusFetcher implements TicketStatusFetcher
 
     private HttpClient $httpClient;
 
-    /**
-     * @var array<string, ?string>
-     */
-    private array $cache;
-
     public function __construct(string $host, ?string $credentials, ?string $credentialsFilePath, HttpClient $httpClient)
     {
         $credentials = CredentialsHelper::getCredentials($credentials, $credentialsFilePath);
@@ -28,17 +23,17 @@ final class YouTrackTicketStatusFetcher implements TicketStatusFetcher
         $this->host = $host;
         $this->authorizationHeader = $credentials ? self::createAuthorizationHeader($credentials) : null;
 
-        $this->cache = [];
         $this->httpClient = $httpClient;
     }
 
-    public function fetchTicketStatus(string $ticketKey): ?string
+    public function fetchTicketStatus(array $ticketKeys): array
     {
-        if (array_key_exists($ticketKey, $this->cache)) {
-            return $this->cache[$ticketKey];
+        $ticketUrls = [];
+
+        foreach ($ticketKeys as $ticketKey) {
+            $ticketUrls[$ticketKey] = "{$this->host}/api/issues/$ticketKey?fields=resolved";
         }
 
-        $url = "{$this->host}/api/issues/$ticketKey?fields=resolved";
         $headers = [];
         if (null !== $this->authorizationHeader) {
             $headers = [
@@ -46,15 +41,22 @@ final class YouTrackTicketStatusFetcher implements TicketStatusFetcher
             ];
         }
 
-        [$responseCode, $response] = $this->httpClient->get($url, $headers);
+        $responses = $this->httpClient->getMulti($ticketUrls, $headers);
 
-        if (200 !== $responseCode) {
-            throw new RuntimeException("Could not fetch ticket's status from YouTrack with url $url");
+        $results = [];
+        $urlsToKeys = array_flip($ticketUrls);
+        foreach ($responses as $url => [$responseCode, $response]) {
+            if (200 !== $responseCode) {
+                throw new RuntimeException("Could not fetch ticket's status from YouTrack with url $url");
+            }
+
+            $data = self::decodeAndValidateResponse($response);
+
+            $ticketKey = $urlsToKeys[$url];
+            $results[$ticketKey] = null === $data['resolved'] ? 'open' : 'resolved';
         }
 
-        $data = self::decodeAndValidateResponse($response);
-
-        return $this->cache[$ticketKey] = null === $data['resolved'] ? 'open' : 'resolved';
+        return $results;
     }
 
     public static function getKeyPattern(): string

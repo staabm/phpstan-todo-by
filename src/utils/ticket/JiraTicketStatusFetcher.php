@@ -17,11 +17,6 @@ final class JiraTicketStatusFetcher implements TicketStatusFetcher
     private string $host;
     private ?string $authorizationHeader;
 
-    /**
-     * @var array<string, ?string>
-     */
-    private array $cache;
-
     private HttpClient $httpClient;
 
     public function __construct(string $host, ?string $credentials, ?string $credentialsFilePath, HttpClient $httpClient)
@@ -31,19 +26,18 @@ final class JiraTicketStatusFetcher implements TicketStatusFetcher
         $this->host = $host;
         $this->authorizationHeader = $credentials ? self::createAuthorizationHeader($credentials) : null;
 
-        $this->cache = [];
         $this->httpClient = $httpClient;
     }
 
-    public function fetchTicketStatus(string $ticketKey): ?string
+    public function fetchTicketStatus(array $ticketKeys): array
     {
-        if (array_key_exists($ticketKey, $this->cache)) {
-            return $this->cache[$ticketKey];
-        }
+        $ticketUrls = [];
 
         $apiVersion = self::API_VERSION;
+        foreach ($ticketKeys as $ticketKey) {
+            $ticketUrls[$ticketKey] = "{$this->host}/rest/api/$apiVersion/issue/$ticketKey?expand=status";
+        }
 
-        $url = "{$this->host}/rest/api/$apiVersion/issue/$ticketKey?expand=status";
         $headers = [];
         if (null !== $this->authorizationHeader) {
             $headers = [
@@ -51,19 +45,27 @@ final class JiraTicketStatusFetcher implements TicketStatusFetcher
             ];
         }
 
-        [$responseCode, $response] = $this->httpClient->get($url, $headers);
+        $responses = $this->httpClient->getMulti($ticketUrls, $headers);
 
-        if (404 === $responseCode) {
-            return null;
+        $results = [];
+        $urlsToKeys = array_flip($ticketUrls);
+        foreach ($responses as $url => [$responseCode, $response]) {
+            if (404 === $responseCode) {
+                $results[$url] = null;
+                continue;
+            }
+
+            if (200 !== $responseCode) {
+                throw new RuntimeException("Could not fetch ticket's status from Jira with url $url");
+            }
+
+            $data = self::decodeAndValidateResponse($response);
+
+            $ticketKey = $urlsToKeys[$url];
+            $results[$ticketKey] = $data['fields']['status']['name'];
         }
 
-        if (200 !== $responseCode) {
-            throw new RuntimeException("Could not fetch ticket's status from Jira with url $url");
-        }
-
-        $data = self::decodeAndValidateResponse($response);
-
-        return $this->cache[$ticketKey] = $data['fields']['status']['name'];
+        return $results;
     }
 
     public static function getKeyPattern(): string
