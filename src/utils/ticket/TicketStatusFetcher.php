@@ -14,4 +14,11 @@ interface TicketStatusFetcher
 
     /** @return non-empty-string */
     public static function getKeyPattern(): string;
+
+    /**
+     * @param non-empty-string $ticketKey
+     *
+     * @return non-empty-string
+     */
+    public function resolveTicketUrl(string $ticketKey): string;
 }

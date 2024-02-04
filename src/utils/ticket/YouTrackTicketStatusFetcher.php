@@ -64,6 +64,11 @@ final class YouTrackTicketStatusFetcher implements TicketStatusFetcher
         return '[A-Z0-9]+-\d+';
     }
 
+    public function resolveTicketUrl(string $ticketKey): string
+    {
+        return "https://youtrack.jetbrains.com/issue/$ticketKey";
+    }
+
     private static function createAuthorizationHeader(string $credentials): string
     {
         return "Bearer $credentials";

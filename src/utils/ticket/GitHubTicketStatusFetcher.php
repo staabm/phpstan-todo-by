@@ -38,13 +38,8 @@ final class GitHubTicketStatusFetcher implements TicketStatusFetcher
     {
         $ticketUrls = [];
 
-        $keyRegex = self::KEY_REGEX;
         foreach ($ticketKeys as $ticketKey) {
-            preg_match_all("/$keyRegex/ix", $ticketKey, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER);
-
-            $owner = $matches[0]['githubOwner'][0] ?: $this->defaultOwner;
-            $repo = $matches[0]['githubRepo'][0] ?: $this->defaultRepo;
-            $number = $matches[0]['githubNumber'][0];
+            [$owner, $repo, $number] = $this->processKey($ticketKey);
 
             $ticketUrls[$ticketKey] = "https://api.github.com/repos/$owner/$repo/issues/$number";
         }
@@ -90,5 +85,25 @@ final class GitHubTicketStatusFetcher implements TicketStatusFetcher
     public static function getKeyPattern(): string
     {
         return self::KEY_REGEX;
+    }
+
+    public function resolveTicketUrl(string $ticketKey): string
+    {
+        [$owner, $repo, $number] = $this->processKey($ticketKey);
+
+        return "https://github.com/$owner/$repo/issues/$number";
+    }
+
+    /** @return array{string,string,string} */
+    private function processKey(string $ticketKey): array
+    {
+        $keyRegex = self::KEY_REGEX;
+        preg_match_all("/$keyRegex/ix", $ticketKey, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER);
+
+        $owner = $matches[0]['githubOwner'][0] ?: $this->defaultOwner;
+        $repo = $matches[0]['githubRepo'][0] ?: $this->defaultRepo;
+        $number = $matches[0]['githubNumber'][0];
+
+        return [$owner, $repo, $number];
     }
 }
