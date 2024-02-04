@@ -17,6 +17,8 @@ use function trim;
  */
 final class TodoByDateRule implements Rule
 {
+    private const ERROR_IDENTIFIER = 'date';
+
     private const PATTERN = <<<'REGEXP'
         {
             @?TODO # possible @ prefix
@@ -68,6 +70,7 @@ final class TodoByDateRule implements Rule
                     $errors[] = $this->errorBuilder->buildError(
                         $comment,
                         'Invalid date "'. $date .'". Expected format "YYYY-MM-DD".',
+                        self::ERROR_IDENTIFIER,
                         null,
                         $match[0][1]
                     );
@@ -95,6 +98,7 @@ final class TodoByDateRule implements Rule
                 $errors[] = $this->errorBuilder->buildError(
                     $comment,
                     $errorMessage,
+                    self::ERROR_IDENTIFIER,
                     null,
                     $match[0][1]
                 );

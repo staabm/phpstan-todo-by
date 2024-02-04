@@ -7,6 +7,8 @@ use PHPStan\Rules\RuleErrorBuilder;
 
 final class ExpiredCommentErrorBuilder
 {
+    private const ERROR_IDENTIFIER_PREFIX = 'todoBy.';
+
     private bool $nonIgnorable;
 
     public function __construct(bool $nonIgnorable)
@@ -17,12 +19,14 @@ final class ExpiredCommentErrorBuilder
     public function buildError(
         Comment $comment,
         string $errorMessage,
+        string $errorIdentifier,
         ?string $tip,
         int $wholeMatchStartOffset
     ): \PHPStan\Rules\RuleError {
         return $this->build(
             $comment,
             $errorMessage,
+            $errorIdentifier,
             $tip,
             $wholeMatchStartOffset,
             null,
@@ -33,6 +37,7 @@ final class ExpiredCommentErrorBuilder
     public function buildFileError(
         Comment $comment,
         string $errorMessage,
+        string $errorIdentifier,
         ?string $tip,
         int $wholeMatchStartOffset,
         string $file,
@@ -41,6 +46,7 @@ final class ExpiredCommentErrorBuilder
         return $this->build(
             $comment,
             $errorMessage,
+            $errorIdentifier,
             $tip,
             $wholeMatchStartOffset,
             $file,
@@ -51,6 +57,7 @@ final class ExpiredCommentErrorBuilder
     private function build(
         Comment $comment,
         string $errorMessage,
+        string $errorIdentifier,
         ?string $tip,
         int $wholeMatchStartOffset,
         ?string $file,
@@ -62,7 +69,10 @@ final class ExpiredCommentErrorBuilder
         // Set the message line to match the line the comment actually starts on.
         $messageLine = $comment->getStartLine() + $newLines;
 
-        $errBuilder = RuleErrorBuilder::message($errorMessage)->line($messageLine);
+        $errBuilder = RuleErrorBuilder::message($errorMessage)
+            ->line($messageLine)
+            ->identifier(self::ERROR_IDENTIFIER_PREFIX.$errorIdentifier);
+
         if (null !== $file) {
             $errBuilder->file($file);
         }
