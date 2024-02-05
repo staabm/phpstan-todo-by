@@ -20,6 +20,8 @@ use function strlen;
  */
 final class TodoByTicketRule implements Rule
 {
+    public const ERROR_IDENTIFIER = 'ticket';
+
     private TicketRuleConfiguration $configuration;
     private ExpiredCommentErrorBuilder $errorBuilder;
 
@@ -79,6 +81,7 @@ final class TodoByTicketRule implements Rule
                         $errors[] = $this->errorBuilder->buildFileError(
                             $this->commentFromJson($json),
                             "Ticket $ticketKey doesn't exist or provided credentials do not allow for viewing it.",
+                            self::ERROR_IDENTIFIER,
                             null,
                             $wholeMatchStartOffset,
                             $file,
@@ -101,6 +104,7 @@ final class TodoByTicketRule implements Rule
                     $errors[] = $this->errorBuilder->buildFileError(
                         $this->commentFromJson($json),
                         $errorMessage,
+                        self::ERROR_IDENTIFIER,
                         "See {$this->configuration->getFetcher()->resolveTicketUrl($ticketKey)}",
                         $wholeMatchStartOffset,
                         $file,

@@ -11,7 +11,8 @@
                     "message": "Should have been resolved in JRA-9: fix me.",
                     "line": 3,
                     "ignorable": false,
-                    "tip": "See https://jira.atlassian.com/browse/JRA-9"
+                    "tip": "See https://jira.atlassian.com/browse/JRA-9",
+                    "identifier": "todoBy.ticket"
                 }
             ]
         }

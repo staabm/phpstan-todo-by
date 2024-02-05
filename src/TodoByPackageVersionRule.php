@@ -27,6 +27,8 @@ use function trim;
  */
 final class TodoByPackageVersionRule implements Rule
 {
+    private const ERROR_IDENTIFIER = 'packageVersion';
+
     private const COMPARATORS = ['<', '>', '='];
 
     // composer package-name pattern from https://getcomposer.org/doc/04-schema.md#name
@@ -125,6 +127,7 @@ final class TodoByPackageVersionRule implements Rule
                 $errors[] = $this->errorBuilder->buildError(
                     $comment,
                     $errorMessage,
+                    self::ERROR_IDENTIFIER,
                     null,
                     $match[0][1]
                 );
@@ -153,6 +156,7 @@ final class TodoByPackageVersionRule implements Rule
             return $this->errorBuilder->buildError(
                 $comment,
                 'Invalid version constraint "' . $version . '" for package "' . $package . '".',
+                self::ERROR_IDENTIFIER,
                 null,
                 $wholeMatchStartOffset
             );
@@ -175,6 +179,7 @@ final class TodoByPackageVersionRule implements Rule
             return $this->errorBuilder->buildError(
                 $comment,
                 'Invalid virtual-package "' . $package . '": "' . $this->virtualPackages[$package] . '" provided via PHPStan config file.',
+                self::ERROR_IDENTIFIER,
                 null,
                 $wholeMatchStartOffset
             );
@@ -186,6 +191,7 @@ final class TodoByPackageVersionRule implements Rule
             return $this->errorBuilder->buildError(
                 $comment,
                 'Invalid version constraint "' . $version . '" for virtual-package "' . $package . '".',
+                self::ERROR_IDENTIFIER,
                 null,
                 $wholeMatchStartOffset
             );
@@ -216,6 +222,7 @@ final class TodoByPackageVersionRule implements Rule
             return $this->phpPlatformVersion = $this->errorBuilder->buildError(
                 $comment,
                 'Unable to find composer.json in '. $this->workingDirectory,
+                self::ERROR_IDENTIFIER,
                 null,
                 $wholeMatchStartOffset
             );
@@ -230,6 +237,7 @@ final class TodoByPackageVersionRule implements Rule
             return $this->phpPlatformVersion = $this->errorBuilder->buildError(
                 $comment,
                 'Missing php platform requirement in '. $this->workingDirectory .'/composer.json',
+                self::ERROR_IDENTIFIER,
                 null,
                 $wholeMatchStartOffset
             );
@@ -250,6 +258,7 @@ final class TodoByPackageVersionRule implements Rule
             return $this->errorBuilder->buildError(
                 $comment,
                 'Unknown package "' . $package . '". It is neither installed via composer.json nor declared as virtual package via PHPStan config.',
+                self::ERROR_IDENTIFIER,
                 null,
                 $wholeMatchStartOffset
             );
@@ -261,6 +270,7 @@ final class TodoByPackageVersionRule implements Rule
             return $this->errorBuilder->buildError(
                 $comment,
                 'Invalid version constraint "' . $version . '" for package "' . $package . '".',
+                self::ERROR_IDENTIFIER,
                 null,
                 $wholeMatchStartOffset
             );

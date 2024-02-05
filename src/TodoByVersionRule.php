@@ -24,6 +24,8 @@ use function trim;
  */
 final class TodoByVersionRule implements Rule
 {
+    private const ERROR_IDENTIFIER = 'version';
+
     private const COMPARATORS = ['<', '>', '='];
 
     private const PATTERN = <<<'REGEXP'
@@ -100,6 +102,7 @@ final class TodoByVersionRule implements Rule
                     $errors[] = $this->errorBuilder->buildError(
                         $comment,
                         'Invalid version constraint "' . $version . '".',
+                        self::ERROR_IDENTIFIER,
                         null,
                         $match[0][1]
                     );
@@ -121,6 +124,7 @@ final class TodoByVersionRule implements Rule
                 $errors[] = $this->errorBuilder->buildError(
                     $comment,
                     $errorMessage,
+                    self::ERROR_IDENTIFIER,
                     "Calculated reference version is '". $referenceVersion ."'.\n\n   See also:\n https://github.com/staabm/phpstan-todo-by#reference-version",
                     $match[0][1]
                 );
