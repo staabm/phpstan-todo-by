@@ -23,17 +23,17 @@ jobs:
                         php-version: '8.2'
                         test-dir: tests-e2e/github/
                         script: |
-                            diff <(vendor/bin/phpstan analyse --error-format=raw --no-progress | sed "s|$(pwd)/||") expected-errors.txt
+                            diff -w <(vendor/bin/phpstan analyse --error-format=prettyJson --no-progress | sed "s|$(pwd)/||") expected-errors.json
                     -   os: ubuntu-latest
                         php-version: '8.2'
                         test-dir: tests-e2e/jira/
                         script: |
-                            diff <(vendor/bin/phpstan analyse --error-format=raw --no-progress | sed "s|$(pwd)/||") expected-errors.txt
+                            diff -w <(vendor/bin/phpstan analyse --error-format=prettyJson --no-progress | sed "s|$(pwd)/||") expected-errors.json
                     -   os: ubuntu-latest
                         php-version: '8.2'
                         test-dir: tests-e2e/youtrack/
                         script: |
-                            diff <(vendor/bin/phpstan analyse --error-format=raw --no-progress | sed "s|$(pwd)/||") expected-errors.txt
+                            diff -w <(vendor/bin/phpstan analyse --error-format=prettyJson --no-progress | sed "s|$(pwd)/||") expected-errors.json
 
         steps:
             -   name: Checkout

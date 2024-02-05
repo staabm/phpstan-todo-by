@@ -36,4 +36,9 @@ final class StaticTicketStatusFetcher implements TicketStatusFetcher
     {
         return '[A-Z0-9]+-\d+';
     }
+
+    public function resolveTicketUrl(string $ticketKey): string
+    {
+        return "https://issue-tracker.com/$ticketKey";
+    }
 }

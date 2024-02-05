@@ -51,10 +51,26 @@ final class TodoByTicketRuleTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse([__DIR__ . '/data/ticket.php'], [
-            ['Should have been resolved in APP-123: rename this to doBar().', 5],
-            ['Comment should have been resolved in APP-4444.', 11],
-            ['Comment should have been resolved in FOO-0001.', 12],
-            ['Should have been resolved in F01-12345: please change me.', 13],
+            [
+                'Should have been resolved in APP-123: rename this to doBar().',
+                5,
+                'See https://issue-tracker.com/APP-123',
+            ],
+            [
+                'Comment should have been resolved in APP-4444.',
+                11,
+                'See https://issue-tracker.com/APP-4444',
+            ],
+            [
+                'Comment should have been resolved in FOO-0001.',
+                12,
+                'See https://issue-tracker.com/FOO-0001',
+            ],
+            [
+                'Should have been resolved in F01-12345: please change me.',
+                13,
+                'See https://issue-tracker.com/F01-12345',
+            ],
         ]);
     }
 
@@ -71,10 +87,12 @@ final class TodoByTicketRuleTest extends RuleTestCase
             [
                 'Should have been resolved in F01-12345: please change me.',
                 9,
+                'See https://issue-tracker.com/F01-12345',
             ],
             [
                 'Should have been resolved in F01-12345: please * change me.',
                 13,
+                'See https://issue-tracker.com/F01-12345',
             ],
         ]);
     }

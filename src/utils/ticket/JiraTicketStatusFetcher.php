@@ -73,6 +73,11 @@ final class JiraTicketStatusFetcher implements TicketStatusFetcher
         return '[A-Z0-9]+-\d+';
     }
 
+    public function resolveTicketUrl(string $ticketKey): string
+    {
+        return "$this->host/browse/$ticketKey";
+    }
+
     /** @return array{fields: array{status: array{name: string}}} */
     private static function decodeAndValidateResponse(string $body): array
     {

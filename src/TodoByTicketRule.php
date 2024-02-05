@@ -101,7 +101,7 @@ final class TodoByTicketRule implements Rule
                     $errors[] = $this->errorBuilder->buildFileError(
                         $this->commentFromJson($json),
                         $errorMessage,
-                        null,
+                        "See {$this->configuration->getFetcher()->resolveTicketUrl($ticketKey)}",
                         $wholeMatchStartOffset,
                         $file,
                         $line

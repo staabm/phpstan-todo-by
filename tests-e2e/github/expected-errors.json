@@ -1,0 +1,38 @@
+{
+    "totals": {
+        "errors": 0,
+        "file_errors": 4
+    },
+    "files": {
+        "src/github-issues-and-prs.php": {
+            "errors": 4,
+            "messages": [
+                {
+                    "message": "Should have been resolved in #59: fix me.",
+                    "line": 3,
+                    "ignorable": false,
+                    "tip": "See https://github.com/staabm/phpstan-todo-by/issues/59"
+                },
+                {
+                    "message": "Should have been resolved in staabm/phpstan-dba#452: change me after https://github.com/staabm/phpstan-dba/issues/452 is closed.",
+                    "line": 4,
+                    "ignorable": false,
+                    "tip": "See https://github.com/staabm/phpstan-dba/issues/452"
+                },
+                {
+                    "message": "Comment should have been resolved in phpstan/phpstan#3.",
+                    "line": 5,
+                    "ignorable": false,
+                    "tip": "See https://github.com/phpstan/phpstan/issues/3"
+                },
+                {
+                    "message": "Should have been resolved in #26: needs https://github.com/staabm/phpstan-todo-by/pull/26.",
+                    "line": 6,
+                    "ignorable": false,
+                    "tip": "See https://github.com/staabm/phpstan-todo-by/issues/26"
+                }
+            ]
+        }
+    },
+    "errors": []
+}
