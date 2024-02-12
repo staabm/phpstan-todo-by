@@ -5,10 +5,8 @@ namespace staabm\PHPStanTodoBy\Tests;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use staabm\PHPStanTodoBy\TodoBySymfonyDeprecationRule;
-use staabm\PHPStanTodoBy\TodoByVersionRule;
-use staabm\PHPStanTodoBy\utils\ExpiredCommentErrorBuilder;
-use staabm\PHPStanTodoBy\utils\GitTagFetcher;
-use staabm\PHPStanTodoBy\utils\ReferenceVersionFinder;
+
+use function dirname;
 
 /**
  * @extends RuleTestCase<TodoBySymfonyDeprecationRule>
@@ -28,9 +26,8 @@ final class TodoBySymfonyDeprecationTest extends RuleTestCase
         $this->analyse([__DIR__ . '/data/sf-trigger-deprecation.php'], [
             [
                 'Since phpunit/phpunit 9.5: Using this is deprecated. Use that instead..',
-                5
-            ]
+                5,
+            ],
         ]);
     }
-
 }
