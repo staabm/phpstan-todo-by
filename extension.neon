@@ -129,6 +129,12 @@ services:
             - %todo_by.singleGitRepo%
 
     -
+        class: staabm\PHPStanTodoBy\TodoBySymfonyDeprecationRule
+        tags: [phpstan.rules.rule]
+        arguments:
+            workingDirectory: %currentWorkingDirectory%
+
+    -
         class: staabm\PHPStanTodoBy\TodoByPackageVersionRule
         tags: [phpstan.rules.rule]
         arguments:
