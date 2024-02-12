@@ -30,10 +30,9 @@ final class IntegrationTest extends PHPStanTestCase
     }
 
     /**
-     * @param string[]|null $allAnalysedFiles
      * @return Error[]
      */
-    private function runAnalyse(string $file, ?array $allAnalysedFiles = null): array
+    private function runAnalyse(string $file): array
     {
         $file = $this->getFileHelper()->normalizePath($file);
         /** @var Analyser $analyser */
@@ -41,7 +40,7 @@ final class IntegrationTest extends PHPStanTestCase
         /** @var FileHelper $fileHelper */
         $fileHelper = self::getContainer()->getByType(FileHelper::class);
         /** @phpstan-ignore-next-line missing bc promise */
-        $errors = $analyser->analyse([$file], null, null, true, $allAnalysedFiles)->getErrors();
+        $errors = $analyser->analyse([$file], null, null, true)->getErrors();
         foreach ($errors as $error) {
             static::assertSame($fileHelper->normalizePath($file), $error->getFilePath());
         }
