@@ -3,33 +3,24 @@
 namespace staabm\PHPStanTodoBy;
 
 use Composer\InstalledVersions;
-use Composer\Semver\Comparator;
 use Composer\Semver\VersionParser;
-use PhpParser\Comment;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
-use PHPStan\Internal\ComposerHelper;
-use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleError;
 use PHPStan\Rules\RuleErrorBuilder;
-use PHPStan\Type\VerbosityLevel;
-use staabm\PHPStanTodoBy\utils\CommentMatcher;
 use staabm\PHPStanTodoBy\utils\ExpiredCommentErrorBuilder;
 use UnexpectedValueException;
 
-use function array_key_exists;
-use function in_array;
-use function is_array;
-use function is_string;
-use function strlen;
-use function trim;
+use function count;
 
 /**
  * @implements Rule<Node\Expr\FuncCall>
  */
 final class TodoBySymfonyDeprecationRule implements Rule
 {
+    private const ERROR_IDENTIFIER = 'sfDeprecation';
+
     private string $workingDirectory;
 
     public function __construct(
@@ -61,7 +52,7 @@ final class TodoBySymfonyDeprecationRule implements Rule
         }
 
         $functionName = strtolower($node->name->toString());
-        if ($functionName !== 'trigger_deprecation') {
+        if ('trigger_deprecation' !== $functionName) {
             return [];
         }
 
@@ -70,15 +61,14 @@ final class TodoBySymfonyDeprecationRule implements Rule
         $messageArgType = $scope->getType($args[2]->value);
 
         $messages = $messageArgType->getConstantStrings();
-        if (count($messages) !== 1) {
+        if (1 !== count($messages)) {
             return [];
         }
         $message = $messages[0]->getValue();
 
         $errors = [];
-        foreach($packageArgType->getConstantStrings() as $package) {
+        foreach ($packageArgType->getConstantStrings() as $package) {
             foreach ($versionArgType->getConstantStrings() as $version) {
-
                 $satisfiesOrError = $this->satisfiesInstalledPackage($package->getValue(), $version->getValue());
                 if ($satisfiesOrError instanceof RuleError) {
                     $errors[] = $satisfiesOrError;
@@ -89,7 +79,9 @@ final class TodoBySymfonyDeprecationRule implements Rule
                 }
 
                 $errorMessage = 'Since %s %s: %s.';
-                $errors[] = sprintf($errorMessage, $package->getValue(), $version->getValue(), $message);
+                $errors[] = RuleErrorBuilder::message(
+                    sprintf($errorMessage, $package->getValue(), $version->getValue(), $message)
+                )->identifier(ExpiredCommentErrorBuilder::ERROR_IDENTIFIER_PREFIX.self::ERROR_IDENTIFIER)->build();
             }
         }
 
@@ -116,5 +108,4 @@ final class TodoBySymfonyDeprecationRule implements Rule
             )->build();
         }
     }
-
 }

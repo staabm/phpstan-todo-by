@@ -7,7 +7,7 @@ use PHPStan\Rules\RuleErrorBuilder;
 
 final class ExpiredCommentErrorBuilder
 {
-    private const ERROR_IDENTIFIER_PREFIX = 'todoBy.';
+    public const ERROR_IDENTIFIER_PREFIX = 'todoBy.';
 
     private bool $nonIgnorable;
 
