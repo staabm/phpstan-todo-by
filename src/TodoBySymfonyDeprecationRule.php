@@ -30,6 +30,8 @@ use function trim;
  */
 final class TodoBySymfonyDeprecationRule implements Rule
 {
+    private const ERROR_IDENTIFIER = 'sfDeprecation';
+
     private string $workingDirectory;
 
     public function __construct(
@@ -89,7 +91,9 @@ final class TodoBySymfonyDeprecationRule implements Rule
                 }
 
                 $errorMessage = 'Since %s %s: %s.';
-                $errors[] = sprintf($errorMessage, $package->getValue(), $version->getValue(), $message);
+                $errors[] = RuleErrorBuilder::message(
+                    sprintf($errorMessage, $package->getValue(), $version->getValue(), $message)
+                )->identifier(ExpiredCommentErrorBuilder::ERROR_IDENTIFIER_PREFIX.self::ERROR_IDENTIFIER)->build();
             }
         }
 
