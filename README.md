@@ -6,7 +6,7 @@ Inspired by [parker-codes/todo-by](https://github.com/parker-codes/todo_by).
 
 ## Examples
 
-The main idea is, that comments within the source code will be turned into PHPStan errors when a condition is satisfied, e.g. a date reached, a version met.
+The main idea is, that comments within the source code will be turned into PHPStan errors when a condition is satisfied, e.g. a date reached, a version met, a issue tracker ticket is closed.
 
 ```php
 <?php
