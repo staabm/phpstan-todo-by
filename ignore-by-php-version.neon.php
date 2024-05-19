@@ -5,8 +5,9 @@ if (PHP_VERSION_ID < 80000) {
 	$includes[] = __DIR__ . '/baseline-7.4.neon';
 }
 
-$config = [];
-$config['includes'] = $includes;
-$config['parameters']['phpVersion'] = PHP_VERSION_ID;
-
-return $config;
+return [
+    'includes' => $includes,
+    'parameters' => [
+        'phpVersion' => PHP_VERSION_ID,
+    ],
+];
