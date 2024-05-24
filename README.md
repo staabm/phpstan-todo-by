@@ -44,9 +44,9 @@ When a text is given after the date, this text will be picked up for the PHPStan
 - by a full github issue url
 
 There are more builtin constraints, but these **require additional configuration**:
-- by a semantic version constraint matched against the projects [reference-version](https://github.com/staabm/phpstan-todo-by#reference-version)
-- by a semantic version constraint matched against a Composer dependency (via `composer.lock` or [`virtualPackages`](https://github.com/staabm/phpstan-todo-by#virtual-packages) config)
-- by ticket reference, matched against the status of a ticket (e.g. in github.com or JIRA)
+- by a semantic version constraint matched against the projects [reference-version config](https://github.com/staabm/phpstan-todo-by#reference-version)
+- by a semantic version constraint matched against a Composer dependency (via `composer.lock` or [`virtualPackages config`](https://github.com/staabm/phpstan-todo-by#virtual-packages))
+- by ticket reference, matched against the status of a ticket (e.g. in [github.com or JIRA via config](https://github.com/staabm/phpstan-todo-by#issue-tracker-key-support))
 
 see examples of different comment variants which are supported:
 
