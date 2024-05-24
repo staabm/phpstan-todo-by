@@ -78,7 +78,12 @@ final class GitHubTicketStatusFetcher implements TicketStatusFetcher
         $responses = $this->httpClient->getMulti($ticketUrls, $headers);
 
         $results = [];
-        $urlsToKeys = array_flip($ticketUrls);
+
+        $urlsToKeys = [];
+        foreach ($ticketUrls as $key => $url) {
+            $urlsToKeys[$url][] = $key;
+        }
+
         foreach ($responses as $url => [$responseCode, $response]) {
             if (404 === $responseCode) {
                 $results[$url] = null;
@@ -94,8 +99,9 @@ final class GitHubTicketStatusFetcher implements TicketStatusFetcher
                 throw new RuntimeException("GitHub returned invalid response body with $url");
             }
 
-            $ticketKey = $urlsToKeys[$url];
-            $results[$ticketKey] = $data['state'];
+            foreach ($urlsToKeys[$url] as $ticketKey) {
+                $results[$ticketKey] = $data['state'];
+            }
         }
 
         return $results;

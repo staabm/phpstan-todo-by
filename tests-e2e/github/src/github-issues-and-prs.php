@@ -5,3 +5,4 @@
 // TODO: phpstan/phpstan#3
 // TODO: #26 - needs https://github.com/staabm/phpstan-todo-by/pull/26
 // TODO: GH-27
+// TODO: staabm/phpstan-todo-by#59

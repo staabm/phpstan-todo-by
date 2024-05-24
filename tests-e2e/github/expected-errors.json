@@ -1,11 +1,11 @@
 {
     "totals": {
         "errors": 0,
-        "file_errors": 5
+        "file_errors": 6
     },
     "files": {
         "src/github-issues-and-prs.php": {
-            "errors": 5,
+            "errors": 6,
             "messages": [
                 {
                     "message": "Should have been resolved in #59: fix me.",
@@ -40,6 +40,13 @@
                     "line": 7,
                     "ignorable": false,
                     "tip": "See https://github.com/staabm/phpstan-todo-by/issues/27",
+                    "identifier": "todoBy.ticket"
+                },
+                {
+                    "message": "Comment should have been resolved in staabm/phpstan-todo-by#59.",
+                    "line": 8,
+                    "ignorable": false,
+                    "tip": "See https://github.com/staabm/phpstan-todo-by/issues/59",
                     "identifier": "todoBy.ticket"
                 }
             ]
