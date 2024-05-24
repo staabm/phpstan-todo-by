@@ -39,8 +39,11 @@ When a text is given after the date, this text will be picked up for the PHPStan
 - the comment might be mixed with `:` or `-` characters
 - multi line `/* */` and `/** */` comments are supported
 
-The comment can expire by different constraints, examples are:
+Out of the box comments can expire by different constraints:
 - by date with format of `YYYY-MM-DD` matched against the [reference-time](https://github.com/staabm/phpstan-todo-by#reference-time)
+- by a full github issue url
+
+There are more builtin constraints, but these require additional configuration:
 - by a semantic version constraint matched against the projects [reference-version](https://github.com/staabm/phpstan-todo-by#reference-version)
 - by a semantic version constraint matched against a Composer dependency (via `composer.lock` or [`virtualPackages`](https://github.com/staabm/phpstan-todo-by#virtual-packages) config)
 - by ticket reference, matched against the status of a ticket (e.g. in github.com or JIRA)
@@ -56,6 +59,8 @@ see examples of different comment variants which are supported:
 
 // TODO@staabm 2023-12-14 - fix it
 // TODO@markus: 2023-12-14 - fix it
+
+// TODO https://github.com/staabm/phpstan-todo-by/issues/91 fix me when this GitHub issue is closed
 
 /*
  * other text
