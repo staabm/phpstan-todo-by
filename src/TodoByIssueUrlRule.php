@@ -63,9 +63,9 @@ final class TodoByIssueUrlRule implements Rule
                 $wholeMatchStartOffset = $match[0][1];
 
                 $apiUrl = $this->fetcher->buildUrl($owner, $repo, $issueNumber);
-                [$ticketStatus] = $this->fetcher->fetchTicketStatusByUrls([$apiUrl]);
+                $fetchedStatuses = $this->fetcher->fetchTicketStatusByUrls([$apiUrl]);
 
-                if (null === $ticketStatus) {
+                if (null === $fetchedStatuses || $fetchedStatuses === []) {
                     $errors[] = $this->errorBuilder->buildError(
                         $comment,
                         "Ticket $url doesn't exist or provided credentials do not allow for viewing it.",
@@ -77,6 +77,7 @@ final class TodoByIssueUrlRule implements Rule
                     continue;
                 }
 
+                list($ticketStatus) = $fetchedStatuses;
                 if (!in_array($ticketStatus, GitHubTicketStatusFetcher::RESOLVED_STATUSES, true)) {
                     continue;
                 }
