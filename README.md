@@ -1,6 +1,6 @@
 # phpstan-todo-by: comments with expiration
 
-PHPStan extension to check for TODO/FIXME/XXX comments with expiration.
+PHPStan extension to check for `TODO/FIXME/XXX` comments with expiration.
 Inspired by [parker-codes/todo-by](https://github.com/parker-codes/todo_by).
 
 
