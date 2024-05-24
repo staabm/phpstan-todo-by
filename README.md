@@ -25,6 +25,9 @@ function doFooBar() { /* ... */ }
 // TODO: APP-2137 A comment which errors when the issue tracker ticket gets resolved
 function doBaz() { /* ... */ }
 
+// TODO https://github.com/staabm/phpstan-todo-by/issues/91 fix me when this GitHub issue is closed
+class FooClass {}
+
 ```
 
 
