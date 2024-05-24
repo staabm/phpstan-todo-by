@@ -14,6 +14,9 @@ The main idea is, that comments within the source code will be turned into PHPSt
 // TODO: 2023-12-14 This comment turns into a PHPStan error as of 14th december 2023
 function doFoo() { /* ... */ }
 
+// TODO https://github.com/staabm/phpstan-todo-by/issues/91 fix me when this GitHub issue is closed
+class FooClass {}
+
 // TODO: <1.0.0 This has to be in the first major release of this repo
 function doBar() { /* ... */ }
 
@@ -24,9 +27,6 @@ function doFooBar() { /* ... */ }
 
 // TODO: APP-2137 A comment which errors when the issue tracker ticket gets resolved
 function doBaz() { /* ... */ }
-
-// TODO https://github.com/staabm/phpstan-todo-by/issues/91 fix me when this GitHub issue is closed
-class FooClass {}
 
 ```
 
