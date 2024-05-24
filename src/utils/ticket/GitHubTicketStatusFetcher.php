@@ -12,7 +12,10 @@ use function is_string;
 
 final class GitHubTicketStatusFetcher implements TicketStatusFetcher
 {
+    public const RESOLVED_STATUSES = ['closed'];
+
     private const API_VERSION = '2022-11-28';
+
     private const KEY_REGEX = '
           ((?P<githubOwner>[\w\-\.]+)\/)? # optional owner with slash separator
           (?P<githubRepo>[\w\-\.]+)? # optional repo
@@ -41,9 +44,25 @@ final class GitHubTicketStatusFetcher implements TicketStatusFetcher
         foreach ($ticketKeys as $ticketKey) {
             [$owner, $repo, $number] = $this->processKey($ticketKey);
 
-            $ticketUrls[$ticketKey] = "https://api.github.com/repos/$owner/$repo/issues/$number";
+            $ticketUrls[$ticketKey] = $this->buildUrl($owner, $repo, $number);
         }
 
+        return $this->fetchTicketStatusByUrls($ticketUrls);
+    }
+
+    /** @return non-empty-string */
+    public function buildUrl(string $owner, string $repo, string $number): string
+    {
+        return "https://api.github.com/repos/$owner/$repo/issues/$number";
+    }
+
+    /**
+     * @param non-empty-array<non-empty-string, non-empty-string> $ticketUrls
+     *
+     * @return non-empty-array<non-empty-string, string|null>
+     */
+    public function fetchTicketStatusByUrls(array $ticketUrls): array
+    {
         $apiVersion = self::API_VERSION;
 
         $headers = [

@@ -119,6 +119,7 @@ services:
         tags: [phpstan.rules.rule]
         arguments:
             - %todo_by.referenceTime%
+
     -
         class: staabm\PHPStanTodoBy\TodoByTicketRule
 
@@ -140,6 +141,10 @@ services:
         arguments:
             workingDirectory: %currentWorkingDirectory%
             virtualPackages: %todo_by.virtualPackages%
+
+    -
+        class: staabm\PHPStanTodoBy\TodoByIssueUrlRule
+        tags: [phpstan.rules.rule]
 
     -
         class: staabm\PHPStanTodoBy\utils\GitTagFetcher
