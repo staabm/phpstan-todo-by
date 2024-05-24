@@ -67,7 +67,7 @@ final class TodoByTicketCollector implements Collector
 
         return <<<"REGEXP"
             {
-                @?TODO # possible @ prefix
+                @?(?:TODO|FIXME|XXX) # possible @ prefix
                 @?[a-zA-Z0-9_-]* # optional username
                 \s*[:-]?\s* # optional colon or hyphen
                 \s+ # keyword/ticket separator

@@ -20,3 +20,5 @@ namespace ExamplePackageVersion;
 // TODO php:7 drop this code after min-version raise
 // TODO php:9
 // TODO php:7
+// XXX php:7
+// FIXME php:7

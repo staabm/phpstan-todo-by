@@ -71,6 +71,26 @@ final class TodoByTicketRuleTest extends RuleTestCase
                 13,
                 'See https://issue-tracker.com/F01-12345',
             ],
+            [
+                'Should have been resolved in F01-12345: please change me.',
+                14,
+                'See https://issue-tracker.com/F01-12345',
+            ],
+            [
+                'Should have been resolved in F01-12345: please change me.',
+                15,
+                'See https://issue-tracker.com/F01-12345',
+            ],
+            [
+                'Should have been resolved in F01-12345: please change me.',
+                16,
+                'See https://issue-tracker.com/F01-12345',
+            ],
+            [
+                'Should have been resolved in F01-12345: please change me.',
+                17,
+                'See https://issue-tracker.com/F01-12345',
+            ],
         ]);
     }
 

@@ -81,6 +81,14 @@ final class TodoByPackageVersionRuleTest extends RuleTestCase
                     '"php" version requirement ">=7" satisfied.',
                     22,
                 ],
+                [
+                    '"php" version requirement ">=7" satisfied.',
+                    23,
+                ],
+                [
+                    '"php" version requirement ">=7" satisfied.',
+                    24,
+                ],
             ],
         ];
     }

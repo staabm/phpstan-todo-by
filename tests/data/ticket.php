@@ -11,3 +11,7 @@ function doFoo(): void {
 // @todo - APP-4444
 // todo - FOO-0001
 // TODO F01-12345 please change me
+// XXX F01-12345 please change me
+// FIXME F01-12345 please change me
+// XXX - FOO-0001
+// fixme - FOO-0001

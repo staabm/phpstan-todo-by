@@ -35,7 +35,7 @@ final class TodoByPackageVersionRule implements Rule
     // adjusted because of backtrack limit issues https://github.com/staabm/phpstan-todo-by/issues/44
     private const PATTERN = <<<'REGEXP'
         {
-            @?TODO # possible @ prefix
+            @?(?:TODO|FIXME|XXX) # possible @ prefix
             @?[a-zA-Z0-9_-]* # optional username
             \s*[:-]?\s* # optional colon or hyphen
             \s+ # keyword/version separator

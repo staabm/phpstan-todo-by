@@ -1,6 +1,6 @@
 # phpstan-todo-by: comments with expiration
 
-PHPStan extension to check for TODO comments with expiration.
+PHPStan extension to check for TODO/FIXME/XXX comments with expiration.
 Inspired by [parker-codes/todo-by](https://github.com/parker-codes/todo_by).
 
 
@@ -17,10 +17,10 @@ function doFoo() { /* ... */ }
 // TODO: <1.0.0 This has to be in the first major release of this repo
 function doBar() { /* ... */ }
 
-// TODO: phpunit/phpunit:5.3 This has to be fixed when updating phpunit to 5.3.x or higher
+// FIXME: phpunit/phpunit:5.3 This has to be fixed when updating phpunit to 5.3.x or higher
 function doFooBar() { /* ... */ }
 
-// TODO: php:8 drop this polyfill when php 8.x is required
+// XXX: php:8 drop this polyfill when php 8.x is required
 
 // TODO: APP-2137 A comment which errors when the issue tracker ticket gets resolved
 function doBaz() { /* ... */ }
@@ -33,7 +33,7 @@ function doBaz() { /* ... */ }
 A todo comment can also consist of just a constraint without any text, like `// @todo 2023-12-14`.
 When a text is given after the date, this text will be picked up for the PHPStan error message.
 
-- the `todo`, `TODO`, `tOdO` keyword is case-insensitive
+- the `todo`, `TODO`, `tOdO`, `FIXME`, `XXX` keyword is case-insensitive
 - the `todo` keyword can be suffixed or prefixed by a `@` character
 - a username might be included after the `todo@`
 - the comment might be mixed with `:` or `-` characters
@@ -51,8 +51,8 @@ see examples of different comment variants which are supported:
 // todo 2023-12-14
 // @todo: 2023-12-14 fix it
 // @todo 2023-12-14: fix it
-// todo - 2023-12-14 fix it
-// todo 2023-12-14 - fix it
+// XXX - 2023-12-14 fix it
+// FIXME 2023-12-14 - fix it
 
 // TODO@staabm 2023-12-14 - fix it
 // TODO@markus: 2023-12-14 - fix it
