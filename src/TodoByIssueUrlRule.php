@@ -26,7 +26,7 @@ final class TodoByIssueUrlRule implements Rule
             @?[a-zA-Z0-9_-]* # optional username
             \s*[:-]?\s* # optional colon or hyphen
             \s+ # keyword/version separator
-            (?P<url>https://github.com/(?P<owner>[\S]{2,})/(?P<repo>[\S]{2,})/issues/(?P<issueNumber>\d+)) # url
+            (?P<url>https://github.com/(?P<owner>[\S]{2,})/(?P<repo>[\S]+)/issues/(?P<issueNumber>\d+)) # url
             \s*[:-]?\s* # optional colon or hyphen
             (?P<comment>(?:(?!\*+/).)*) # rest of line as comment text, excluding block end
         }ix
