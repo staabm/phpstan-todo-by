@@ -57,7 +57,7 @@ final class GitHubTicketStatusFetcher implements TicketStatusFetcher
     }
 
     /**
-     * @param non-empty-array<non-empty-string> $ticketUrls
+     * @param non-empty-array<non-empty-string, non-empty-string> $ticketUrls
      *
      * @return non-empty-array<non-empty-string, string|null>
      */
