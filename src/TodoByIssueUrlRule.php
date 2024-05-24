@@ -9,6 +9,7 @@ use staabm\PHPStanTodoBy\utils\CommentMatcher;
 use staabm\PHPStanTodoBy\utils\ExpiredCommentErrorBuilder;
 use staabm\PHPStanTodoBy\utils\ticket\GitHubTicketStatusFetcher;
 
+use function array_key_exists;
 use function in_array;
 use function trim;
 
@@ -65,7 +66,7 @@ final class TodoByIssueUrlRule implements Rule
                 $apiUrl = $this->fetcher->buildUrl($owner, $repo, $issueNumber);
                 $fetchedStatuses = $this->fetcher->fetchTicketStatusByUrls([$apiUrl => $apiUrl]);
 
-                if (!array_key_exists($apiUrl, $fetchedStatuses) || $fetchedStatuses[$apiUrl] === null) {
+                if (!array_key_exists($apiUrl, $fetchedStatuses) || null === $fetchedStatuses[$apiUrl]) {
                     $errors[] = $this->errorBuilder->buildError(
                         $comment,
                         "Ticket $url doesn't exist or provided credentials do not allow for viewing it.",
