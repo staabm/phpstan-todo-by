@@ -138,7 +138,7 @@ final class TodoByPackageVersionRule implements Rule
     }
 
     /**
-     * @return bool|\PHPStan\Rules\RuleError
+     * @return bool|RuleError
      */
     private function satisfiesPhpPlatformPackage(string $package, string $version, Comment $comment, int $wholeMatchStartOffset)
     {
@@ -166,7 +166,7 @@ final class TodoByPackageVersionRule implements Rule
     }
 
     /**
-     * @return bool|\PHPStan\Rules\RuleError
+     * @return bool|RuleError
      */
     private function satisfiesVirtualPackage(string $package, string $version, Comment $comment, int $wholeMatchStartOffset)
     {
@@ -247,7 +247,7 @@ final class TodoByPackageVersionRule implements Rule
     }
 
     /**
-     * @return bool|\PHPStan\Rules\RuleError
+     * @return bool|RuleError
      */
     private function satisfiesInstalledPackage(string $package, string $version, Comment $comment, int $wholeMatchStartOffset)
     {

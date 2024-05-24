@@ -89,7 +89,7 @@ final class TodoBySymfonyDeprecationRule implements Rule
     }
 
     /**
-     * @return bool|\PHPStan\Rules\RuleError
+     * @return bool|RuleError
      */
     private function satisfiesInstalledPackage(string $package, string $version)
     {
