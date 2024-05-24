@@ -19,7 +19,7 @@ final class GitHubTicketStatusFetcher implements TicketStatusFetcher
     private const KEY_REGEX = '
           ((?P<githubOwner>[\w\-\.]+)\/)? # optional owner with slash separator
           (?P<githubRepo>[\w\-\.]+)? # optional repo
-          \#(?P<githubNumber>\d+) # ticket number
+          (\#|GH-)(?P<githubNumber>\d+) # ticket number
         ';
 
     private string $defaultOwner;
