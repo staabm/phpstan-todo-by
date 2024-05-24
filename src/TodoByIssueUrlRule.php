@@ -66,7 +66,7 @@ final class TodoByIssueUrlRule implements Rule
                 [$ticketStatus] = $this->fetcher->fetchTicketStatusByUrls([$apiUrl]);
 
                 if (null === $ticketStatus) {
-                    $errors[] = $this->errorBuilder->buildFileError(
+                    $errors[] = $this->errorBuilder->buildError(
                         $comment,
                         "Ticket $url doesn't exist or provided credentials do not allow for viewing it.",
                         self::ERROR_IDENTIFIER,
