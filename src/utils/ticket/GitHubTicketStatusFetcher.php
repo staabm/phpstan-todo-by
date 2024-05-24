@@ -50,6 +50,7 @@ final class GitHubTicketStatusFetcher implements TicketStatusFetcher
         return $this->fetchTicketStatusByUrls($ticketUrls);
     }
 
+    /** @return non-empty-string */
     public function buildUrl(string $owner, string $repo, string $number): string
     {
         return "https://api.github.com/repos/$owner/$repo/issues/$number";
