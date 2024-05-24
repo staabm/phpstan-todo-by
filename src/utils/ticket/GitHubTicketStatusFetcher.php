@@ -56,6 +56,11 @@ final class GitHubTicketStatusFetcher implements TicketStatusFetcher
         return "https://api.github.com/repos/$owner/$repo/issues/$number";
     }
 
+    /**
+     * @param non-empty-array<non-empty-string> $ticketUrls
+     *
+     * @return non-empty-array<non-empty-string, string|null>
+     */
     public function fetchTicketStatusByUrls(array $ticketUrls): array
     {
         $apiVersion = self::API_VERSION;
