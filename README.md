@@ -80,6 +80,7 @@ see examples of different comment variants which are supported:
 
 // TODO: APP-123 fix it when this Jira ticket is closed
 // TODO: #123 fix it when this GitHub issue is closed
+// TODO: GH-123 fix it when this GitHub issue is closed
 // TODO: some-organization/some-repo#123 change me if this GitHub pull request is closed
 ```
 
@@ -314,6 +315,7 @@ There are multiple ways to reference GitHub issue/PR:
 ##### Only number
 ```php
 // TODO: #123 - fix me
+// TODO: GH-123 - fix me
 ```
 If the `defaultOwner` is set to `acme` and `defaultRepo` is set to `hello-world`, the referenced issue is resolved to `acme/hello-world#123`.
 
