@@ -149,4 +149,17 @@ final class TodoByVersionRuleTest extends RuleTestCase
             ],
         ]);
     }
+
+    public function testBug101(): void
+    {
+        $this->referenceVersion = '1.0';
+
+        $this->analyse([__DIR__ . '/data/bug101.php'], [
+            [
+                'Version requirement >=1.0 satisfied: fix me.',
+                21,
+                "Calculated reference version is '1.0.0.0'.\n\n   See also:\n https://github.com/staabm/phpstan-todo-by#reference-version",
+            ],
+        ]);
+    }
 }

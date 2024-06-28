@@ -116,4 +116,15 @@ final class TodoByTicketRuleTest extends RuleTestCase
             ],
         ]);
     }
+
+    public function testBug101(): void
+    {
+        $this->analyse([__DIR__ . '/data/bug101.php'], [
+            [
+                'Should have been resolved in APP-123: please change me.',
+                3,
+                'See https://issue-tracker.com/APP-123',
+            ],
+        ]);
+    }
 }
