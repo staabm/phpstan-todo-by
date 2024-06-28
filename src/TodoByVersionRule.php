@@ -51,6 +51,9 @@ final class TodoByVersionRule implements Rule
 
     private ExpiredCommentErrorBuilder $errorBuilder;
 
+    /** @var string[] */
+    private array $processedComments = [];
+
     public function __construct(
         bool $singleGitRepo,
         ReferenceVersionFinder $refVersionFinder,
@@ -69,10 +72,19 @@ final class TodoByVersionRule implements Rule
     public function processNode(Node $node, Scope $scope): array
     {
         $it = CommentMatcher::matchComments($node, self::PATTERN);
+        $file = $scope->getFile();
 
         $errors = [];
         $versionParser = new VersionParser();
         foreach ($it as $comment => $matches) {
+            $line = $comment->getLine();
+            $commentIdentifier = "$file:$line";
+
+            if (in_array($commentIdentifier, $this->processedComments, true)) {
+                continue;
+            }
+            $this->processedComments[] = $commentIdentifier;
+
             try {
                 $referenceVersion = $this->getReferenceVersion($scope);
             } catch (LatestTagNotFoundException $e) {

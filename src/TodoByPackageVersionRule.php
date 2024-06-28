@@ -60,6 +60,9 @@ final class TodoByPackageVersionRule implements Rule
      */
     private array $virtualPackages;
 
+    /** @var string[] */
+    private array $processedComments = [];
+
     /**
      * @param array<string, string> $virtualPackages
      */
@@ -87,9 +90,18 @@ final class TodoByPackageVersionRule implements Rule
     public function processNode(Node $node, Scope $scope): array
     {
         $it = CommentMatcher::matchComments($node, self::PATTERN);
+        $file = $scope->getFile();
 
         $errors = [];
         foreach ($it as $comment => $matches) {
+            $line = $comment->getLine();
+            $commentIdentifier = "$file:$line";
+
+            if (in_array($commentIdentifier, $this->processedComments, true)) {
+                continue;
+            }
+            $this->processedComments[] = $commentIdentifier;
+
             /** @var array<int, array<array{0: string, 1: int}>> $matches */
             foreach ($matches as $match) {
                 $package = $match['package'][0];

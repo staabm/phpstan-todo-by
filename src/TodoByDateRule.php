@@ -9,6 +9,7 @@ use RuntimeException;
 use staabm\PHPStanTodoBy\utils\CommentMatcher;
 use staabm\PHPStanTodoBy\utils\ExpiredCommentErrorBuilder;
 
+use function in_array;
 use function strtotime;
 use function trim;
 
@@ -34,6 +35,9 @@ final class TodoByDateRule implements Rule
     private int $now;
     private ExpiredCommentErrorBuilder $errorBuilder;
 
+    /** @var string[] */
+    private array $processedComments = [];
+
     public function __construct(
         string $referenceTime,
         ExpiredCommentErrorBuilder $errorBuilder
@@ -56,9 +60,18 @@ final class TodoByDateRule implements Rule
     public function processNode(Node $node, Scope $scope): array
     {
         $it = CommentMatcher::matchComments($node, self::PATTERN);
+        $file = $scope->getFile();
 
         $errors = [];
         foreach ($it as $comment => $matches) {
+            $line = $comment->getLine();
+            $commentIdentifier = "$file:$line";
+
+            if (in_array($commentIdentifier, $this->processedComments, true)) {
+                continue;
+            }
+            $this->processedComments[] = $commentIdentifier;
+
             /** @var array<int, array<array{0: string, 1: int}>> $matches */
             foreach ($matches as $match) {
                 $date = $match['date'][0];
