@@ -9,6 +9,7 @@ use RuntimeException;
 use staabm\PHPStanTodoBy\utils\CommentMatcher;
 use staabm\PHPStanTodoBy\utils\ticket\TicketRuleConfiguration;
 
+use function in_array;
 use function trim;
 
 /**
@@ -17,6 +18,9 @@ use function trim;
 final class TodoByTicketCollector implements Collector
 {
     private TicketRuleConfiguration $configuration;
+
+    /** @var string[] */
+    private array $processedComments = [];
 
     public function __construct(TicketRuleConfiguration $configuration)
     {
@@ -31,11 +35,18 @@ final class TodoByTicketCollector implements Collector
     public function processNode(Node $node, Scope $scope)
     {
         $it = CommentMatcher::matchComments($node, $this->createPattern());
+        $file = $scope->getFile();
 
         $tickets = [];
         foreach ($it as $comment => $matches) {
             // use deprecated method for nikic/php-parser 4.x compat
             $line = $comment->getLine();
+            $commentIdentifier = "$file:$line";
+
+            if (in_array($commentIdentifier, $this->processedComments, true)) {
+                continue;
+            }
+            $this->processedComments[] = $commentIdentifier;
 
             /** @var array<int, array<array{0: string, 1: int}>> $matches */
             foreach ($matches as $match) {
