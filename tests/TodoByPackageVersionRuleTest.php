@@ -145,4 +145,14 @@ final class TodoByPackageVersionRuleTest extends RuleTestCase
             ],
         ]);
     }
+
+    public function testBug101(): void
+    {
+        $this->analyse([__DIR__ . '/data/bug101.php'], [
+            [
+                '"phpunit/phpunit" version requirement ">=5.3" satisfied.',
+                15,
+            ],
+        ]);
+    }
 }

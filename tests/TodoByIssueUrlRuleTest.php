@@ -50,6 +50,16 @@ final class TodoByIssueUrlRuleTest extends RuleTestCase
         ];
     }
 
+    public function testBug101(): void
+    {
+        $this->analyse([__DIR__ . '/data/bug101.php'], [
+            [
+                'Comment should have been resolved with https://github.com/staabm/phpstan-todo-by/issues/47.',
+                5,
+            ],
+        ]);
+    }
+
     public static function getAdditionalConfigFiles(): array
     {
         return [

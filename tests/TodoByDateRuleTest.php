@@ -201,4 +201,16 @@ final class TodoByDateRuleTest extends RuleTestCase
             ],
         ]);
     }
+
+    public function testBug101(): void
+    {
+        $this->referenceTime = '2022-12-01';
+
+        $this->analyse([__DIR__ . '/data/bug101.php'], [
+            [
+                'Expired on 2020-01-01: do not forget about me.',
+                10,
+            ],
+        ]);
+    }
 }
