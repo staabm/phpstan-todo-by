@@ -125,7 +125,8 @@ final class TodoByPackageVersionRule implements Rule
                 }
 
                 $errors[] = $this->errorBuilder->buildError(
-                    $comment,
+                    $comment->getText(),
+                    $comment->getStartLine(),
                     $errorMessage,
                     self::ERROR_IDENTIFIER,
                     null,
@@ -154,7 +155,8 @@ final class TodoByPackageVersionRule implements Rule
             $constraint = $versionParser->parseConstraints($version);
         } catch (UnexpectedValueException $e) {
             return $this->errorBuilder->buildError(
-                $comment,
+                $comment->getText(),
+                $comment->getStartLine(),
                 'Invalid version constraint "' . $version . '" for package "' . $package . '".',
                 self::ERROR_IDENTIFIER,
                 null,
@@ -177,7 +179,8 @@ final class TodoByPackageVersionRule implements Rule
             );
         } catch (UnexpectedValueException $e) {
             return $this->errorBuilder->buildError(
-                $comment,
+                $comment->getText(),
+                $comment->getStartLine(),
                 'Invalid virtual-package "' . $package . '": "' . $this->virtualPackages[$package] . '" provided via PHPStan config file.',
                 self::ERROR_IDENTIFIER,
                 null,
@@ -189,7 +192,8 @@ final class TodoByPackageVersionRule implements Rule
             $constraint = $versionParser->parseConstraints($version);
         } catch (UnexpectedValueException $e) {
             return $this->errorBuilder->buildError(
-                $comment,
+                $comment->getText(),
+                $comment->getStartLine(),
                 'Invalid version constraint "' . $version . '" for virtual-package "' . $package . '".',
                 self::ERROR_IDENTIFIER,
                 null,
@@ -220,7 +224,8 @@ final class TodoByPackageVersionRule implements Rule
 
         if (null === $config) {
             return $this->phpPlatformVersion = $this->errorBuilder->buildError(
-                $comment,
+                $comment->getText(),
+                $comment->getStartLine(),
                 'Unable to find composer.json in '. $this->workingDirectory,
                 self::ERROR_IDENTIFIER,
                 null,
@@ -235,7 +240,8 @@ final class TodoByPackageVersionRule implements Rule
             || !is_string($config['require']['php'])
         ) {
             return $this->phpPlatformVersion = $this->errorBuilder->buildError(
-                $comment,
+                $comment->getText(),
+                $comment->getStartLine(),
                 'Missing php platform requirement in '. $this->workingDirectory .'/composer.json',
                 self::ERROR_IDENTIFIER,
                 null,
@@ -256,7 +262,8 @@ final class TodoByPackageVersionRule implements Rule
         // see https://getcomposer.org/doc/07-runtime.md#installed-versions
         if (!InstalledVersions::isInstalled($package)) {
             return $this->errorBuilder->buildError(
-                $comment,
+                $comment->getText(),
+                $comment->getStartLine(),
                 'Unknown package "' . $package . '". It is neither installed via composer.json nor declared as virtual package via PHPStan config.',
                 self::ERROR_IDENTIFIER,
                 null,
@@ -268,7 +275,8 @@ final class TodoByPackageVersionRule implements Rule
             return InstalledVersions::satisfies($versionParser, $package, $version);
         } catch (UnexpectedValueException $e) {
             return $this->errorBuilder->buildError(
-                $comment,
+                $comment->getText(),
+                $comment->getStartLine(),
                 'Invalid version constraint "' . $version . '" for package "' . $package . '".',
                 self::ERROR_IDENTIFIER,
                 null,
