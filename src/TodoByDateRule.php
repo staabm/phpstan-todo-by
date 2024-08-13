@@ -68,7 +68,8 @@ final class TodoByDateRule implements Rule
 
                 if (!checkdate((int) $month, (int) $day, (int) $year)) {
                     $errors[] = $this->errorBuilder->buildError(
-                        $comment,
+                        $comment->getText(),
+                        $comment->getStartLine(),
                         'Invalid date "'. $date .'". Expected format "YYYY-MM-DD".',
                         self::ERROR_IDENTIFIER,
                         null,
@@ -96,7 +97,8 @@ final class TodoByDateRule implements Rule
                 }
 
                 $errors[] = $this->errorBuilder->buildError(
-                    $comment,
+                    $comment->getText(),
+                    $comment->getStartLine(),
                     $errorMessage,
                     self::ERROR_IDENTIFIER,
                     null,

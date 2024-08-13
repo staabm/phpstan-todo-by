@@ -100,7 +100,8 @@ final class TodoByVersionRule implements Rule
                     $constraint = $versionParser->parseConstraints($version);
                 } catch (UnexpectedValueException $e) {
                     $errors[] = $this->errorBuilder->buildError(
-                        $comment,
+                        $comment->getText(),
+                        $comment->getStartLine(),
                         'Invalid version constraint "' . $version . '".',
                         self::ERROR_IDENTIFIER,
                         null,
@@ -122,7 +123,8 @@ final class TodoByVersionRule implements Rule
                 }
 
                 $errors[] = $this->errorBuilder->buildError(
-                    $comment,
+                    $comment->getText(),
+                    $comment->getStartLine(),
                     $errorMessage,
                     self::ERROR_IDENTIFIER,
                     "Calculated reference version is '". $referenceVersion ."'.\n\n   See also:\n https://github.com/staabm/phpstan-todo-by#reference-version",

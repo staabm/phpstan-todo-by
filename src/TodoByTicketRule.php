@@ -43,7 +43,7 @@ final class TodoByTicketRule implements Rule
         $ticketKeys = [];
         foreach ($collectorData as $collected) {
             foreach ($collected as $tickets) {
-                foreach ($tickets as [$json, $ticketKey, $todoText, $wholeMatchStartOffset, $line]) {
+                foreach ($tickets as [$comment, $startLine, $ticketKey, $todoText, $wholeMatchStartOffset, $line]) {
                     if ([] !== $this->configuration->getKeyPrefixes() && !$this->hasPrefix($ticketKey)) {
                         continue;
                     }
@@ -67,7 +67,7 @@ final class TodoByTicketRule implements Rule
         $errors = [];
         foreach ($collectorData as $file => $collected) {
             foreach ($collected as $tickets) {
-                foreach ($tickets as [$json, $ticketKey, $todoText, $wholeMatchStartOffset, $line]) {
+                foreach ($tickets as [$comment, $startLine, $ticketKey, $todoText, $wholeMatchStartOffset, $line]) {
                     if ([] !== $this->configuration->getKeyPrefixes() && !$this->hasPrefix($ticketKey)) {
                         continue;
                     }
@@ -79,7 +79,8 @@ final class TodoByTicketRule implements Rule
 
                     if (null === $ticketStatus) {
                         $errors[] = $this->errorBuilder->buildFileError(
-                            $this->commentFromJson($json),
+                            $comment,
+                            $startLine,
                             "Ticket $ticketKey doesn't exist or provided credentials do not allow for viewing it.",
                             self::ERROR_IDENTIFIER,
                             null,
@@ -102,7 +103,8 @@ final class TodoByTicketRule implements Rule
                     }
 
                     $errors[] = $this->errorBuilder->buildFileError(
-                        $this->commentFromJson($json),
+                        $comment,
+                        $startLine,
                         $errorMessage,
                         self::ERROR_IDENTIFIER,
                         "See {$this->configuration->getFetcher()->resolveTicketUrl($ticketKey)}",
@@ -128,30 +130,4 @@ final class TodoByTicketRule implements Rule
         return false;
     }
 
-    private function commentFromJson(string $json): Comment
-    {
-        $arr = json_decode($json, true);
-
-        if ('Comment_Doc' === $arr['nodeType']) {
-            return new Comment\Doc(
-                $arr['text'],
-                $arr['line'],
-                $arr['filePos'],
-                $arr['tokenPos'],
-                $arr['endLine'],
-                $arr['endFilePos'],
-                $arr['endTokenPos']
-            );
-        }
-
-        return new Comment(
-            $arr['text'],
-            $arr['line'],
-            $arr['filePos'],
-            $arr['tokenPos'],
-            $arr['endLine'],
-            $arr['endFilePos'],
-            $arr['endTokenPos']
-        );
-    }
 }

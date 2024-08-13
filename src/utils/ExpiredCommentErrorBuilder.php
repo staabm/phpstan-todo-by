@@ -17,7 +17,8 @@ final class ExpiredCommentErrorBuilder
     }
 
     public function buildError(
-        Comment $comment,
+        string $comment,
+        int $startLine,
         string $errorMessage,
         string $errorIdentifier,
         ?string $tip,
@@ -25,6 +26,7 @@ final class ExpiredCommentErrorBuilder
     ): \PHPStan\Rules\RuleError {
         return $this->build(
             $comment,
+            $startLine,
             $errorMessage,
             $errorIdentifier,
             $tip,
@@ -35,7 +37,8 @@ final class ExpiredCommentErrorBuilder
     }
 
     public function buildFileError(
-        Comment $comment,
+        string $comment,
+        int $startLine,
         string $errorMessage,
         string $errorIdentifier,
         ?string $tip,
@@ -45,6 +48,7 @@ final class ExpiredCommentErrorBuilder
     ): \PHPStan\Rules\RuleError {
         return $this->build(
             $comment,
+            $startLine,
             $errorMessage,
             $errorIdentifier,
             $tip,
@@ -55,7 +59,8 @@ final class ExpiredCommentErrorBuilder
     }
 
     private function build(
-        Comment $comment,
+        string $comment,
+        int $startLine,
         string $errorMessage,
         string $errorIdentifier,
         ?string $tip,
@@ -64,10 +69,10 @@ final class ExpiredCommentErrorBuilder
         ?int $line
     ): \PHPStan\Rules\RuleError {
         // Count the number of newlines between the start of the whole comment, and the start of the match.
-        $newLines = substr_count($comment->getText(), "\n", 0, $wholeMatchStartOffset);
+        $newLines = substr_count($comment, "\n", 0, $wholeMatchStartOffset);
 
         // Set the message line to match the line the comment actually starts on.
-        $messageLine = $comment->getStartLine() + $newLines;
+        $messageLine = $startLine + $newLines;
 
         $errBuilder = RuleErrorBuilder::message($errorMessage)
             ->line($messageLine)

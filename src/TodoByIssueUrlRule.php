@@ -68,7 +68,8 @@ final class TodoByIssueUrlRule implements Rule
 
                 if (!array_key_exists($apiUrl, $fetchedStatuses) || null === $fetchedStatuses[$apiUrl]) {
                     $errors[] = $this->errorBuilder->buildError(
-                        $comment,
+                        $comment->getText(),
+                        $comment->getStartLine(),
                         "Ticket $url doesn't exist or provided credentials do not allow for viewing it.",
                         self::ERROR_IDENTIFIER,
                         null,
@@ -90,7 +91,8 @@ final class TodoByIssueUrlRule implements Rule
                 }
 
                 $errors[] = $this->errorBuilder->buildError(
-                    $comment,
+                    $comment->getText(),
+                    $comment->getStartLine(),
                     $errorMessage,
                     self::ERROR_IDENTIFIER,
                     null,

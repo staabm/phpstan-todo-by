@@ -12,7 +12,7 @@ use staabm\PHPStanTodoBy\utils\ticket\TicketRuleConfiguration;
 use function trim;
 
 /**
- * @implements Collector<Node, list<array{string, string, string, int, int}>>
+ * @implements Collector<Node, list<array{string, int, string, string, int, int}>>
  */
 final class TodoByTicketCollector implements Collector
 {
@@ -37,19 +37,17 @@ final class TodoByTicketCollector implements Collector
             // use deprecated method for nikic/php-parser 4.x compat
             $line = $comment->getLine();
 
+            $text = $comment->getText();
+            $startLine =$comment->getStartLine();
+
             /** @var array<int, array<array{0: string, 1: int}>> $matches */
             foreach ($matches as $match) {
                 $ticketKey = $match['ticketKey'][0];
                 $todoText = trim($match['comment'][0]);
 
-                // collectors do not support serializing objects, pass a string instead.
-                $json = json_encode($comment);
-                if (false === $json) {
-                    throw new RuntimeException('Failed to encode comment as JSON: ' . json_last_error_msg());
-                }
-
                 $tickets[] = [
-                    $json,
+                    $text,
+                    $startLine,
                     $ticketKey,
                     $todoText,
                     $match[0][1], // wholeMatchStartOffset
