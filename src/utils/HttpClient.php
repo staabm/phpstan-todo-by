@@ -69,6 +69,7 @@ final class HttpClient
             $result[$url] = [$responseCode, $response];
 
             curl_multi_remove_handle($mh, $handle);
+            curl_close($handle);
         }
         curl_multi_close($mh);
 
