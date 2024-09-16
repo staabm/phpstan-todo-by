@@ -13,6 +13,7 @@ use staabm\PHPStanTodoBy\utils\ExpiredCommentErrorBuilder;
 use UnexpectedValueException;
 
 use function count;
+use function sprintf;
 
 /**
  * @implements Rule<Node\Expr\FuncCall>

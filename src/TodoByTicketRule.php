@@ -2,7 +2,6 @@
 
 namespace staabm\PHPStanTodoBy;
 
-use PhpParser\Comment;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\CollectedDataNode;
@@ -129,5 +128,4 @@ final class TodoByTicketRule implements Rule
 
         return false;
     }
-
 }

@@ -19,6 +19,7 @@ final class CommentMatcher
         if (
             $node instanceof VirtualNode
             || $node instanceof Node\Expr
+            || $node instanceof \PHPStan\Node\CollectedDataNode // see https://github.com/phpstan/phpstan/discussions/11701
         ) {
             // prevent duplicate errors
             return [];
