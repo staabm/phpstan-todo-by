@@ -17,10 +17,16 @@ final class CommentMatcher
     public static function matchComments(Node $node, string $pattern): iterable
     {
         if (
+            $node instanceof Node\Stmt\InlineHTML
+            || $node instanceof \PHPStan\Node\CollectedDataNode // see https://github.com/phpstan/phpstan/discussions/11701
+        ) {
+            // prevent unnecessary work / reduce memory consumption
+            return [];
+        }
+
+        if (
             $node instanceof VirtualNode
             || $node instanceof Node\Expr
-            || $node instanceof Node\Stmt\InlineHTML
-            || $node instanceof \PHPStan\Node\CollectedDataNode // see https://github.com/phpstan/phpstan/discussions/11701
         ) {
             // prevent duplicate errors
             return [];
