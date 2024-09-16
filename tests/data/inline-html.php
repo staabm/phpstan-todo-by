@@ -1,6 +1,6 @@
 <?php
 
-namespace ExampleTest;
+namespace InlineHtmlTest;
 
 ?>
 <head></head>
