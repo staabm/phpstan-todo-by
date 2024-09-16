@@ -5,7 +5,6 @@ namespace staabm\PHPStanTodoBy;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Collectors\Collector;
-use RuntimeException;
 use staabm\PHPStanTodoBy\utils\CommentMatcher;
 use staabm\PHPStanTodoBy\utils\ticket\TicketRuleConfiguration;
 
@@ -38,7 +37,7 @@ final class TodoByTicketCollector implements Collector
             $line = $comment->getLine();
 
             $text = $comment->getText();
-            $startLine =$comment->getStartLine();
+            $startLine = $comment->getStartLine();
 
             /** @var array<int, array<array{0: string, 1: int}>> $matches */
             foreach ($matches as $match) {
