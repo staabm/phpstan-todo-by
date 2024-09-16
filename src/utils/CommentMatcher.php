@@ -19,6 +19,8 @@ final class CommentMatcher
         if (
             $node instanceof VirtualNode
             || $node instanceof Node\Expr
+            || $node instanceof \PHPStan\Node\CollectedDataNode
+            || $node instanceof Node\Stmt\InlineHTML
         ) {
             // prevent duplicate errors
             return [];
