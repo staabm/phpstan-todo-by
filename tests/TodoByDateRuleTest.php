@@ -209,9 +209,8 @@ final class TodoByDateRuleTest extends RuleTestCase
         $this->analyse([__DIR__ . '/data/inline-html.php'], [
             [
                 'Expired on 2023-12-14: Expired comment1.',
-                8
-            ]
+                8,
+            ],
         ]);
     }
-
 }
