@@ -55,7 +55,12 @@ final class TodoByTicketCollector implements Collector
             }
         }
 
-        return $tickets;
+        // don't return empty array so we don't pollute the result cache
+        // see https://github.com/phpstan/phpstan/discussions/11701#discussioncomment-10660711
+        if ($tickets !== []) {
+            return $tickets;
+        }
+        return null;
     }
 
     private function createPattern(): string
