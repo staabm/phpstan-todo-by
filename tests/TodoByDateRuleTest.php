@@ -201,4 +201,17 @@ final class TodoByDateRuleTest extends RuleTestCase
             ],
         ]);
     }
+
+    public function testInlineHtml(): void
+    {
+        $this->referenceTime = 'now';
+
+        $this->analyse([__DIR__ . '/data/inline-html.php'], [
+            [
+                'Expired on 2023-12-14: Expired comment1.',
+                8
+            ]
+        ]);
+    }
+
 }
