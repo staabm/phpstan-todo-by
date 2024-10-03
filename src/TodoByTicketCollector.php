@@ -33,9 +33,6 @@ final class TodoByTicketCollector implements Collector
 
         $tickets = [];
         foreach ($it as $comment => $matches) {
-            // use deprecated method for nikic/php-parser 4.x compat
-            $line = $comment->getLine();
-
             $text = $comment->getText();
             $startLine = $comment->getStartLine();
 
@@ -49,8 +46,8 @@ final class TodoByTicketCollector implements Collector
                     $startLine,
                     $ticketKey,
                     $todoText,
-                    $match[0][1], // wholeMatchStartOffset
-                    $line,
+                    $match[0][1], // wholeMatchStartOffset,
+                    $startLine,
                 ];
             }
         }
