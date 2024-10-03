@@ -23,7 +23,7 @@ final class ExpiredCommentErrorBuilder
         string $errorIdentifier,
         ?string $tip,
         int $wholeMatchStartOffset
-    ): \PHPStan\Rules\RuleError {
+    ): \PHPStan\Rules\IdentifierRuleError {
         return $this->build(
             $comment,
             $startLine,
@@ -45,7 +45,7 @@ final class ExpiredCommentErrorBuilder
         int $wholeMatchStartOffset,
         string $file,
         int $line
-    ): \PHPStan\Rules\RuleError {
+    ): \PHPStan\Rules\IdentifierRuleError {
         return $this->build(
             $comment,
             $startLine,
@@ -67,7 +67,7 @@ final class ExpiredCommentErrorBuilder
         int $wholeMatchStartOffset,
         ?string $file,
         ?int $line
-    ): \PHPStan\Rules\RuleError {
+    ): \PHPStan\Rules\IdentifierRuleError {
         // Count the number of newlines between the start of the whole comment, and the start of the match.
         $newLines = substr_count($comment, "\n", 0, $wholeMatchStartOffset);
 

@@ -79,6 +79,7 @@ final class TodoByVersionRule implements Rule
                 return [
                     RuleErrorBuilder::message($e->getMessage())
                         ->tip('See https://github.com/staabm/phpstan-todo-by#could-not-determine-latest-git-tag-error')
+                        ->identifier(ExpiredCommentErrorBuilder::ERROR_IDENTIFIER_PREFIX.self::ERROR_IDENTIFIER)
                         ->build(),
                 ];
             }

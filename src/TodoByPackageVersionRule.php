@@ -9,6 +9,7 @@ use PhpParser\Comment;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Internal\ComposerHelper;
+use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleError;
 use staabm\PHPStanTodoBy\utils\CommentMatcher;
@@ -51,7 +52,7 @@ final class TodoByPackageVersionRule implements Rule
     private string $workingDirectory;
 
     /**
-     * @var null|string|RuleError
+     * @var null|string|IdentifierRuleError
      */
     private $phpPlatformVersion;
 
@@ -139,7 +140,7 @@ final class TodoByPackageVersionRule implements Rule
     }
 
     /**
-     * @return bool|RuleError
+     * @return bool|IdentifierRuleError
      */
     private function satisfiesPhpPlatformPackage(string $package, string $version, Comment $comment, int $wholeMatchStartOffset)
     {
@@ -168,7 +169,7 @@ final class TodoByPackageVersionRule implements Rule
     }
 
     /**
-     * @return bool|RuleError
+     * @return bool|IdentifierRuleError
      */
     private function satisfiesVirtualPackage(string $package, string $version, Comment $comment, int $wholeMatchStartOffset)
     {
@@ -205,7 +206,7 @@ final class TodoByPackageVersionRule implements Rule
     }
 
     /**
-     * @return RuleError|string
+     * @return IdentifierRuleError|string
      */
     private function readPhpPlatformVersion(Comment $comment, int $wholeMatchStartOffset)
     {
@@ -253,7 +254,7 @@ final class TodoByPackageVersionRule implements Rule
     }
 
     /**
-     * @return bool|RuleError
+     * @return bool|IdentifierRuleError
      */
     private function satisfiesInstalledPackage(string $package, string $version, Comment $comment, int $wholeMatchStartOffset)
     {

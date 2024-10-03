@@ -6,6 +6,7 @@ use Composer\InstalledVersions;
 use Composer\Semver\VersionParser;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
+use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleError;
 use PHPStan\Rules\RuleErrorBuilder;
@@ -90,7 +91,7 @@ final class TodoBySymfonyDeprecationRule implements Rule
     }
 
     /**
-     * @return bool|RuleError
+     * @return bool|IdentifierRuleError
      */
     private function satisfiesInstalledPackage(string $package, string $version)
     {
@@ -104,9 +105,9 @@ final class TodoBySymfonyDeprecationRule implements Rule
         try {
             return InstalledVersions::satisfies($versionParser, $package, '>='.$version);
         } catch (UnexpectedValueException $e) {
-            return RuleErrorBuilder::message(
-                'Invalid version constraint "' . $version . '" for package "' . $package . '".',
-            )->build();
+            return RuleErrorBuilder::message('Invalid version constraint "' . $version . '" for package "' . $package . '".')
+                ->identifier(ExpiredCommentErrorBuilder::ERROR_IDENTIFIER_PREFIX.self::ERROR_IDENTIFIER)
+                ->build();
         }
     }
 }
