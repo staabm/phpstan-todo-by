@@ -16,7 +16,7 @@
         "ext-json": "*",
         "composer-runtime-api": "^2",
         "composer/semver": "^3.4",
-        "nikolaposa/version": "^4.1",
+        "nikolaposa/version": "^4.2",
         "phpstan/phpstan": "^1.10"
     },
     "require-dev": {
