@@ -1,6 +1,7 @@
 includes:
     - extension.neon
     - ignore-by-php-version.neon.php
+    - phar://phpstan.phar/conf/bleedingEdge.neon
 
 parameters:
     level: 8

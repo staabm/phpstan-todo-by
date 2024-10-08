@@ -36,7 +36,7 @@ final class IntegrationTest extends PHPStanTestCase
     {
         $file = $this->getFileHelper()->normalizePath($file);
         /** @var Analyser $analyser */
-        $analyser = self::getContainer()->getByType(Analyser::class);
+        $analyser = self::getContainer()->getByType(Analyser::class); /** @phpstan-ignore phpstanApi.classConstant */
         /** @var FileHelper $fileHelper */
         $fileHelper = self::getContainer()->getByType(FileHelper::class);
         /** @phpstan-ignore-next-line missing bc promise */

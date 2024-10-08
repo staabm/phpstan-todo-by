@@ -7,7 +7,7 @@ use function count;
 final class GitTagFetcher implements TagFetcher
 {
     // fetch version of the latest created git tag
-    public function fetchLatestTagVersion(?string $workingDirectory): ?string
+    public function fetchLatestTagVersion(?string $workingDirectory): string
     {
         // requires tags have been fetched into the local clone
         // see https://github.com/staabm/phpstan-todo-by#reference-version
@@ -26,7 +26,6 @@ final class GitTagFetcher implements TagFetcher
             throw new LatestTagNotFoundException('Could not determine latest git tag');
         }
 
-        // a repo might not contain any tags
-        return $output[0] ?? null;
+        return $output[0];
     }
 }

@@ -20,7 +20,6 @@ final class CommentMatcher
             $node instanceof Node\Stmt\InlineHTML
             || $node instanceof Node\Name
             || $node instanceof Node\Identifier
-            || $node instanceof \PHPStan\Node\CollectedDataNode // see https://github.com/phpstan/phpstan/discussions/11701
         ) {
             // prevent unnecessary work / reduce memory consumption
             return [];
