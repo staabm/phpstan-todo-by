@@ -23,7 +23,7 @@
         "friendsofphp/php-cs-fixer": "^3.64",
         "nikic/php-parser": "^4.0",
         "phpstan/extension-installer": "^1.4",
-        "phpstan/phpstan-deprecation-rules": "^1.2",
+        "phpstan/phpstan-deprecation-rules": "^2",
         "phpunit/phpunit": "^9 || ^10.5",
         "redaxo/php-cs-fixer-config": "^1.0"
     },
