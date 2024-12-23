@@ -24,7 +24,7 @@
         "nikic/php-parser": "^5.3",
         "phpstan/extension-installer": "^1.4",
         "phpstan/phpstan-deprecation-rules": "^2",
-        "phpunit/phpunit": "^9 || ^10.5",
+        "phpunit/phpunit": "^11.5.2",
         "redaxo/php-cs-fixer-config": "^1.0"
     },
     "autoload": {
