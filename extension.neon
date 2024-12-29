@@ -51,7 +51,7 @@ parameters:
             # whether to analyze comments by issue tracker ticket key
             enabled: false
 
-            # one of: jira, github (case-sensitive)
+            # one of: jira, github, youtrack (case-sensitive)
             tracker: jira
 
             # a case-sensitive list of status names.
