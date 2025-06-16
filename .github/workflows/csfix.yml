@@ -33,7 +33,7 @@ jobs:
             - name: "Run friendsofphp/php-cs-fixer"
               run: "vendor/bin/php-cs-fixer fix --diff"
 
-            - uses: stefanzweifel/git-auto-commit-action@v5
+            - uses: stefanzweifel/git-auto-commit-action@v6
               with:
                   commit_message: Apply php-cs-fixer changes
                   branch: ${{ github.head_ref }}
