@@ -2,8 +2,7 @@
 
 namespace staabm\PHPStanTodoBy;
 
-use Composer\InstalledVersions;
-use Composer\Semver\Comparator;
+use OutOfBoundsException;
 use Composer\Semver\VersionParser;
 use PhpParser\Comment;
 use PhpParser\Node;
@@ -62,6 +61,11 @@ final class TodoByPackageVersionRule implements Rule
     private array $virtualPackages;
 
     /**
+     * @var array{versions: array<string, array{version: string, pretty_version?: string}>}
+     */
+    private array $installedVersions;
+
+    /**
      * @param array<string, string> $virtualPackages
      */
     public function __construct(
@@ -74,9 +78,9 @@ final class TodoByPackageVersionRule implements Rule
         $this->errorBuilder = $errorBuilder;
 
         // require the top level installed versions, so we don't mix it up with the one in phpstan.phar
-        $installedVersions = $this->workingDirectory . '/vendor/composer/InstalledVersions.php';
-        if (!class_exists(InstalledVersions::class, false) && is_readable($installedVersions)) {
-            require_once $installedVersions;
+        $installedVersions = $this->workingDirectory . '/vendor/composer/installed.php';
+        if (is_readable($installedVersions)) {
+            $this->installedVersions = require $installedVersions;
         }
     }
 
@@ -261,7 +265,7 @@ final class TodoByPackageVersionRule implements Rule
         $versionParser = new VersionParser();
 
         // see https://getcomposer.org/doc/07-runtime.md#installed-versions
-        if (!InstalledVersions::isInstalled($package)) {
+        if (!isset($this->installedVersions['versions'][$package])) {
             return $this->errorBuilder->buildError(
                 $comment->getText(),
                 $comment->getStartLine(),
@@ -273,7 +277,10 @@ final class TodoByPackageVersionRule implements Rule
         }
 
         try {
-            return InstalledVersions::satisfies($versionParser, $package, $version);
+            $constraint = $versionParser->parseConstraints($version);
+            $provided = $versionParser->parseConstraints($this->getVersionRanges($package));
+
+            return $provided->matches($constraint);
         } catch (UnexpectedValueException $e) {
             return $this->errorBuilder->buildError(
                 $comment->getText(),
@@ -297,5 +304,28 @@ final class TodoByPackageVersionRule implements Rule
         }
 
         return $comparator;
+    }
+
+    public function getVersionRanges(string $packageName) : string
+    {
+        if (!isset($this->installedVersions['versions'][$packageName])) {
+            throw new OutOfBoundsException('Package "' . $packageName . '" is not installed');
+        }
+
+        $ranges = array();
+        if (isset($this->installedVersions['versions'][$packageName]['pretty_version'])) {
+            $ranges[] = $this->installedVersions['versions'][$packageName]['pretty_version'];
+        }
+        if (array_key_exists('aliases', $this->installedVersions['versions'][$packageName])) {
+            $ranges = array_merge($ranges, $this->installedVersions['versions'][$packageName]['aliases']);
+        }
+        if (array_key_exists('replaced', $this->installedVersions['versions'][$packageName])) {
+            $ranges = array_merge($ranges, $this->installedVersions['versions'][$packageName]['replaced']);
+        }
+        if (array_key_exists('provided', $this->installedVersions['versions'][$packageName])) {
+            $ranges = array_merge($ranges, $this->installedVersions['versions'][$packageName]['provided']);
+        }
+
+        return implode(' || ', $ranges);
     }
 }
