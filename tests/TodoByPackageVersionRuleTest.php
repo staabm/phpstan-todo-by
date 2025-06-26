@@ -58,24 +58,24 @@ final class TodoByPackageVersionRuleTest extends RuleTestCase
                     11,
                 ],
                 [
-                    '"phpunit/phpunit" version requirement "<10" satisfied.',
+                    '"phpunit/phpunit" version requirement "<11" satisfied.',
                     14,
                 ],
                 [
-                    '"phpunit/phpunit" version requirement "<11" satisfied.',
-                    15,
-                ],
-                [
                     'Invalid version constraint "<inValid.12" for package "phpunit/phpunit".',
-                    17,
+                    16,
                 ],
                 [
                     '"php" version requirement ">7.3" satisfied: drop this code after min-version raise.',
-                    19,
+                    18,
                 ],
                 [
                     '"php" version requirement ">=7" satisfied: drop this code after min-version raise.',
-                    20,
+                    19,
+                ],
+                [
+                    '"php" version requirement ">=7" satisfied.',
+                    21,
                 ],
                 [
                     '"php" version requirement ">=7" satisfied.',
@@ -84,10 +84,6 @@ final class TodoByPackageVersionRuleTest extends RuleTestCase
                 [
                     '"php" version requirement ">=7" satisfied.',
                     23,
-                ],
-                [
-                    '"php" version requirement ">=7" satisfied.',
-                    24,
                 ],
             ],
         ];
