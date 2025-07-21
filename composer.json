@@ -20,7 +20,7 @@
         "phpstan/phpstan": "^2.0"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^3.83",
+        "friendsofphp/php-cs-fixer": "^3.84",
         "nikic/php-parser": "^5.3",
         "phpstan/extension-installer": "^1.4",
         "phpstan/phpstan-deprecation-rules": "^2",
