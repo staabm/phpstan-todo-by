@@ -2,8 +2,8 @@
 
 namespace staabm\PHPStanTodoBy;
 
-use OutOfBoundsException;
 use Composer\Semver\VersionParser;
+use OutOfBoundsException;
 use PhpParser\Comment;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
@@ -306,13 +306,13 @@ final class TodoByPackageVersionRule implements Rule
         return $comparator;
     }
 
-    public function getVersionRanges(string $packageName) : string
+    public function getVersionRanges(string $packageName): string
     {
         if (!isset($this->installedVersions['versions'][$packageName])) {
             throw new OutOfBoundsException('Package "' . $packageName . '" is not installed');
         }
 
-        $ranges = array();
+        $ranges = [];
         if (isset($this->installedVersions['versions'][$packageName]['pretty_version'])) {
             $ranges[] = $this->installedVersions['versions'][$packageName]['pretty_version'];
         }
