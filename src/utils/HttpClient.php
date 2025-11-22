@@ -16,6 +16,17 @@ final class HttpClient
      */
     public function getMulti(array $urls, array $headers): array
     {
+        if (function_exists('curl_share_init_persistent')) {
+            $share = curl_share_init_persistent([
+                CURL_LOCK_DATA_DNS,
+                CURL_LOCK_DATA_CONNECT,
+            ]);
+        } else {
+            $share = curl_share_init();
+            curl_share_setopt($share, CURLSHOPT_SHARE, CURL_LOCK_DATA_DNS);
+            curl_share_setopt($share, CURLSHOPT_SHARE, CURL_LOCK_DATA_CONNECT);
+        }
+
         $mh = curl_multi_init();
 
         $handles = [];
@@ -25,6 +36,8 @@ final class HttpClient
             if (!$curl) {
                 throw new RuntimeException('Could not initialize cURL connection');
             }
+
+            curl_setopt($curl, CURLOPT_SHARE, $share);
 
             // see https://stackoverflow.com/a/27776164/1597388
             curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 3);
