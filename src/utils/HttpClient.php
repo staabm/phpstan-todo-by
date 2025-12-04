@@ -3,6 +3,7 @@
 namespace staabm\PHPStanTodoBy\utils;
 
 use CurlShareHandle;
+use CurlSharePersistentHandle;
 use RuntimeException;
 
 use function function_exists;
@@ -11,7 +12,7 @@ use function is_string;
 final class HttpClient
 {
     /**
-     * @var CurlShareHandle|resource|null
+     * @var CurlShareHandle|CurlSharePersistentHandle|resource|null
      */
     private $shareHandle;
 

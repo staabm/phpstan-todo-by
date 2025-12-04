@@ -6,6 +6,9 @@ parameters:
 			path: src/utils/HttpClient.php
 
 		-
-			message: "#unknown class CurlShareHandle#"
-			count: 1
+			message: "#CurlShareHandle#"
+			path: src/utils/HttpClient.php
+
+		-
+			message: "#CurlSharePersistentHandle#"
 			path: src/utils/HttpClient.php
