@@ -13,3 +13,12 @@ parameters:
 
     excludePaths:
         - tests/data/*
+
+    ignoreErrors:
+        -
+            message: "#CurlShareHandle#"
+            path: src/utils/HttpClient.php
+
+        -
+            message: "#CurlSharePersistentHandle#"
+            path: src/utils/HttpClient.php
