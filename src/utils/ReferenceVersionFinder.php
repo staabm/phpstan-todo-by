@@ -57,7 +57,7 @@ final class ReferenceVersionFinder
             }
 
             try {
-                return self::nextVersion($versionString, $originalVersionString);
+                return $this->nextVersion($versionString, $originalVersionString);
             } catch (InvalidVersionString $invalidVersionException) {
                 throw new InvalidTagException("Could not parse version from tag '{$originalVersionString}'", 0, $invalidVersionException);
             }
