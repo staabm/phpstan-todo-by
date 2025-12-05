@@ -101,7 +101,7 @@ final class TodoByVersionRule implements Rule
 
                 // assume a min version constraint, when the comment does not specify a comparator
                 if (null === $this->getVersionComparator($version)) {
-                    $version = '>='. $version;
+                    $version = '>=' . $version;
                 }
 
                 try {
@@ -125,7 +125,7 @@ final class TodoByVersionRule implements Rule
 
                 // If there is further text, append it.
                 if ('' !== $todoText) {
-                    $errorMessage = "Version requirement {$version} satisfied: ". rtrim($todoText, '.') .'.';
+                    $errorMessage = "Version requirement {$version} satisfied: " . rtrim($todoText, '.') . '.';
                 } else {
                     $errorMessage = "Version requirement {$version} satisfied.";
                 }
@@ -135,7 +135,7 @@ final class TodoByVersionRule implements Rule
                     $comment->getStartLine(),
                     $errorMessage,
                     self::ERROR_IDENTIFIER,
-                    "Calculated reference version is '". $referenceVersion ."'.\n\n   See also:\n https://github.com/staabm/phpstan-todo-by#reference-version",
+                    "Calculated reference version is '" . $referenceVersion . "'.\n\n   See also:\n https://github.com/staabm/phpstan-todo-by#reference-version",
                     $match[0][1]
                 );
             }
