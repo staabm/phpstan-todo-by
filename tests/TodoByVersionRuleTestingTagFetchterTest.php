@@ -29,6 +29,11 @@ final class TodoByVersionRuleTestingTagFetchterTest extends RuleTestCase
     {
         $this->referenceVersion = 'nextMajor';
 
-        $this->analyse([__DIR__ . '/data/tagNotFound.php'], []);
+        $this->analyse([__DIR__ . '/data/tagNotFound.php'], [
+            [
+                "Could not parse version from tag 'testing'",
+                5,
+            ],
+        ]);
     }
 }

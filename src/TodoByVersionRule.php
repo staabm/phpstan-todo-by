@@ -9,6 +9,7 @@ use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 use staabm\PHPStanTodoBy\utils\CommentMatcher;
 use staabm\PHPStanTodoBy\utils\ExpiredCommentErrorBuilder;
+use staabm\PHPStanTodoBy\utils\InvalidTagException;
 use staabm\PHPStanTodoBy\utils\LatestTagNotFoundException;
 use staabm\PHPStanTodoBy\utils\ReferenceVersionFinder;
 use UnexpectedValueException;
@@ -79,6 +80,12 @@ final class TodoByVersionRule implements Rule
                 return [
                     RuleErrorBuilder::message($e->getMessage())
                         ->tip('See https://github.com/staabm/phpstan-todo-by#could-not-determine-latest-git-tag-error')
+                        ->identifier(ExpiredCommentErrorBuilder::ERROR_IDENTIFIER_PREFIX.self::ERROR_IDENTIFIER)
+                        ->build(),
+                ];
+            } catch (InvalidTagException $e) {
+                return [
+                    RuleErrorBuilder::message($e->getMessage())
                         ->identifier(ExpiredCommentErrorBuilder::ERROR_IDENTIFIER_PREFIX.self::ERROR_IDENTIFIER)
                         ->build(),
                 ];
