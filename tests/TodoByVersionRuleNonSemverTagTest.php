@@ -12,7 +12,7 @@ use staabm\PHPStanTodoBy\utils\ReferenceVersionFinder;
  * @extends RuleTestCase<TodoByVersionRule>
  * @internal
  */
-final class TodoByVersionRuleTestingTagFetchterTest extends RuleTestCase
+final class TodoByVersionRuleNonSemverTagTest extends RuleTestCase
 {
     private string $referenceVersion;
 
@@ -25,7 +25,7 @@ final class TodoByVersionRuleTestingTagFetchterTest extends RuleTestCase
         );
     }
 
-    public function testNoTagIsFetched(): void
+    public function testInvalidTagIsParsed(): void
     {
         $this->referenceVersion = 'nextMajor';
 
