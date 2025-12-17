@@ -6,13 +6,16 @@ Inspired by [parker-codes/todo-by](https://github.com/parker-codes/todo_by).
 
 ## Examples
 
-The main idea is, that comments within the source code will be turned into PHPStan errors when a condition is satisfied, e.g. a date reached, a version met, a issue tracker ticket is closed.
+The main idea is, that comments within the source code will be turned into PHPStan errors when a condition is satisfied, e.g. a date reached, a keyword, a version met, a issue tracker ticket is closed.
 
 ```php
 <?php
 
 // TODO: 2023-12-14 This comment turns into a PHPStan error as of 14th december 2023
 function doFoo() { /* ... */ }
+
+// TODO: asap Don’t let these these line in next commit
+function legacyFunc() { /* ... */ }
 
 // TODO https://github.com/staabm/phpstan-todo-by/issues/91 fix me when this GitHub issue is closed
 class FooClass {}
@@ -44,6 +47,7 @@ When a text is given after the date, this text will be picked up for the PHPStan
 
 **Out of the box** comments can expire by different constraints:
 - by date with format of `YYYY-MM-DD` matched against the [reference-time](https://github.com/staabm/phpstan-todo-by#reference-time)
+- by a keyword matched against a [list](https://github.com/staabm/phpstan-todo-by#keywords)
 - by a full github issue url
 - by a semantic version constraint matched against a Composer dependency (via `composer.lock`)
 
@@ -73,6 +77,7 @@ see examples of different comment variants which are supported:
  *   more comment data
  */
 
+// TODO: keyword fix it before commit
 // TODO: <1.0.0 This has to be in the first major release
 // TODO >123.4: Must fix this or bump the version
 
@@ -124,6 +129,15 @@ parameters:
 
 `TODOBY_REF_TIME="now+7days" vendor/bin/phpstan analyze`
 
+### Keywords
+
+A keyword list can be defined to create a PHPStan error each time one of these keywords is met after todo.
+
+```neon
+parameters:
+    todo_by:
+        keywords: ["asap", "now"]
+```
 
 ### Reference version
 
