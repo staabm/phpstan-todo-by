@@ -46,8 +46,8 @@ final class YouTrackTicketStatusFetcher implements TicketStatusFetcher
         $results = [];
         $urlsToKeys = array_flip($ticketUrls);
         foreach ($responses as $url => [$responseCode, $response]) {
-            if (403 === $responseCode) {
-                throw new RuntimeException("YouTrack responded with status 403 for url $url. YouTrack credentials configuration might be invalid.");
+            if (401 === $responseCode || 403 === $responseCode) {
+                throw new RuntimeException("YouTrack responded with status $responseCode for url $url. YouTrack credentials configuration might be invalid.");
             }
 
             if (200 !== $responseCode) {
