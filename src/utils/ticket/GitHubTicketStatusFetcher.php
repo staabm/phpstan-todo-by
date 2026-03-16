@@ -90,6 +90,10 @@ final class GitHubTicketStatusFetcher implements TicketStatusFetcher
                 continue;
             }
 
+            if (403 === $responseCode) {
+                throw new RuntimeException("GitHub responded with status 403 for url $url. GitHub credentials configuration might be invalid.");
+            }
+
             if (200 !== $responseCode) {
                 throw new RuntimeException("Could not fetch ticket's status from GitHub with $url");
             }

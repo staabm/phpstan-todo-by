@@ -55,6 +55,10 @@ final class JiraTicketStatusFetcher implements TicketStatusFetcher
                 continue;
             }
 
+            if (403 === $responseCode) {
+                throw new RuntimeException("Jira responded with status 403 for url $url. Jira credentials configuration might be invalid.");
+            }
+
             if (200 !== $responseCode) {
                 throw new RuntimeException("Could not fetch ticket's status from Jira with url $url");
             }
