@@ -51,7 +51,7 @@ final class YouTrackTicketStatusFetcher implements TicketStatusFetcher
             }
 
             if (200 !== $responseCode) {
-                throw new RuntimeException("Could not fetch ticket's status from YouTrack with url $url");
+                throw new RuntimeException("Could not fetch ticket's status from YouTrack with url $url. YouTrack responded with status $responseCode.");
             }
 
             $data = self::decodeAndValidateResponse($response);

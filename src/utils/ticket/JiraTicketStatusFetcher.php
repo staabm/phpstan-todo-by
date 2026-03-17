@@ -60,7 +60,7 @@ final class JiraTicketStatusFetcher implements TicketStatusFetcher
             }
 
             if (200 !== $responseCode) {
-                throw new RuntimeException("Could not fetch ticket's status from Jira with url $url");
+                throw new RuntimeException("Could not fetch ticket's status from Jira with url $url. Jira responded with status $responseCode.");
             }
 
             $data = self::decodeAndValidateResponse($response);

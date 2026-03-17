@@ -95,7 +95,7 @@ final class GitHubTicketStatusFetcher implements TicketStatusFetcher
             }
 
             if (200 !== $responseCode) {
-                throw new RuntimeException("Could not fetch ticket's status from GitHub with $url");
+                throw new RuntimeException("Could not fetch ticket's status from GitHub with $url. GitHub responded with status $responseCode.");
             }
 
             $data = json_decode($response, true);
