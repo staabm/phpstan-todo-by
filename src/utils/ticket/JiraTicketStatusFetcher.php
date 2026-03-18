@@ -55,8 +55,12 @@ final class JiraTicketStatusFetcher implements TicketStatusFetcher
                 continue;
             }
 
+            if (401 === $responseCode || 403 === $responseCode) {
+                throw new RuntimeException("Jira responded with status $responseCode for url $url. Jira credentials configuration might be invalid.");
+            }
+
             if (200 !== $responseCode) {
-                throw new RuntimeException("Could not fetch ticket's status from Jira with url $url");
+                throw new RuntimeException("Could not fetch ticket's status from Jira with url $url. Jira responded with status $responseCode.");
             }
 
             $data = self::decodeAndValidateResponse($response);
