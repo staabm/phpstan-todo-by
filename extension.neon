@@ -2,6 +2,7 @@ parametersSchema:
     todo_by: structure([
         nonIgnorable: bool()
         referenceTime: string()
+        keywords: listOf(string())
         referenceVersion: string()
         singleGitRepo: bool()
         virtualPackages: arrayOf(string(), string())
@@ -36,6 +37,9 @@ parameters:
 
         # any strtotime() compatible string
         referenceTime: "now"
+
+        # list of keywords to create an error if one is met after todo
+        keywords: []
 
         # "nextMajor", "nextMinor", "nextPatch" or a version string like "1.2.3"
         referenceVersion: "nextMajor"
@@ -119,6 +123,12 @@ services:
         tags: [phpstan.rules.rule]
         arguments:
             - %todo_by.referenceTime%
+
+    -
+        class: staabm\PHPStanTodoBy\TodoByKeywordRule
+        tags: [phpstan.rules.rule]
+        arguments:
+            - %todo_by.keywords%
 
     -
         class: staabm\PHPStanTodoBy\TodoByTicketRule
