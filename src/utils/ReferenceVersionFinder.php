@@ -37,8 +37,10 @@ final class ReferenceVersionFinder
     }
 
     // adopted from https://github.com/WyriHaximus/github-action-next-semvers/blob/master/src/Next.php
-    private function nextVersion(string $versionString): string
+    private function nextVersion(string $versionString, ?string $originalVersionString = null): string
     {
+        $originalVersionString ??= $versionString;
+
         try {
             $version = Version::fromString($versionString);
         } catch (InvalidVersionString $invalidVersionException) {
@@ -54,7 +56,11 @@ final class ReferenceVersionFinder
                 $versionString .= '.0';
             }
 
-            return self::nextVersion($versionString);
+            try {
+                return $this->nextVersion($versionString, $originalVersionString);
+            } catch (InvalidVersionString $invalidVersionException) {
+                throw new InvalidTagException("Could not parse version from tag '{$originalVersionString}'", 0, $invalidVersionException);
+            }
         }
 
         $wasPreRelease = false;
