@@ -28,7 +28,19 @@ final class TodoByIssueUrlRuleTest extends RuleTestCase
      */
     public function testRule(array $errors): void
     {
-        $this->analyse([__DIR__ . '/data/issue-urls.php'], $errors);
+        try {
+            $this->analyse([__DIR__ . '/data/issue-urls.php'], $errors);
+        } catch (\RuntimeException $e) {
+            // the test hits the live GitHub API without credentials; on shared CI IPs this
+            // regularly runs into the unauthenticated rate limit. Skip rather than fail then.
+            $message = $e->getMessage();
+            if (false !== strpos($message, 'GitHub responded with status 403')
+                || false !== strpos($message, 'GitHub responded with status 401')) {
+                self::markTestSkipped($message);
+            }
+
+            throw $e;
+        }
     }
 
     /**

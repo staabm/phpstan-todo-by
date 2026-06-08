@@ -11,7 +11,7 @@ use staabm\PHPStanTodoBy\utils\ticket\TicketRuleConfiguration;
 use function trim;
 
 /**
- * @implements Collector<Node, list<array{string, int, string, string, int, int}>>
+ * @implements Collector<Node, list<array{string, int, string, string, string, int, int}>>
  */
 final class TodoByTicketCollector implements Collector
 {
@@ -40,12 +40,14 @@ final class TodoByTicketCollector implements Collector
             foreach ($matches as $match) {
                 $ticketKey = $match['ticketKey'][0];
                 $todoText = trim($match['comment'][0]);
+                $username = $match['username'][0];
 
                 $tickets[] = [
                     $text,
                     $startLine,
                     $ticketKey,
                     $todoText,
+                    $username,
                     $match[0][1], // wholeMatchStartOffset,
                     $startLine,
                 ];
@@ -67,7 +69,7 @@ final class TodoByTicketCollector implements Collector
         return <<<"REGEXP"
             {
                 @?(?:TODO|FIXME|XXX) # possible @ prefix
-                @?[a-zA-Z0-9_-]* # optional username
+                @?(?P<username>[a-zA-Z0-9_-]*) # optional username
                 \s*[:-]?\s* # optional colon or hyphen
                 \s+ # keyword/ticket separator
                 (?P<ticketKey>$keyRegex) # ticket key

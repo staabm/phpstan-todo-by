@@ -38,7 +38,7 @@ When a text is given after the date, this text will be picked up for the PHPStan
 
 - the `todo`, `TODO`, `tOdO`, `FIXME`, `XXX` keyword is case-insensitive
 - the `todo` keyword can be suffixed or prefixed by a `@` character
-- a username might be included after the `todo@`
+- a username might be included after the `todo@`, which is appended to the reported error (and can be [required](https://github.com/staabm/phpstan-todo-by#require-usernames))
 - the comment might be mixed with `:` or `-` characters
 - multi line `/* */` and `/** */` comments are supported
 
@@ -98,6 +98,25 @@ parameters:
     todo_by:
         nonIgnorable: false # default is true
 ```
+
+
+### Require usernames
+
+A todo comment can be attributed to a username, e.g. `// TODO@john: 2023-12-14 fix it`.
+When present, the username is woven into the reported error, e.g. `Todo by @john expired on 2023-12-14: fix it.`.
+
+By default attribution is optional. You can require every todo comment handled by this extension
+(date, version, package-version, issue-url and ticket) to be attributed to a username:
+
+```neon
+parameters:
+    todo_by:
+        requireUsername: true # default is false
+```
+
+When enabled, un-attributed comments are reported with a `todoBy.missingUsername` error.
+A comment that already triggers its regular error (e.g. an expired date) keeps reporting that
+error, which takes precedence over the missing-username error.
 
 
 ### Reference time

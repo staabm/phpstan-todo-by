@@ -18,7 +18,7 @@ final class IntegrationTest extends PHPStanTestCase
         $errors = $this->runAnalyse(__DIR__ . '/data/e2e.php');
         static::assertCount(2, $errors);
 
-        static::assertSame('Expired on 2023-12-14: fix it.', $errors[0]->getMessage());
+        static::assertSame('Todo by @staabm expired on 2023-12-14: fix it.', $errors[0]->getMessage());
         static::assertSame('"php" version requirement ">=7" satisfied.', $errors[1]->getMessage());
     }
 

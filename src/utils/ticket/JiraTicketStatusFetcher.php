@@ -108,7 +108,7 @@ final class JiraTicketStatusFetcher implements TicketStatusFetcher
             self::throwInvalidResponse();
         }
 
-        return $data;
+        return ['fields' => ['status' => ['name' => $name]]];
     }
 
     private static function createAuthorizationHeader(string $credentials): string
