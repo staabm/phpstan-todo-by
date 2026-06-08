@@ -96,16 +96,18 @@ final class ExpiredCommentErrorBuilder
         ?string $file,
         ?int $line
     ): \PHPStan\Rules\IdentifierRuleError {
-        // Attribute the error to the TODO author, when present, e.g.
-        // "Todo by @john expired on 2023-12-14: fix it.".
+        // Attribute the error to the TODO author, turning them into the subject of the message:
+        //   "Expired on 2023-12-14: fix it."  =>  "Todo by @john expired on 2023-12-14: fix it."
+        //   "Comment expired on 2023-12-14."  =>  "Todo by @john expired on 2023-12-14."
+        // Comments without a trailing text use "Comment" as the subject, which we drop here so it
+        // does not collide with the "Todo by @john" subject we are prepending.
         if (null !== $username && '' !== $username) {
-            // the text-less variants start with "Comment "; drop it so the author reads as the subject
-            if (0 === strncmp($errorMessage, 'Comment ', 8)) {
-                $errorMessage = substr($errorMessage, 8);
-            } else {
-                $errorMessage = lcfirst($errorMessage);
+            $subject = 'Comment ';
+            if (0 === strncmp($errorMessage, $subject, strlen($subject))) {
+                $errorMessage = substr($errorMessage, strlen($subject));
             }
-            $errorMessage = 'Todo by @' . $username . ' ' . $errorMessage;
+
+            $errorMessage = 'Todo by @' . $username . ' ' . lcfirst($errorMessage);
         }
 
         // Count the number of newlines between the start of the whole comment, and the start of the match.
