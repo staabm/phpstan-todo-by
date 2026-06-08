@@ -31,7 +31,7 @@ final class TodoByVersionRule implements Rule
     private const PATTERN = <<<'REGEXP'
         {
             @?(?:TODO|FIXME|XXX) # possible @ prefix
-            @?[a-zA-Z0-9_-]* # optional username
+            @?(?P<username>[a-zA-Z0-9_-]*) # optional username
             \s*[:-]?\s* # optional colon or hyphen
             \s+ # keyword/version separator
             (?P<version>[<>=]?[0-9]+\.[0-9]+(\.[0-9]+)?) # version
@@ -51,14 +51,18 @@ final class TodoByVersionRule implements Rule
 
     private ExpiredCommentErrorBuilder $errorBuilder;
 
+    private bool $requireUsername;
+
     public function __construct(
         bool $singleGitRepo,
         ReferenceVersionFinder $refVersionFinder,
-        ExpiredCommentErrorBuilder $errorBuilder
+        ExpiredCommentErrorBuilder $errorBuilder,
+        bool $requireUsername = false
     ) {
         $this->referenceVersionFinder = $refVersionFinder;
         $this->errorBuilder = $errorBuilder;
         $this->singleGitRepo = $singleGitRepo;
+        $this->requireUsername = $requireUsername;
     }
 
     public function getNodeType(): string
@@ -91,6 +95,7 @@ final class TodoByVersionRule implements Rule
             foreach ($matches as $match) {
                 $version = $match['version'][0];
                 $todoText = trim($match['comment'][0]);
+                $username = $match['username'][0];
 
                 // assume a min version constraint, when the comment does not specify a comparator
                 if (null === $this->getVersionComparator($version)) {
@@ -106,13 +111,23 @@ final class TodoByVersionRule implements Rule
                         'Invalid version constraint "' . $version . '".',
                         self::ERROR_IDENTIFIER,
                         null,
-                        $match[0][1]
+                        $match[0][1],
+                        $username
                     );
 
                     continue;
                 }
 
                 if (!$provided->matches($constraint)) {
+                    // requirement not yet satisfied, but still require attribution when configured
+                    if ($this->requireUsername && '' === $username) {
+                        $errors[] = $this->errorBuilder->buildMissingUsernameError(
+                            $comment->getText(),
+                            $comment->getStartLine(),
+                            $match[0][1]
+                        );
+                    }
+
                     continue;
                 }
 
@@ -129,7 +144,8 @@ final class TodoByVersionRule implements Rule
                     $errorMessage,
                     self::ERROR_IDENTIFIER,
                     "Calculated reference version is '". $referenceVersion ."'.\n\n   See also:\n https://github.com/staabm/phpstan-todo-by#reference-version",
-                    $match[0][1]
+                    $match[0][1],
+                    $username
                 );
             }
         }

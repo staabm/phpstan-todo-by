@@ -15,11 +15,14 @@ use staabm\PHPStanTodoBy\utils\ticket\TicketRuleConfiguration;
  */
 final class TodoByTicketRuleTest extends RuleTestCase
 {
+    private bool $requireUsername = false;
+
     protected function getRule(): Rule
     {
         return new TodoByTicketRule(
             $this->getTicketConfiguration(),
             new ExpiredCommentErrorBuilder(true),
+            $this->requireUsername,
         );
     }
 
@@ -90,6 +93,31 @@ final class TodoByTicketRuleTest extends RuleTestCase
                 'Comment should have been resolved in FOO-0001.',
                 17,
                 'See https://issue-tracker.com/FOO-0001',
+            ],
+        ]);
+    }
+
+    public function testRequireUsername(): void
+    {
+        $this->requireUsername = true;
+
+        $this->analyse([__DIR__ . '/data/requireUsernameTicket.php'], [
+            // attributed + resolved: regular error, attributed to the author
+            [
+                'Todo by @alice should have been resolved in APP-123: rename this.',
+                5,
+                'See https://issue-tracker.com/APP-123',
+            ],
+            // un-attributed + unresolved: missing-username error
+            [
+                'Missing TODO author. Expected an @-prefixed username, e.g. "TODO@john".',
+                6,
+            ],
+            // the resolved-ticket error takes precedence over the missing-username error
+            [
+                'Comment should have been resolved in APP-4444.',
+                7,
+                'See https://issue-tracker.com/APP-4444',
             ],
         ]);
     }

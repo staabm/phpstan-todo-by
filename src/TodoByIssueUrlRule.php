@@ -23,7 +23,7 @@ final class TodoByIssueUrlRule implements Rule
     private const PATTERN = <<<'REGEXP'
         {
             @?(?:TODO|FIXME|XXX) # possible @ prefix
-            @?[a-zA-Z0-9_-]* # optional username
+            @?(?P<username>[a-zA-Z0-9_-]*) # optional username
             \s*[:-]?\s* # optional colon or hyphen
             \s+ # keyword/version separator
             (?P<url>https://github.com/(?P<owner>[\S]{2,})/(?P<repo>[\S]+)/(issues|pull)/(?P<issueNumber>\d+)) # url
@@ -34,13 +34,16 @@ final class TodoByIssueUrlRule implements Rule
 
     private ExpiredCommentErrorBuilder $errorBuilder;
     private GitHubTicketStatusFetcher $fetcher;
+    private bool $requireUsername;
 
     public function __construct(
         ExpiredCommentErrorBuilder $errorBuilder,
-        GitHubTicketStatusFetcher $fetcher
+        GitHubTicketStatusFetcher $fetcher,
+        bool $requireUsername = false
     ) {
         $this->errorBuilder = $errorBuilder;
         $this->fetcher = $fetcher;
+        $this->requireUsername = $requireUsername;
     }
 
     public function getNodeType(): string
@@ -61,6 +64,7 @@ final class TodoByIssueUrlRule implements Rule
                 $repo = $match['repo'][0];
                 $issueNumber = $match['issueNumber'][0];
                 $todoText = trim($match['comment'][0]);
+                $username = $match['username'][0];
                 $wholeMatchStartOffset = $match[0][1];
 
                 $apiUrl = $this->fetcher->buildUrl($owner, $repo, $issueNumber);
@@ -73,7 +77,8 @@ final class TodoByIssueUrlRule implements Rule
                         "Ticket $url doesn't exist or provided credentials do not allow for viewing it.",
                         self::ERROR_IDENTIFIER,
                         null,
-                        $wholeMatchStartOffset
+                        $wholeMatchStartOffset,
+                        $username
                     );
 
                     continue;
@@ -81,6 +86,15 @@ final class TodoByIssueUrlRule implements Rule
 
                 $ticketStatus = $fetchedStatuses[$apiUrl];
                 if (!in_array($ticketStatus, GitHubTicketStatusFetcher::RESOLVED_STATUSES, true)) {
+                    // not yet resolved, but still require attribution when configured
+                    if ($this->requireUsername && '' === $username) {
+                        $errors[] = $this->errorBuilder->buildMissingUsernameError(
+                            $comment->getText(),
+                            $comment->getStartLine(),
+                            $wholeMatchStartOffset
+                        );
+                    }
+
                     continue;
                 }
 
@@ -98,7 +112,8 @@ final class TodoByIssueUrlRule implements Rule
                     $errorMessage,
                     self::ERROR_IDENTIFIER,
                     null,
-                    $wholeMatchStartOffset
+                    $wholeMatchStartOffset,
+                    $username
                 );
             }
         }

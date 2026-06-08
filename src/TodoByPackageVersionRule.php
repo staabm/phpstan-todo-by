@@ -36,7 +36,7 @@ final class TodoByPackageVersionRule implements Rule
     private const PATTERN = <<<'REGEXP'
         {
             @?(?:TODO|FIXME|XXX) # possible @ prefix
-            @?[a-zA-Z0-9_-]* # optional username
+            @?(?P<username>[a-zA-Z0-9_-]*) # optional username
             \s*[:-]?\s* # optional colon or hyphen
             \s+ # keyword/version separator
             (?:(?P<package>(php|[a-z0-9]([_.-]?[a-z0-9]++)*+/[a-z0-9](([_.]|-{1,2})?[a-z0-9]++)*+)):) # "php" or a composer package name, followed by ":"
@@ -65,17 +65,21 @@ final class TodoByPackageVersionRule implements Rule
      */
     private array $installedVersions;
 
+    private bool $requireUsername;
+
     /**
      * @param array<string, string> $virtualPackages
      */
     public function __construct(
         ExpiredCommentErrorBuilder $errorBuilder,
         string $workingDirectory,
-        array $virtualPackages
+        array $virtualPackages,
+        bool $requireUsername = false
     ) {
         $this->workingDirectory = $workingDirectory;
         $this->virtualPackages = $virtualPackages;
         $this->errorBuilder = $errorBuilder;
+        $this->requireUsername = $requireUsername;
 
         // require the top level installed versions, so we don't mix it up with the one in phpstan.phar
         $installedVersions = $this->workingDirectory . '/vendor/composer/installed.php';
@@ -100,6 +104,7 @@ final class TodoByPackageVersionRule implements Rule
                 $package = $match['package'][0];
                 $version = $match['version'][0];
                 $todoText = trim($match['comment'][0]);
+                $username = $match['username'][0];
 
                 // assume a min version constraint, when the comment does not specify a comparator
                 if (null === $this->getVersionComparator($version)) {
@@ -107,11 +112,11 @@ final class TodoByPackageVersionRule implements Rule
                 }
 
                 if ('php' === $package) {
-                    $satisfiesOrError = $this->satisfiesPhpPlatformPackage($package, $version, $comment, $match[0][1]);
+                    $satisfiesOrError = $this->satisfiesPhpPlatformPackage($package, $version, $comment, $match[0][1], $username);
                 } elseif (array_key_exists($package, $this->virtualPackages)) {
-                    $satisfiesOrError = $this->satisfiesVirtualPackage($package, $version, $comment, $match[0][1]);
+                    $satisfiesOrError = $this->satisfiesVirtualPackage($package, $version, $comment, $match[0][1], $username);
                 } else {
-                    $satisfiesOrError = $this->satisfiesInstalledPackage($package, $version, $comment, $match[0][1]);
+                    $satisfiesOrError = $this->satisfiesInstalledPackage($package, $version, $comment, $match[0][1], $username);
                 }
 
                 if ($satisfiesOrError instanceof RuleError) {
@@ -119,6 +124,15 @@ final class TodoByPackageVersionRule implements Rule
                     continue;
                 }
                 if (false === $satisfiesOrError) {
+                    // requirement not yet satisfied, but still require attribution when configured
+                    if ($this->requireUsername && '' === $username) {
+                        $errors[] = $this->errorBuilder->buildMissingUsernameError(
+                            $comment->getText(),
+                            $comment->getStartLine(),
+                            $match[0][1]
+                        );
+                    }
+
                     continue;
                 }
 
@@ -135,7 +149,8 @@ final class TodoByPackageVersionRule implements Rule
                     $errorMessage,
                     self::ERROR_IDENTIFIER,
                     null,
-                    $match[0][1]
+                    $match[0][1],
+                    $username
                 );
             }
         }
@@ -146,7 +161,7 @@ final class TodoByPackageVersionRule implements Rule
     /**
      * @return bool|IdentifierRuleError
      */
-    private function satisfiesPhpPlatformPackage(string $package, string $version, Comment $comment, int $wholeMatchStartOffset)
+    private function satisfiesPhpPlatformPackage(string $package, string $version, Comment $comment, int $wholeMatchStartOffset, string $username)
     {
         $phpPlatformVersion = $this->readPhpPlatformVersion($comment, $wholeMatchStartOffset);
         if ($phpPlatformVersion instanceof RuleError) {
@@ -165,7 +180,8 @@ final class TodoByPackageVersionRule implements Rule
                 'Invalid version constraint "' . $version . '" for package "' . $package . '".',
                 self::ERROR_IDENTIFIER,
                 null,
-                $wholeMatchStartOffset
+                $wholeMatchStartOffset,
+                $username
             );
         }
 
@@ -175,7 +191,7 @@ final class TodoByPackageVersionRule implements Rule
     /**
      * @return bool|IdentifierRuleError
      */
-    private function satisfiesVirtualPackage(string $package, string $version, Comment $comment, int $wholeMatchStartOffset)
+    private function satisfiesVirtualPackage(string $package, string $version, Comment $comment, int $wholeMatchStartOffset, string $username)
     {
         $versionParser = new VersionParser();
         try {
@@ -189,7 +205,8 @@ final class TodoByPackageVersionRule implements Rule
                 'Invalid virtual-package "' . $package . '": "' . $this->virtualPackages[$package] . '" provided via PHPStan config file.',
                 self::ERROR_IDENTIFIER,
                 null,
-                $wholeMatchStartOffset
+                $wholeMatchStartOffset,
+                $username
             );
         }
 
@@ -202,7 +219,8 @@ final class TodoByPackageVersionRule implements Rule
                 'Invalid version constraint "' . $version . '" for virtual-package "' . $package . '".',
                 self::ERROR_IDENTIFIER,
                 null,
-                $wholeMatchStartOffset
+                $wholeMatchStartOffset,
+                $username
             );
         }
 
@@ -260,7 +278,7 @@ final class TodoByPackageVersionRule implements Rule
     /**
      * @return bool|IdentifierRuleError
      */
-    private function satisfiesInstalledPackage(string $package, string $version, Comment $comment, int $wholeMatchStartOffset)
+    private function satisfiesInstalledPackage(string $package, string $version, Comment $comment, int $wholeMatchStartOffset, string $username)
     {
         $versionParser = new VersionParser();
 
@@ -272,7 +290,8 @@ final class TodoByPackageVersionRule implements Rule
                 'Unknown package "' . $package . '". It is neither installed via composer.json nor declared as virtual package via PHPStan config.',
                 self::ERROR_IDENTIFIER,
                 null,
-                $wholeMatchStartOffset
+                $wholeMatchStartOffset,
+                $username
             );
         }
 
@@ -288,7 +307,8 @@ final class TodoByPackageVersionRule implements Rule
                 'Invalid version constraint "' . $version . '" for package "' . $package . '".',
                 self::ERROR_IDENTIFIER,
                 null,
-                $wholeMatchStartOffset
+                $wholeMatchStartOffset,
+                $username
             );
         }
     }

@@ -23,11 +23,16 @@ final class TodoByTicketRule implements Rule
 
     private TicketRuleConfiguration $configuration;
     private ExpiredCommentErrorBuilder $errorBuilder;
+    private bool $requireUsername;
 
-    public function __construct(TicketRuleConfiguration $configuration, ExpiredCommentErrorBuilder $errorBuilder)
-    {
+    public function __construct(
+        TicketRuleConfiguration $configuration,
+        ExpiredCommentErrorBuilder $errorBuilder,
+        bool $requireUsername = false
+    ) {
         $this->configuration = $configuration;
         $this->errorBuilder = $errorBuilder;
+        $this->requireUsername = $requireUsername;
     }
 
     public function getNodeType(): string
@@ -42,7 +47,7 @@ final class TodoByTicketRule implements Rule
         $ticketKeys = [];
         foreach ($collectorData as $collected) {
             foreach ($collected as $tickets) {
-                foreach ($tickets as [$comment, $startLine, $ticketKey, $todoText, $wholeMatchStartOffset, $line]) {
+                foreach ($tickets as [$comment, $startLine, $ticketKey, $todoText, $username, $wholeMatchStartOffset, $line]) {
                     if ([] !== $this->configuration->getKeyPrefixes() && !$this->hasPrefix($ticketKey)) {
                         continue;
                     }
@@ -66,7 +71,7 @@ final class TodoByTicketRule implements Rule
         $errors = [];
         foreach ($collectorData as $file => $collected) {
             foreach ($collected as $tickets) {
-                foreach ($tickets as [$comment, $startLine, $ticketKey, $todoText, $wholeMatchStartOffset, $line]) {
+                foreach ($tickets as [$comment, $startLine, $ticketKey, $todoText, $username, $wholeMatchStartOffset, $line]) {
                     if ([] !== $this->configuration->getKeyPrefixes() && !$this->hasPrefix($ticketKey)) {
                         continue;
                     }
@@ -85,13 +90,25 @@ final class TodoByTicketRule implements Rule
                             null,
                             $wholeMatchStartOffset,
                             $file,
-                            $line
+                            $line,
+                            $username
                         );
 
                         continue;
                     }
 
                     if (!in_array($ticketStatus, $this->configuration->getResolvedStatuses(), true)) {
+                        // not yet resolved, but still require attribution when configured
+                        if ($this->requireUsername && '' === $username) {
+                            $errors[] = $this->errorBuilder->buildMissingUsernameError(
+                                $comment,
+                                $startLine,
+                                $wholeMatchStartOffset,
+                                $file,
+                                $line
+                            );
+                        }
+
                         continue;
                     }
 
@@ -109,7 +126,8 @@ final class TodoByTicketRule implements Rule
                         "See {$this->configuration->getFetcher()->resolveTicketUrl($ticketKey)}",
                         $wholeMatchStartOffset,
                         $file,
-                        $line
+                        $line,
+                        $username
                     );
                 }
             }

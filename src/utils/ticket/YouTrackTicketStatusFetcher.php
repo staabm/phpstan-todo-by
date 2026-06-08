@@ -87,7 +87,12 @@ final class YouTrackTicketStatusFetcher implements TicketStatusFetcher
             self::throwInvalidResponse();
         }
 
-        return $data;
+        $resolved = $data['resolved'];
+        if (null !== $resolved && !is_int($resolved)) {
+            self::throwInvalidResponse();
+        }
+
+        return ['resolved' => $resolved];
     }
 
     /** @return never */

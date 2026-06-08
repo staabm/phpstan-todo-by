@@ -1,6 +1,7 @@
 parametersSchema:
     todo_by: structure([
         nonIgnorable: bool()
+        requireUsername: bool()
         referenceTime: string()
         referenceVersion: string()
         singleGitRepo: bool()
@@ -33,6 +34,11 @@ parametersSchema:
 parameters:
     todo_by:
         nonIgnorable: true
+
+        # whether to require every date/version/package/issue/ticket TODO to be
+        # attributed to a username, e.g. "// TODO@john: ...".
+        # un-attributed comments are reported when set to true.
+        requireUsername: false
 
         # any strtotime() compatible string
         referenceTime: "now"
@@ -118,16 +124,20 @@ services:
         class: staabm\PHPStanTodoBy\TodoByDateRule
         tags: [phpstan.rules.rule]
         arguments:
-            - %todo_by.referenceTime%
+            referenceTime: %todo_by.referenceTime%
+            requireUsername: %todo_by.requireUsername%
 
     -
         class: staabm\PHPStanTodoBy\TodoByTicketRule
+        arguments:
+            requireUsername: %todo_by.requireUsername%
 
     -
         class: staabm\PHPStanTodoBy\TodoByVersionRule
         tags: [phpstan.rules.rule]
         arguments:
-            - %todo_by.singleGitRepo%
+            singleGitRepo: %todo_by.singleGitRepo%
+            requireUsername: %todo_by.requireUsername%
 
     -
         class: staabm\PHPStanTodoBy\TodoBySymfonyDeprecationRule
@@ -141,10 +151,13 @@ services:
         arguments:
             workingDirectory: %currentWorkingDirectory%
             virtualPackages: %todo_by.virtualPackages%
+            requireUsername: %todo_by.requireUsername%
 
     -
         class: staabm\PHPStanTodoBy\TodoByIssueUrlRule
         tags: [phpstan.rules.rule]
+        arguments:
+            requireUsername: %todo_by.requireUsername%
 
     -
         class: staabm\PHPStanTodoBy\utils\GitTagFetcher

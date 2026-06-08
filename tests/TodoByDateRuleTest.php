@@ -15,11 +15,14 @@ final class TodoByDateRuleTest extends RuleTestCase
 {
     private string $referenceTime;
 
+    private bool $requireUsername = false;
+
     protected function getRule(): Rule
     {
         return new TodoByDateRule(
             $this->referenceTime,
-            new ExpiredCommentErrorBuilder(true)
+            new ExpiredCommentErrorBuilder(true),
+            $this->requireUsername
         );
     }
 
@@ -101,11 +104,11 @@ final class TodoByDateRuleTest extends RuleTestCase
                 51,
             ],
             [
-                'Expired on 2023-12-14: fix it.',
+                'Todo by @lars expired on 2023-12-14: fix it.',
                 53,
             ],
             [
-                'Expired on 2023-12-14: fix it.',
+                'Todo by @lars expired on 2023-12-14: fix it.',
                 54,
             ],
             [
@@ -198,6 +201,48 @@ final class TodoByDateRuleTest extends RuleTestCase
             [
                 'Expired on 2000-12-08: Fix me.',
                 5,
+            ],
+        ]);
+    }
+
+    public function testRequireUsername(): void
+    {
+        $this->referenceTime = 'now';
+        $this->requireUsername = true;
+
+        $this->analyse([__DIR__ . '/data/requireUsername.php'], [
+            // attributed + not yet expired: no error
+            // un-attributed + not yet expired: missing-username error
+            [
+                'Missing TODO author. Expected an @-prefixed username, e.g. "TODO@john".',
+                4,
+            ],
+            // attributed + expired: regular expiration error, attributed to the author
+            [
+                'Todo by @bob expired on 2020-01-01: expired and attributed.',
+                5,
+            ],
+            // the expiration error takes precedence over the missing-username error
+            [
+                'Expired on 2020-01-01: expired, not attributed.',
+                6,
+            ],
+        ]);
+    }
+
+    public function testRequireUsernameDisabledByDefault(): void
+    {
+        $this->referenceTime = 'now';
+        $this->requireUsername = false;
+
+        $this->analyse([__DIR__ . '/data/requireUsername.php'], [
+            [
+                'Todo by @bob expired on 2020-01-01: expired and attributed.',
+                5,
+            ],
+            [
+                'Expired on 2020-01-01: expired, not attributed.',
+                6,
             ],
         ]);
     }

@@ -22,7 +22,7 @@ final class TodoByDateRule implements Rule
     private const PATTERN = <<<'REGEXP'
         {
             @?(?:TODO|FIXME|XXX) # possible @ prefix
-            @?[a-zA-Z0-9_-]* # optional username
+            @?(?P<username>[a-zA-Z0-9_-]*) # optional username
             \s*[:-]?\s* # optional colon or hyphen
             \s+ # keyword/date separator
             (?P<date>\d{4}-\d\d?-\d\d?) # date consisting of YYYY-MM-DD format
@@ -33,10 +33,12 @@ final class TodoByDateRule implements Rule
 
     private int $now;
     private ExpiredCommentErrorBuilder $errorBuilder;
+    private bool $requireUsername;
 
     public function __construct(
         string $referenceTime,
-        ExpiredCommentErrorBuilder $errorBuilder
+        ExpiredCommentErrorBuilder $errorBuilder,
+        bool $requireUsername = false
     ) {
         $time = strtotime($referenceTime);
 
@@ -46,6 +48,7 @@ final class TodoByDateRule implements Rule
 
         $this->now = $time;
         $this->errorBuilder = $errorBuilder;
+        $this->requireUsername = $requireUsername;
     }
 
     public function getNodeType(): string
@@ -63,6 +66,7 @@ final class TodoByDateRule implements Rule
             foreach ($matches as $match) {
                 $date = $match['date'][0];
                 $todoText = trim($match['comment'][0]);
+                $username = $match['username'][0];
 
                 sscanf($date, '%4d-%2d-%2d', $year, $month, $day);
 
@@ -73,7 +77,8 @@ final class TodoByDateRule implements Rule
                         'Invalid date "'. $date .'". Expected format "YYYY-MM-DD".',
                         self::ERROR_IDENTIFIER,
                         null,
-                        $match[0][1]
+                        $match[0][1],
+                        $username
                     );
 
                     continue;
@@ -85,6 +90,15 @@ final class TodoByDateRule implements Rule
                  * the current date as expired, except when ran exactly at 00:00:00.
                  */
                 if (strtotime($date) > $this->now) {
+                    // not yet expired, but still require attribution when configured
+                    if ($this->requireUsername && '' === $username) {
+                        $errors[] = $this->errorBuilder->buildMissingUsernameError(
+                            $comment->getText(),
+                            $comment->getStartLine(),
+                            $match[0][1]
+                        );
+                    }
+
                     continue;
                 }
 
@@ -102,7 +116,8 @@ final class TodoByDateRule implements Rule
                     $errorMessage,
                     self::ERROR_IDENTIFIER,
                     null,
-                    $match[0][1]
+                    $match[0][1],
+                    $username
                 );
             }
         }
