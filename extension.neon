@@ -6,6 +6,9 @@ parametersSchema:
         referenceVersion: string()
         singleGitRepo: bool()
         virtualPackages: arrayOf(string(), string())
+        issueUrl: structure([
+            enabled: bool()
+        ])
         ticket: structure([
             enabled: bool()
             tracker: anyOf('jira', 'github', 'youtrack')
@@ -52,6 +55,12 @@ parameters:
 
         # a map of additional packages to match package-comments against
         virtualPackages: []
+
+        issueUrl:
+            # whether to analyze comments referencing a full GitHub issue/pull request url.
+            # requires network access to the GitHub API, therefore it can be turned off
+            # e.g. in environments without internet access.
+            enabled: true
 
         ticket:
             # whether to analyze comments by issue tracker ticket key
@@ -118,6 +127,8 @@ parameters:
 conditionalTags:
     staabm\PHPStanTodoBy\TodoByTicketRule:
         phpstan.rules.rule: %todo_by.ticket.enabled%
+    staabm\PHPStanTodoBy\TodoByIssueUrlRule:
+        phpstan.rules.rule: %todo_by.issueUrl.enabled%
 
 services:
     -
@@ -155,7 +166,6 @@ services:
 
     -
         class: staabm\PHPStanTodoBy\TodoByIssueUrlRule
-        tags: [phpstan.rules.rule]
         arguments:
             requireUsername: %todo_by.requireUsername%
 

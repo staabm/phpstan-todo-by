@@ -1,0 +1,20 @@
+{
+    "totals": {
+        "errors": 0,
+        "file_errors": 1
+    },
+    "files": {
+        "src/issue-urls.php": {
+            "errors": 1,
+            "messages": [
+                {
+                    "message": "Expired on 2023-12-14: fix it.",
+                    "line": 9,
+                    "ignorable": false,
+                    "identifier": "todoBy.date"
+                }
+            ]
+        }
+    },
+    "errors": []
+}

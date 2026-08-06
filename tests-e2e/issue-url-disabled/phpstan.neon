@@ -1,0 +1,7 @@
+parameters:
+  level: max
+  paths:
+    - src/
+  todo_by:
+      issueUrl:
+          enabled: false

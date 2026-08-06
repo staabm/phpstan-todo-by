@@ -206,6 +206,29 @@ Reference these virtual packages like any other package in your todo-comments:
 `// TODO staabm/mypackage:2.2.0 remove the following function once staabm/mypackage is updated to 2.2.0`
 
 
+### GitHub issue urls
+
+Comments referencing a full GitHub issue/pull request url, e.g.
+
+```php
+// TODO https://github.com/staabm/phpstan-todo-by/issues/91 fix me when this GitHub issue is closed
+```
+
+are analyzed out of the box, which requires network access to the GitHub API.
+If your environment cannot reach github.com, or you don't want these comments to be analyzed at all,
+you can turn the feature off:
+
+```neon
+parameters:
+    todo_by:
+        issueUrl:
+            enabled: false # default is true
+```
+
+The API requests are authenticated with the `ticket.github.credentials` (or `ticket.github.credentialsFilePath`)
+parameter, which is required for private repositories and raises the GitHub API rate limit.
+
+
 ### Issue tracker key support
 
 Optionally you can configure this extension to analyze your comments with issue tracker ticket keys.
