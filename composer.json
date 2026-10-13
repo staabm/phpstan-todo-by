@@ -15,7 +15,7 @@
         "ext-curl": "*",
         "ext-json": "*",
         "composer-runtime-api": "^2",
-        "composer/semver": "^3.4",
+        "composer/semver": "^3.5",
         "nikolaposa/version": "^4.1",
         "phpstan/phpstan": "^2.0"
     },
