@@ -3,15 +3,20 @@
 namespace staabm\PHPStanTodoBy;
 
 use PhpParser\Node;
+use PHPStan\Analyser\DependencyTracker;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\CollectedDataNode;
 use PHPStan\Rules\Rule;
 use RuntimeException;
 use staabm\PHPStanTodoBy\utils\ExpiredCommentErrorBuilder;
 use staabm\PHPStanTodoBy\utils\ticket\TicketRuleConfiguration;
+use staabm\PHPStanTodoBy\utils\ticket\TicketStatusCache;
+use staabm\PHPStanTodoBy\utils\ticket\TicketStatusValueExtension;
 
 use function array_key_exists;
+use function implode;
 use function in_array;
+use function ksort;
 use function strlen;
 
 /**
@@ -22,15 +27,18 @@ final class TodoByTicketRule implements Rule
     public const ERROR_IDENTIFIER = 'ticket';
 
     private TicketRuleConfiguration $configuration;
+    private TicketStatusCache $ticketStatusCache;
     private ExpiredCommentErrorBuilder $errorBuilder;
     private bool $requireUsername;
 
     public function __construct(
         TicketRuleConfiguration $configuration,
+        TicketStatusCache $ticketStatusCache,
         ExpiredCommentErrorBuilder $errorBuilder,
         bool $requireUsername = false
     ) {
         $this->configuration = $configuration;
+        $this->ticketStatusCache = $ticketStatusCache;
         $this->errorBuilder = $errorBuilder;
         $this->requireUsername = $requireUsername;
     }
@@ -63,10 +71,15 @@ final class TodoByTicketRule implements Rule
         if ([] === $ticketKeys) {
             return [];
         }
+        ksort($ticketKeys);
 
-        $keyToTicketStatus = $this->configuration->getFetcher()->fetchTicketStatus(
-            array_keys($ticketKeys)
-        );
+        // the result cache reuses the errors only while the ticket statuses stay the same.
+        // the scope is a DependencyTracker since PHPStan 2.3.0
+        if ($scope instanceof DependencyTracker) { // @phpstan-ignore instanceof.alwaysTrue
+            $scope->trackValueDependency(TicketStatusValueExtension::class, implode(',', array_keys($ticketKeys)));
+        }
+
+        $keyToTicketStatus = $this->ticketStatusCache->fetchTicketStatus(array_keys($ticketKeys));
 
         $errors = [];
         foreach ($collectorData as $file => $collected) {
