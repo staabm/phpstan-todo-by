@@ -44,7 +44,7 @@ final class TodoBySymfonyDeprecationRule implements Rule
 
     public function processNode(Node $node, Scope $scope): array
     {
-        if (!($node->name instanceof Node\Name)) {
+        if (!$node->name instanceof Node\Name) {
             return [];
         }
 

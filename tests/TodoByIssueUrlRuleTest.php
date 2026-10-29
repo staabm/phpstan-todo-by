@@ -4,6 +4,7 @@ namespace staabm\PHPStanTodoBy\Tests;
 
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
+use RuntimeException;
 use staabm\PHPStanTodoBy\TodoByIssueUrlRule;
 use staabm\PHPStanTodoBy\utils\ExpiredCommentErrorBuilder;
 use staabm\PHPStanTodoBy\utils\ticket\GitHubTicketStatusFetcher;
@@ -30,13 +31,13 @@ final class TodoByIssueUrlRuleTest extends RuleTestCase
     {
         try {
             $this->analyse([__DIR__ . '/data/issue-urls.php'], $errors);
-        } catch (\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             // the test hits the live GitHub API without credentials; on shared CI IPs this
             // regularly runs into the unauthenticated rate limit. Skip rather than fail then.
             $message = $e->getMessage();
-            if (false !== strpos($message, 'GitHub responded with status 403')
-                || false !== strpos($message, 'GitHub responded with status 401')) {
-                self::markTestSkipped($message);
+            if (str_contains($message, 'GitHub responded with status 403')
+                || str_contains($message, 'GitHub responded with status 401')) {
+                static::markTestSkipped($message);
             }
 
             throw $e;
