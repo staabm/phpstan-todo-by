@@ -5,6 +5,8 @@ namespace staabm\PHPStanTodoBy\utils;
 use PhpParser\Comment;
 use PHPStan\Rules\RuleErrorBuilder;
 
+use function strlen;
+
 final class ExpiredCommentErrorBuilder
 {
     public const ERROR_IDENTIFIER_PREFIX = 'todoBy.';

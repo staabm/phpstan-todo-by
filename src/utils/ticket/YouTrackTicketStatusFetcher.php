@@ -8,6 +8,7 @@ use staabm\PHPStanTodoBy\utils\HttpClient;
 
 use function array_key_exists;
 use function is_array;
+use function is_int;
 
 final class YouTrackTicketStatusFetcher implements TicketStatusFetcher
 {
