@@ -8,6 +8,7 @@ use staabm\PHPStanTodoBy\TodoByTicketCollector;
 use staabm\PHPStanTodoBy\TodoByTicketRule;
 use staabm\PHPStanTodoBy\utils\ExpiredCommentErrorBuilder;
 use staabm\PHPStanTodoBy\utils\ticket\TicketRuleConfiguration;
+use staabm\PHPStanTodoBy\utils\ticket\TicketStatusCache;
 
 /**
  * @extends RuleTestCase<TodoByTicketRule>
@@ -19,8 +20,11 @@ final class TodoByTicketRuleTest extends RuleTestCase
 
     protected function getRule(): Rule
     {
+        $configuration = $this->getTicketConfiguration();
+
         return new TodoByTicketRule(
-            $this->getTicketConfiguration(),
+            $configuration,
+            new TicketStatusCache($configuration),
             new ExpiredCommentErrorBuilder(true),
             $this->requireUsername,
         );

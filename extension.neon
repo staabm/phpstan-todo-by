@@ -190,6 +190,14 @@ services:
         factory: @staabm\PHPStanTodoBy\utils\ticket\TicketRuleConfigurationFactory::create
 
     -
+        class: staabm\PHPStanTodoBy\utils\ticket\TicketStatusCache
+
+    -
+        class: staabm\PHPStanTodoBy\utils\ticket\TicketStatusValueExtension
+        tags:
+            - phpstan.resultCacheValueExtension
+
+    -
         class: staabm\PHPStanTodoBy\TodoByTicketCollector
         tags:
             - phpstan.collector
