@@ -48,6 +48,9 @@ final class TodoByTicketRule implements Rule
         return CollectedDataNode::class;
     }
 
+    /**
+     * @param Scope&DependencyTracker $scope
+     */
     public function processNode(Node $node, Scope $scope): array
     {
         $collectorData = $node->get(TodoByTicketCollector::class);
@@ -73,11 +76,8 @@ final class TodoByTicketRule implements Rule
         }
         ksort($ticketKeys);
 
-        // the result cache reuses the errors only while the ticket statuses stay the same.
-        // the scope is a DependencyTracker since PHPStan 2.3.0
-        if ($scope instanceof DependencyTracker) { // @phpstan-ignore instanceof.alwaysTrue
-            $scope->trackValueDependency(TicketStatusValueExtension::class, implode(',', array_keys($ticketKeys)));
-        }
+        // the result cache reuses the errors only while the ticket statuses stay the same
+        $scope->trackValueDependency(TicketStatusValueExtension::class, implode(',', array_keys($ticketKeys)));
 
         $keyToTicketStatus = $this->ticketStatusCache->fetchTicketStatus(array_keys($ticketKeys));
 

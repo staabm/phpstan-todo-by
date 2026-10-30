@@ -1,6 +1,3 @@
-includes:
-    - result-cache.neon.php
-
 parametersSchema:
     todo_by: structure([
         nonIgnorable: bool()
@@ -194,6 +191,11 @@ services:
 
     -
         class: staabm\PHPStanTodoBy\utils\ticket\TicketStatusCache
+
+    -
+        class: staabm\PHPStanTodoBy\utils\ticket\TicketStatusValueExtension
+        tags:
+            - phpstan.resultCacheValueExtension
 
     -
         class: staabm\PHPStanTodoBy\TodoByTicketCollector

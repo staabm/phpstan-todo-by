@@ -15,8 +15,6 @@ use function sha1;
  * Lets the result cache reuse the errors of TodoByTicketRule only while the ticket statuses stay the same.
  * The key is the comma-separated list of ticket keys the rule asked for.
  *
- * Registered in result-cache.neon.php, because the interface exists since PHPStan 2.3.0.
- *
  * @internal
  */
 final class TicketStatusValueExtension implements ResultCacheValueExtension
