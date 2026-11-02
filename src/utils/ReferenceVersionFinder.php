@@ -28,7 +28,11 @@ final class ReferenceVersionFinder
             $latestTagVersion = $this->fetcher->fetchLatestTagVersion($workingDirectory);
 
             if (null !== $latestTagVersion) {
-                return $this->nextVersion($latestTagVersion);
+                try {
+                    return $this->nextVersion($latestTagVersion);
+                } catch (InvalidVersionString $e) {
+                    throw new InvalidTagException("Could not parse version from tag '{$latestTagVersion}'", 0, $e);
+                }
             }
         }
 
