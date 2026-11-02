@@ -49,4 +49,16 @@ final class TodoByVersionRuleNonSemverTagTest extends RuleTestCase
             ],
         ]);
     }
+
+    public function testTagWithMoreThanThreeParts(): void
+    {
+        $this->tag = '1.2.3.4';
+
+        $this->analyse([__DIR__ . '/data/tagNotFound.php'], [
+            [
+                "Could not parse version from tag '1.2.3.4'",
+                5,
+            ],
+        ]);
+    }
 }
