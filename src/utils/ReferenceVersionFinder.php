@@ -46,7 +46,7 @@ final class ReferenceVersionFinder
         try {
             $version = Version::fromString($versionString);
         } catch (InvalidVersionString $invalidVersionException) {
-            if (3 === count(explode('.', $versionString))) {
+            if (count(explode('.', $versionString)) >= 3) {
                 throw $invalidVersionException;
             }
 
