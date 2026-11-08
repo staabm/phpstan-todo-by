@@ -1,0 +1,17 @@
+parameters:
+  level: max
+  paths:
+    - src/
+  tmpDir: tmp
+  featureToggles:
+      reuseCollectedDataRuleErrors: true
+  todo_by:
+      ticket:
+          enabled: true
+          tracker: jira
+          keyPrefixes:
+              - JRA
+          resolvedStatuses:
+              - Closed
+          jira:
+              server: http://127.0.0.1:8123
